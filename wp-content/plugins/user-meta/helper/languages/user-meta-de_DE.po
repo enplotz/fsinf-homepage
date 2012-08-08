@@ -1,0 +1,1657 @@
+# Copyright (C) 2012 User Meta http://user-meta.com
+# This file is distributed under the same license as the User Meta package.
+msgid ""
+msgstr ""
+"Project-Id-Version: User Meta Pro 1.1.2rc3.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-04-10 16:14+0600\n"
+"PO-Revision-Date: 2012-06-14 15:44+0100\n"
+"Last-Translator: Andreas Tanke <atanke@ats-edv-service.de>\n"
+"Language-Team: metaconsulting <office@metaconsulting.net>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-Language: German\n"
+"X-Poedit-Country: AUSTRIA\n"
+
+#: views/formsEditorPage.php:6
+msgid "Forms Editor"
+msgstr "Formular-Editor"
+
+#: views/formsEditorPage.php:6
+#: views/formsEditorPage.php:39
+#: views/form.php:75
+msgid "New Form"
+msgstr "Neues Formular"
+
+#: views/formsEditorPage.php:14
+#: views/formsEditorPage.php:34
+#: views/settingsPage.php:85
+#: views/fieldsEditorPage.php:15
+#: views/fieldsEditorPage.php:35
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: views/formsEditorPage.php:51
+#: views/settingsPage.php:132
+#: views/fieldsEditorPage.php:57
+#: views/email/emailNotificationPage.php:19
+msgid "3 steps to getting started"
+msgstr "3 Schritte um zu beginnen"
+
+#: views/formsEditorPage.php:53
+#: views/settingsPage.php:134
+#: views/fieldsEditorPage.php:56
+#: views/email/emailNotificationPage.php:21
+msgid "User Meta Pro"
+msgstr "User Meta Pro"
+
+#: views/formsEditorPage.php:54
+#: views/settingsPage.php:135
+#: views/fieldsEditorPage.php:58
+#: views/email/emailNotificationPage.php:13
+#: views/email/emailNotificationPage.php:22
+msgid "Shortcode"
+msgstr "Shortcode"
+
+#: views/generateField.php:120
+msgid "Retype "
+msgstr "Wiederhole"
+
+#: views/settingsPage.php:8
+msgid "User Meta Settings"
+msgstr "User Meta Einstellungen"
+
+#: views/settingsPage.php:19
+msgid "General"
+msgstr "Allgemein"
+
+#: views/settingsPage.php:20
+msgid "Login"
+msgstr "Login"
+
+#: views/settingsPage.php:21
+msgid "Registration"
+msgstr "Registrierung"
+
+#: views/settingsPage.php:22
+msgid "Redirection"
+msgstr "Weiterleitung"
+
+#: views/settingsPage.php:23
+msgid "Backend Profile"
+msgstr "Backend-Profil"
+
+#: views/fieldsEditorPage.php:6
+msgid "Fields Editor"
+msgstr "Feld-Editor"
+
+#: views/fieldsEditorPage.php:8
+msgid "Click field from right side panel for creating new field"
+msgstr "Um ein neues Feld zu erstellen, in der rechten Spalte eines anklicken"
+
+#: views/fieldsEditorPage.php:52
+msgid "WordPress Default Fields"
+msgstr "WordPress-Standardfelder"
+
+#: views/fieldsEditorPage.php:53
+msgid "Extra Fields"
+msgstr "Extrafelder"
+
+#: views/fieldsEditorPage.php:54
+msgid "Formatting Fields"
+msgstr "Formatierungsfelder"
+
+#: views/field.php:16
+msgid "Field Title"
+msgstr "Feldtitel"
+
+#: views/field.php:27
+msgid "Field Type"
+msgstr "Feldtyp"
+
+#: views/field.php:37
+msgid "Field Description"
+msgstr "Feldbeschreibung"
+
+#: views/field.php:45
+msgid "Meta Key"
+msgstr "Meta Key"
+
+#: views/field.php:54
+msgid "Default Value"
+msgstr "Standardwert"
+
+#: views/field.php:62
+msgid "Field Options"
+msgstr "Feldoptionen"
+
+#: views/field.php:71
+msgid "Required"
+msgstr "Erforderlich"
+
+#: views/field.php:76
+msgid "Admin Only"
+msgstr "Nur Administratoren"
+
+#: views/field.php:81
+msgid "Read Only for all user"
+msgstr "Schreibgeschützt für alle Benutzer"
+
+#: views/field.php:86
+msgid "Read Only for non admin"
+msgstr "Schreibgeschützt für Nicht-Administratoren"
+
+#: views/field.php:91
+msgid "Unique"
+msgstr "Eindeutig"
+
+#: views/field.php:96
+msgid "Non-Admin only"
+msgstr "Nur Nicht-Administratoren"
+
+#: views/field.php:101
+msgid "Only on Registration Page"
+msgstr "Nur auf der Registrierungsseite"
+
+#: views/field.php:106
+msgid "Disable AJAX upload"
+msgstr "AJAX-Upload ausschalten"
+
+#: views/field.php:111
+msgid "Title Position"
+msgstr "Titelposition"
+
+#: views/field.php:120
+msgid "CSS Class"
+msgstr "CSS Class"
+
+#: views/field.php:128
+msgid "CSS Style"
+msgstr "CSS Style"
+
+#: views/field.php:136
+msgid "Field Size"
+msgstr "Feldgröße"
+
+#: views/field.php:145
+msgid "Field Height"
+msgstr "Feldhöhe"
+
+#: views/field.php:154
+msgid "Max Char"
+msgstr "Max. Zeichen"
+
+#: views/field.php:164
+msgid "Force to change username"
+msgstr "Zwingen den Benutzernamen zu ändern"
+
+#: views/field.php:168
+msgid "Retype Email"
+msgstr "E-Mail wiederholen"
+
+#: views/field.php:172
+msgid "Retype Password"
+msgstr "Passwort wiederholen"
+
+#: views/field.php:176
+msgid "Show password strength meter"
+msgstr "Zeige Passwortstärke"
+
+#: views/field.php:181
+msgid "Show Divider"
+msgstr "Zeige Trenner"
+
+#: views/field.php:186
+msgid "Use Rich Text"
+msgstr "Verwende Rich Text"
+
+#: views/field.php:203
+msgid "Allowed Extension"
+msgstr "Erlaubte Endungen"
+
+#: views/field.php:212
+msgid "Type Selection"
+msgstr "Typenauswahl"
+
+#: views/field.php:217
+msgid "Date"
+msgstr "Datum"
+
+#: views/field.php:217
+msgid "Time"
+msgstr "Zeit"
+
+#: views/field.php:217
+msgid "Date and Time"
+msgstr "Datum und Zeit"
+
+#: views/field.php:221
+msgid "Save meta value by"
+msgstr "Meta-Value speichern mittels"
+
+#: views/field.php:226
+msgid "Country Code"
+msgstr "Ländercode"
+
+#: views/field.php:226
+msgid "Country Name"
+msgstr "Ländername"
+
+#: views/field.php:230
+msgid "Maximum Number"
+msgstr "Maximale Anzahl"
+
+#: views/field.php:238
+msgid "Minimum Number"
+msgstr "Minimale Anzahl"
+
+#: views/field.php:246
+msgid "Max File Size"
+msgstr "Max. Dateigröße"
+
+#: views/field.php:249
+msgid "(in KB. Default: 1024KB)"
+msgstr "(in KB. Standard: 1024KB)"
+
+#: views/field.php:255
+msgid "Image Width (px)"
+msgstr "Bildbreite (px)"
+
+#: views/field.php:258
+msgid "(For Image Only. e.g. 640)"
+msgstr "(Nur für Bilder, z.B. 640)"
+
+#: views/field.php:264
+msgid "Image Height (px)"
+msgstr "Bildhöhe (px)"
+
+#: views/field.php:267
+msgid "(For Image Only. e.g. 480)"
+msgstr "(Nur für Bilder, z.B. 480)"
+
+#: views/field.php:273
+msgid "reCaptcha Public Key"
+msgstr "reCaptcha Public Key"
+
+#: views/field.php:281
+msgid "reCaptcha Private Key"
+msgstr "reCaptcha Private Key"
+
+#: views/field.php:298
+msgid "By default, <strong>Required</strong> and <strong>Unique</strong> validation will be set with this field. <strong>Read Only</strong> will be set conditionally."
+msgstr "Standardmässig wird <strong>Erforderlich</strong> und <strong>Eindeutig</strong> für dieses Feld gesetzt. <strong>Schreibgeschützt</strong> wird bedingt gesetzt."
+
+#: views/field.php:304
+msgid "By default, <strong>Required</strong> and <strong>Unique</strong> validation will be set with this field."
+msgstr "Standardmässig wird <strong>Erforderlich</strong> und <strong>Eindeutig</strong> für dieses Feld gesetzt."
+
+#: views/field.php:310
+msgid "<strong>Required</strong> validation will be set automatically when password field is being used by registration."
+msgstr "<strong>Erforderlich</strong> wird automatisch gesetzt, wenn Passwortfelder in der Benutzerregistrierung verwendet werden."
+
+#: views/field.php:402
+msgid "New Field"
+msgstr "Neues Feld"
+
+#: views/generateForm.php:10
+msgid "Form not found."
+msgstr "Formular nicht gefunden."
+
+#: views/generateForm.php:13
+msgid "Fields not found."
+msgstr "Felder nicht gefunden."
+
+#: views/generateForm.php:105
+msgid "Previous"
+msgstr "Voriger"
+
+#: views/generateForm.php:117
+msgid "Update"
+msgstr "Aktualiseren"
+
+#: views/generateForm.php:119
+msgid "Register"
+msgstr "Registrierung"
+
+#: views/form.php:11
+msgid "Form Name"
+msgstr "Formularname"
+
+#: views/form.php:16
+msgid "(Give a name to your form)"
+msgstr "(Geben Sie Ihrem Formular einen Namen)"
+
+#: views/form.php:30
+msgid "Fields in your form (Drag from available fields)"
+msgstr "Felder in Ihrem Formular (von den verfügbaren Feldern herziehen)"
+
+#: views/form.php:31
+msgid "Available Fields"
+msgstr "Verfügbare Felder"
+
+#: views/form.php:59
+msgid "Drag fields from right block to left block for make them available to your form."
+msgstr "Felder aus dem rechten Block in den Linken ziehen, um diese ins Formular einzufügen."
+
+#: views/form.php:64
+msgid "Do not use AJAX submit"
+msgstr "AJAX-Übermittlung nicht verwenden"
+
+#: views/email/emailNotificationPage.php:7
+msgid "E-mail Notification"
+msgstr "E-Mail-Benachrichtigung"
+
+#: views/email/mailForm.php:7
+msgid "From E-mail"
+msgstr "Von E-Mail:"
+
+#: views/email/mailForm.php:15
+msgid "From Name"
+msgstr "Von Name"
+
+#: views/email/mailForm.php:23
+msgid "Plain Text"
+msgstr "Reiner Text"
+
+#: views/email/mailForm.php:24
+msgid "HTML"
+msgstr "HTML"
+
+#: views/email/mailForm.php:28
+msgid "E-mail Format"
+msgstr "E-Mail-Format"
+
+#: views/email/mailForm.php:36
+msgid "Subject"
+msgstr "E-Mail-Betreff"
+
+#: views/email/mailForm.php:44
+msgid "Body"
+msgstr "Nachricht"
+
+#: views/email/mailForm.php:52
+msgid "Disable Notification"
+msgstr "Benachrichtigung abschalten"
+
+#: views/settings/activationForm.php:10
+msgid "Version:"
+msgstr "Version:"
+
+#: views/settings/activationForm.php:13
+msgid "Account Details"
+msgstr "Kontodetails"
+
+#: views/settings/activationForm.php:14
+#, php-format
+msgid "Enter your email and password for %s to activate your pro version."
+msgstr "Geben Sie E-Mail und Passwort für %s ein, um die Pro-Version zu aktivieren"
+
+#: views/settings/activationForm.php:19
+msgid "Email:"
+msgstr "E-Mail:"
+
+#: views/settings/activationForm.php:27
+msgid "Password:"
+msgstr "Passwort:"
+
+#: views/settings/activationForm.php:34
+msgid "Save"
+msgstr "Speichern"
+
+#: views/settings/activationForm.php:44
+msgid "Enter email and password to activate Pro version"
+msgstr "Geben Sie E-Mail und Passwort ein, um die Pro-Version zu aktivieren"
+
+#: views/settings/activationForm.php:46
+msgid "Enter email and password for upgrade to pro version"
+msgstr "Geben Sie zum Upgrade auf die Pro-Version E-Mail und Passwort ein"
+
+#: views/settings/activationForm.php:53
+msgid "Click for upgrade to Pro"
+msgstr "Klicken zum Upgrade auf die Pro-Version "
+
+#: views/settings/activationForm.php:62
+msgid "User Meta Pro Account Information"
+msgstr "User Meta Pro Account Information"
+
+#: views/settings/miscSettings.php:4
+#: views/settings/backendProfile.php:4
+#, php-format
+msgid "This feature is only supported in Pro version. Get %s"
+msgstr "Dieses Feature wird nur in der Pro-Version unterstützt. Zu bekommen hier %s"
+
+#: views/settings/settings1.php:6
+msgid "Version: "
+msgstr "Version:"
+
+#: views/settings/settings1.php:11
+msgid "Profile Page Selection"
+msgstr "Profilseitenauswahl"
+
+#: views/settings/settings1.php:20
+msgid "Show profile link to User Administration Page"
+msgstr "Profillink zur Benutzerverwaltungsseite anzeigen"
+
+#: views/settings/generalSettings.php:17
+#, php-format
+msgid "Show profile link to <a href=\"%s\">Users<a> administration page."
+msgstr "Profillink zur <a href=\"%s\">Benutzerverwaltungsseite<a> anzeigen."
+
+#: views/settings/generalSettings.php:19
+msgid "Profile page should contain shortcode like:"
+msgstr "Profilseite sollte einen Shortcode enthalten wie:"
+
+#: views/settings/generalSettings.php:29
+msgid "E-mail Sender Setting"
+msgstr "Einstellungen E-Mail-Absender"
+
+#: views/settings/generalSettings.php:31
+msgid "Set default email sender information"
+msgstr "Standardinformationen für E-Mail-Absender eingeben"
+
+#: views/settings/generalSettings.php:34
+msgid "From Name:"
+msgstr "Von Name:"
+
+#: views/settings/generalSettings.php:37
+#: views/settings/generalSettings.php:45
+#: views/pro/email/singleEmailForm.php:15
+#: views/pro/email/singleEmailForm.php:24
+#: views/pro/email/singleEmailForm.php:39
+msgid "(Leave blank to use default)"
+msgstr "(Leerlassen um den Standardwert zu verwenden)"
+
+#: views/settings/generalSettings.php:42
+msgid "From Email:"
+msgstr "Von E-Mail:"
+
+#: views/settings/generalSettings.php:50
+msgid "Email Format:"
+msgstr "E-Mail-Format"
+
+#: views/pro/fieldPro.php:71
+#, php-format
+msgid "Please provide reCaptcha public and private key from User Meta %s page"
+msgstr "Bitte reCaptcha Public- und Private-Key auf der User Meta %s Seite eingeben"
+
+#: views/pro/generateField.php:310
+msgid "Next"
+msgstr "Nächster"
+
+#: views/pro/generateField.php:365
+msgid "Please set public and private key from User Meta >> Settings Page"
+msgstr "Bitte reCaptcha Public- und Private-Key unter User Meta >> Einstellungen eingeben"
+
+#: views/pro/email/emailNotificationPage.php:21
+msgid "This e-mail will be sent to new user after registration."
+msgstr "Diese E-Mail wird neuen Benutzern nach der Registrierung gesendet."
+
+#: views/pro/email/emailNotificationPage.php:22
+#: views/pro/email/emailNotificationPage.php:43
+#: views/pro/email/emailNotificationPage.php:55
+#: views/pro/email/emailNotificationPage.php:67
+#: views/pro/email/emailNotificationPage.php:87
+msgid "User Notification"
+msgstr "Benachrichtigung"
+
+#: views/pro/email/emailNotificationPage.php:24
+#: views/pro/email/emailNotificationPage.php:32
+#: views/pro/email/emailNotificationPage.php:76
+#, php-format
+msgid "Use placeholder %s if needed."
+msgstr "Wenn nötig, verwende den Platzhalter %s."
+
+#: views/pro/email/emailNotificationPage.php:29
+msgid "This e-mail will be sent to admin after new user registration."
+msgstr "Diese E-Mail wird den Administratoren nach der Registrierung neuer Benutzer gesendet."
+
+#: views/pro/email/emailNotificationPage.php:30
+#: views/pro/email/emailNotificationPage.php:74
+msgid "Admin Notification"
+msgstr "Administratoren Benachrichtigung"
+
+#: views/pro/email/emailNotificationPage.php:34
+msgid "User Registration E-mail"
+msgstr "E-Mail für Benutzerregistrierung"
+
+#: views/pro/email/emailNotificationPage.php:41
+msgid "This e-mail will be sent to user upon activation."
+msgstr "Diese E-Mail wird Benutzern bei der Aktivierung gesendet."
+
+#: views/pro/email/emailNotificationPage.php:46
+msgid "User Activation E-mail"
+msgstr "E-Mail für Benutzerfreischaltung"
+
+#: views/pro/email/emailNotificationPage.php:53
+msgid "This e-mail will be sent to user upon deactivation."
+msgstr "Diese E-Mail wird Benutzern bei der Deaktivierung gesendet."
+
+#: views/pro/email/emailNotificationPage.php:58
+msgid "User Deactivation E-mail"
+msgstr "E-Mail für Benutzerdeaktivierung"
+
+#: views/pro/email/emailNotificationPage.php:66
+msgid "This email will be sent to user after email verified."
+msgstr "Diese E-Mail wird nach der Überprüfung der E-Mail-Adresse an den Benutzer gesendet."
+
+#: views/pro/email/emailNotificationPage.php:73
+msgid "This email will be sent to admin after user email verified."
+msgstr "Diese E-Mail wird nach der Überprüfung der E-Mail-Adresse an die Administratoren gesendet."
+
+#: views/pro/email/emailNotificationPage.php:78
+msgid "After email verified"
+msgstr "E-Mail-Überprüfung erforderlich"
+
+#: views/pro/email/emailNotificationPage.php:85
+msgid "This e-mail will be sent to user when requested for reset password."
+msgstr "Diese E-Mail wird Benutzern gesendet, wenn sie ihr Passwort vergessen haben."
+
+#: views/pro/email/emailNotificationPage.php:89
+#, php-format
+msgid "Use placeholder <strong>%s</strong> or it will automatically included."
+msgstr "Benutze den Platzhalter <strong>%reset_password_link%</strong> oder er wird automatisch eingefügt."
+
+#: views/pro/email/emailNotificationPage.php:91
+msgid "Lost Password E-mail"
+msgstr "E-Mail bei Passwort vergessen"
+
+#: views/pro/email/emailNotificationPage.php:109
+msgid "Site Placeholder"
+msgstr "Platzhalter für Site"
+
+#: views/pro/email/emailNotificationPage.php:118
+msgid "User Placeholder"
+msgstr "Platzhalter für Benutzer"
+
+#: views/pro/email/emailNotificationPage.php:127
+msgid "Custom Field"
+msgstr "Benutzerdefiniertes Feld"
+
+#: views/pro/email/emailNotificationPage.php:130
+msgid "Use those placeholders to email subject or body. Placeholder will be replaced with proper value."
+msgstr "Benutzen Sie die Platzhalter für Betreff oder Nachricht. Diese werden mit den entsprechenden Werten ersetzt."
+
+#: views/pro/email/emailNotificationPage.php:132
+msgid "Placeholder"
+msgstr "Platzhalter"
+
+#: views/pro/settings/backendProfile.php:15
+msgid "Personal Options Heading"
+msgstr "Abschnittskopf für persönliche Optionen"
+
+#: views/pro/settings/backendProfile.php:16
+msgid "Visual Editor"
+msgstr "Visueller Editor"
+
+#: views/pro/settings/backendProfile.php:17
+msgid "Admin Color Scheme"
+msgstr "Farbschema für Administration"
+
+#: views/pro/settings/backendProfile.php:18
+msgid "Keyboard Shortcuts"
+msgstr "Tastaturkürzel"
+
+#: views/pro/settings/backendProfile.php:19
+msgid "Toolbar"
+msgstr "Toolbar"
+
+#: views/pro/settings/backendProfile.php:23
+msgid "Name Heading"
+msgstr "Abschnittskopf für Name"
+
+#: views/pro/settings/backendProfile.php:24
+msgid "Username"
+msgstr "Benutzername"
+
+#: views/pro/settings/backendProfile.php:25
+msgid "First Name"
+msgstr "Vorname"
+
+#: views/pro/settings/backendProfile.php:26
+msgid "Last Name"
+msgstr "Nachname"
+
+#: views/pro/settings/backendProfile.php:27
+msgid "Nickname"
+msgstr "Spitzname"
+
+#: views/pro/settings/backendProfile.php:28
+msgid "Display Name"
+msgstr "Öffentlicher Name"
+
+#: views/pro/settings/backendProfile.php:32
+msgid "Contact Info Heading"
+msgstr "Abschnittskopf für Kontaktinfo"
+
+#: views/pro/settings/backendProfile.php:33
+msgid "E-mail"
+msgstr "E-Mail"
+
+#: views/pro/settings/backendProfile.php:34
+msgid "Website"
+msgstr "Website"
+
+#: views/pro/settings/backendProfile.php:35
+msgid "AIM"
+msgstr "AIM"
+
+#: views/pro/settings/backendProfile.php:36
+msgid "Yahoo IM"
+msgstr "Yahoo IM"
+
+#: views/pro/settings/backendProfile.php:37
+msgid "Jabber / Google Talk"
+msgstr "Jabber / Google Talk"
+
+#: views/pro/settings/backendProfile.php:41
+msgid "About Yourself Heading"
+msgstr "Überschrift für &quot;Über Sie&quot;"
+
+#: views/pro/settings/backendProfile.php:42
+msgid "Biographical Info"
+msgstr "Biographische Angaben"
+
+#: views/pro/settings/backendProfile.php:43
+msgid "New Password"
+msgstr "Neues Passwort"
+
+#: views/pro/settings/backendProfile.php:47
+msgid "Hide WordPress default fields"
+msgstr "WordPress-Standardfelder verstecken"
+
+#: views/pro/settings/backendProfile.php:48
+msgid "Select fields from below, which you need to hide from backend profile page"
+msgstr "Wählen Sie unten die Felder, die auf der Backend-Profilseite nicht angezeigt werden."
+
+#: views/pro/settings/backendProfile.php:83
+msgid "Extra fields in backend profile"
+msgstr "Zusätzliche Felder im Backend-Profil"
+
+#: views/pro/settings/backendProfile.php:84
+msgid "Add extra fields to backend profile. drag from available fields block to backend profile block"
+msgstr "Zusätzliche Felder zum Backend-Profil hinzufügen, indem Sie diese von den verfügbaren Feldern zum Backend-Profilblock ziehen."
+
+#: views/pro/settings/backendProfile.php:85
+msgid "Fields in backend profile (Drag from available fields)"
+msgstr "Felder im Backend-Profil (von den verfügbaren Feldern herziehen)"
+
+#: views/pro/settings/registrationSettings.php:9
+msgid "User auto activation."
+msgstr "Benutzer-Autoaktivierung."
+
+#: views/pro/settings/registrationSettings.php:9
+msgid "User will be activated automatically after registration"
+msgstr "Benutzer wird nach der Registrierung automatisch aktiviert"
+
+#: views/pro/settings/registrationSettings.php:10
+msgid "Need email verification."
+msgstr "E-Mail-Überprüfung erforderlich."
+
+#: views/pro/settings/registrationSettings.php:10
+msgid "A verification link will be sent to user email. User must verify the link to activate their account"
+msgstr "Ein Überprüfungslink wird an die Emailadresse des Benutzers geschickt. Um seinen Account zu aktivieren muss der Benutzer den Link anklicken"
+
+#: views/pro/settings/registrationSettings.php:11
+msgid "Need admin approval."
+msgstr "Überprüfung durch Administrator erforderlich."
+
+#: views/pro/settings/registrationSettings.php:11
+msgid "Admin needs to approve the new user"
+msgstr "Admin muss den neuen Benutzer bestätigen"
+
+#: views/pro/settings/registrationSettings.php:12
+msgid "Need both email verification and admin approval."
+msgstr "E-Mail-Überprüfung und Freigabe durch Administrator erforderlich."
+
+#: views/pro/settings/registrationSettings.php:12
+msgid "A verification link will be sent to user email. User must verify the link to activate their account and an admin needs to approve the account"
+msgstr "Ein Überprüfungslink wird an die Emailadresse des Benutzers geschickt. Um seinen Account zu aktivieren muss der Benutzer den Link anklicken und ein Admin muss den Account bestätigen"
+
+#: views/pro/settings/registrationSettings.php:17
+msgid "User Activation"
+msgstr "Benutzerfreischaltung"
+
+#: views/pro/settings/generalProSettings.php:9
+msgid "reCAPTCHA Settings"
+msgstr "reCAPTCHA Einstellungen"
+
+#: views/pro/settings/generalProSettings.php:11
+msgid "reCAPTCHA is a free CAPTCHA service that helps to digitize books, newspapers and old time radio shows."
+msgstr "reCAPTCHA ist ein kostenloserCaptcha-Service, der hilft, Bücher, Zeitungen und alte Radiosendungen zu digitalisieren."
+
+#: views/pro/settings/generalProSettings.php:11
+msgid "Read More"
+msgstr "Weiterlesen"
+
+#: views/pro/settings/generalProSettings.php:15
+msgid "reCAPTCHA Public Key"
+msgstr "reCAPTCHA Public-Key"
+
+#: views/pro/settings/generalProSettings.php:23
+msgid "reCAPTCHA Private Key"
+msgstr "reCAPTCHA Private-Key"
+
+#: views/pro/settings/generalProSettings.php:29
+msgid "<p>User Meta plugin use reCAPTCHA as Captcha field. reCAPTCHA Public Key and reCAPTCHA Private Key are required for using Captcha validation. Get those key for free. <a href='http://www.google.com/recaptcha/whyrecaptcha' target='_blank'>Sign up now</a>.</p>"
+msgstr "<p>Das User Meta-Plugin verwendet reCAPTCHA für Captcha-Felder. reCAPTCHA Public- und Private-Key sind für die Captcha-Überprüfung erforderlich und sind kostenlos. <a href='http://www.google.com/recaptcha/whyrecaptcha' target='_blank'>Registrieren Sie sich jetzt</a>.</p>"
+
+#: views/pro/settings/redirectionSettings.php:10
+msgid "User Redirection Settings"
+msgstr "Einstellungen für Benutzerweiterleitung"
+
+#: views/pro/settings/redirectionSettings.php:12
+msgid "Disable redirection feature"
+msgstr "Weiterleitungsfunktion ausschalten"
+
+#: views/pro/settings/redirectionSettings.php:18
+msgid "Set redirection on login, logout and registration"
+msgstr "Weiterleiten bei An-, Abmelden und Registrierung einstellen"
+
+#: views/pro/settings/redirectionSettings.php:25
+msgid "Default (<em>Use default redirection</em>)"
+msgstr "Standard (<em>Benutze die Standardweiterleitung</em>)"
+
+#: views/pro/settings/redirectionSettings.php:26
+msgid "Referer (<em>Send the user back to the page where they comes from</em>)"
+msgstr "Ursprungsseite (<em>Leitet den Benutzer wieder zur Seite weiter, von der sie kamen</em>)"
+
+#: views/pro/settings/redirectionSettings.php:27
+msgid "Home"
+msgstr "Home"
+
+#: views/pro/settings/redirectionSettings.php:28
+msgid "Profile"
+msgstr "Profil"
+
+#: views/pro/settings/redirectionSettings.php:29
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: views/pro/settings/redirectionSettings.php:30
+#: views/pro/settings/loginSettings.php:25
+msgid "Login Page"
+msgstr "Anmeldeseite"
+
+#: views/pro/settings/redirectionSettings.php:31
+msgid "<em> (Include http:// with url)</em>"
+msgstr "<em> (Füge http:// in die url ein)</em>"
+
+#: views/pro/settings/redirectionSettings.php:54
+#: views/pro/settings/redirectionSettings.php:72
+#: views/pro/settings/redirectionSettings.php:89
+msgid "Custom URL:"
+msgstr "Benutzerdefinierte URL:"
+
+#: views/pro/settings/redirectionSettings.php:62
+msgid "Login Redirection"
+msgstr "Weiterleitung für Anmeldung"
+
+#: views/pro/settings/redirectionSettings.php:79
+msgid "Logout Redirection "
+msgstr "Weiterleitung für Abmeldung"
+
+#: views/pro/settings/redirectionSettings.php:96
+msgid "Registration Redirection"
+msgstr "Weiterleitung für Registrierung"
+
+#: views/pro/settings/loginSettings.php:13
+msgid "User login by"
+msgstr "Benutzeranmeldung durch:"
+
+#: views/pro/settings/loginSettings.php:33
+msgid "Login page should contain shortcode:"
+msgstr "Anmeldeseite sollte den Shortcode enthalten:"
+
+#: views/pro/settings/loginSettings.php:34
+msgid "Login page will be used for login, lost password, reset password and email verification process."
+msgstr "Login-Seite wird verwendet für Login, Passwort vergessen, Passwort zurücksetzen und Benutzeraktivierung."
+
+#: views/pro/settings/loginSettings.php:36
+#, php-format
+msgid "Disable default login url (%s)"
+msgstr "Standard-Loginadresse deaktivieren (%s)"
+
+#: views/pro/settings/loginSettings.php:41
+#, php-format
+msgid "Disable wp-login.php and redirect to front-end login page %s"
+msgstr "wp-login.php deaktivieren und weiterleiten zur Frontend-Loginseite %s"
+
+#: views/pro/settings/loginSettings.php:49
+msgid "Login Form"
+msgstr "Login-Formular"
+
+#: views/pro/settings/loginSettings.php:56
+#, php-format
+msgid "Use placeholder %login_form% for showing login form and %lostpassword_form% for showing lost password form. <br /> Note: %login_form% should be included. If not included, plugin will automatically include it."
+msgstr "Platzhalter %login_form% benutzen um das Login-Formular und %lostpassword_form% um das Passwort-Verloren-Formular anzuzeigen.<br /> Anm.: %login_form% sollte eingefügt sein, sonst wird es automatisch eingefügt."
+
+#: views/pro/settings/loginSettings.php:60
+msgid "Disable AJAX submit"
+msgstr "AJAX-Übermittung ausschalten"
+
+#: views/pro/settings/loginSettings.php:70
+msgid "Logged in user profile settings"
+msgstr "Profileinstellungen des angemeldeten Benutzers"
+
+#: views/pro/login/lostPasswordForm.php:7
+msgid "Lost your password?"
+msgstr "Passwort vergessen?"
+
+#: views/pro/login/lostPasswordForm.php:13
+msgid "Please enter your username or email address. You will receive a link to create a new password via email."
+msgstr "Bitte geben Sie Ihren Benutzernamen oder Ihre E-Mail-Adresse ein. Sie erhalten per E-Mail einen Link, um ein neues Passwort zu vergeben."
+
+#: views/pro/login/lostPasswordForm.php:19
+msgid "Username or E-mail"
+msgstr "Benutzername oder E-Mail"
+
+#: views/pro/login/lostPasswordForm.php:29
+msgid "Get New Password"
+msgstr "Neues Passwort erstellen"
+
+#: views/pro/login/loginForm.php:16
+msgid "Password"
+msgstr "Passwort"
+
+#: views/pro/login/loginForm.php:24
+msgid "Remember Me"
+msgstr "Erinnere dich an mich"
+
+#: views/pro/login/resetPasswordForm.php:8
+#: views/pro/login/resetPasswordForm.php:31
+msgid "Reset Password"
+msgstr "Passwort zurücksetzen"
+
+#: views/pro/login/resetPasswordForm.php:9
+msgid "Enter your new password below."
+msgstr "Geben Sie Ihr neues Passwort unten ein."
+
+#: views/pro/login/resetPasswordForm.php:15
+msgid "New password"
+msgstr "Neues Passwort"
+
+#: views/pro/login/resetPasswordForm.php:23
+msgid "Confirm new password"
+msgstr "Neues Passwort wiederholen"
+
+#: views/pro/userImport/formStep3.php:20
+msgid "Import completed."
+msgstr "Import abgeschlossen."
+
+#: views/pro/userImport/formStep3.php:24
+msgid "Read: %1$S, Created: %2$s, Updated: %3$s, Skipped: %4$s"
+msgstr "Gelesen: %1$S, Erstellt: %2$s, Aktualisiert: %3$s, Übersprungen: %4$s"
+
+#: views/pro/userImport/importPage.php:9
+#: views/pro/userImport/formStep2.php:107
+#: views/pro/userImport/formStep1.php:18
+#: controllers/pro/umUserImportController.php:15
+msgid "User Import"
+msgstr "Benutzer-Import"
+
+#: views/pro/userImport/formStep2.php:16
+msgid "Identify Uniquely"
+msgstr "Eindeutig identifizieren"
+
+#: views/pro/userImport/formStep2.php:22
+msgid "By Email"
+msgstr "mit E-Mail"
+
+#: views/pro/userImport/formStep2.php:23
+msgid "By Username"
+msgstr "mit Benutzername"
+
+#: views/pro/userImport/formStep2.php:24
+msgid "By Both Email & Username"
+msgstr "mit beidem (Benutzername und E-Mail)"
+
+#: views/pro/userImport/formStep2.php:30
+msgid "CSV Header"
+msgstr "CSV Header"
+
+#: views/pro/userImport/formStep2.php:31
+msgid "Assigning Field"
+msgstr "Weise Feld zu"
+
+#: views/pro/userImport/formStep2.php:33
+msgid "Sample Data"
+msgstr "Beispieldaten"
+
+#: views/pro/userImport/formStep2.php:44
+msgid "Field Name"
+msgstr "Feldname"
+
+#: views/pro/userImport/formStep2.php:62
+msgid "User Role :"
+msgstr "Benutzerrolle:"
+
+#: views/pro/userImport/formStep2.php:72
+msgid "Overwrite existing users."
+msgstr "Bestehende Benutzer überschreiben."
+
+#: views/pro/userImport/formStep2.php:80
+msgid "Send email to new user."
+msgstr "E-Mail an neuen Benutzer senden."
+
+#: views/pro/userImport/formStep2.php:89
+#, php-format
+msgid " Add custom field to %s (if not already added)"
+msgstr " Benutzerdefiniertes Feld hinzufügen zu %s (wenn nicht bereits vorhanden)"
+
+#: views/pro/userImport/formStep2.php:96
+msgid "Import"
+msgstr "Import"
+
+#: views/pro/userImport/formStep2.php:104
+msgid "Username will accept only alphanumeric characters plus these: _, space, ., -, *, and @. All other characters will replace with null."
+msgstr "Benutzernamen dürfen nur aus Buchstaben, Zahlen bestehen und: _, Leerzeichen, ., -, *, and @. Alle anderen werden mit Null ersetzt."
+
+#: views/pro/userImport/formStep2.php:105
+msgid "In case of new user, If password field not set then user will get the password by email."
+msgstr "Bei neuen Benutzern wird das Passwort per E-Mail gesendet, wenn dieses nicht eingegeben wurde."
+
+#: views/pro/userImport/formStep2.php:110
+msgid "User Import Status"
+msgstr "Benutzer-Import Status"
+
+#: views/pro/userImport/formStep1.php:8
+msgid "Upload the <strong>CSV</strong> file only."
+msgstr "Nur <strong>CSV</strong>-Dateien hochladen."
+
+#: views/pro/userImport/formStep1.php:15
+msgid "First row of CSV file will treat as Field Name."
+msgstr "Erste Zeile der CSV-Datei enthält die Feldnamen"
+
+#: views/pro/userImport/formStep1.php:16
+msgid "Field will separate with comma (,) and Enclosed with the double quotation (\" \")."
+msgstr "Felder werden mit Komma (,) getrennt und in Anführungszeichen eingeschlossen (\" \")."
+
+#: controllers/umFieldsController.php:18
+msgid "User Meta Fields Editor"
+msgstr "User Meta Feld-Editor"
+
+#: controllers/umFieldsController.php:87
+msgid "Fields Successfully Saved."
+msgstr "Felder erfolgreich gespeichert."
+
+#: controllers/umPreloadsController.php:133
+#, php-format
+msgid "There is a new version of %1$s available. <a href=\"%2$s\">update automatically</a>."
+msgstr "Es ist eine neue Version von <strong>%1$s</strong> verfügbar. <a href=\"%2$s\">automatisch aktualisieren</a>."
+
+#: controllers/umSettingsController.php:14
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: controllers/umSettingsController.php:79
+msgid "Settings Successfully Saved."
+msgstr "Einstellungen erfolgreich gespeichert."
+
+#: controllers/umShortcodesController.php:94
+#, php-format
+msgid "Sorry. type=\"%s\" is not supported."
+msgstr "type=\"%s\" wird leider nicht unterstützt."
+
+#: controllers/umShortcodesController.php:114
+msgid "You do not have permission to access this page."
+msgstr "Sie haben nicht die erforderlichen Rechte für einen Zugriff auf diese Seite."
+
+#: controllers/umShortcodesController.php:117
+#, php-format
+msgid "You are already registered. See your <a href=\"%s\">profile</a>"
+msgstr "Sie sind bereits registriert. Schauen Sie in Ihr <a href=\"%s\">Profil</a>"
+
+#: controllers/umShortcodesController.php:119
+msgid "User registration is currently not allowed."
+msgstr "Benutzerregistrierung ist derzeit nicht erlaubt."
+
+#: controllers/umFormsController.php:17
+msgid "User Meta Forms Editor"
+msgstr "User Meta Formular-Editor"
+
+#: controllers/umFormsController.php:79
+msgid "All form keys are required!"
+msgstr "Alle Formularschlüssel sind erforderlich!"
+
+#: controllers/umFormsController.php:81
+#, php-format
+msgid "Form key should be unique. \"%s\" is duplicated!"
+msgstr "Formularschlüssel müssen eindeutig sein. \"%s\" ist doppelt!"
+
+#: controllers/umFormsController.php:93
+msgid "Form Successfully saved."
+msgstr "Formular erfolgreich gespeichert."
+
+#: controllers/umVersionUpdateController.php:47
+msgid "Upgrading from free version to pro version"
+msgstr "Upgrade von der kostenlosen zur Pro-Version"
+
+#: controllers/pro/umUserImportController.php:56
+msgid "You do not have sufficient permissions to access this page."
+msgstr "Sie haben nicht die nötigen Rechte um auf diese Seite zuzugreifen."
+
+#: controllers/pro/umUserImportController.php:139
+msgid "CSV file not found for import!"
+msgstr "CSV-Datei für Import nicht gefunden!"
+
+#: controllers/pro/umUserImportController.php:141
+msgid "There is some error while importing."
+msgstr "Es gab Fehler während des Imports."
+
+#: controllers/pro/umUserImportController.php:145
+msgid "Email field should be selected as any field."
+msgstr "E-Mail-Feld muss als irgendein Feld ausgewählt sein."
+
+#: controllers/pro/umUserImportController.php:148
+msgid "Username field should be selected as any field."
+msgstr "Benutzername muss als irgendein Feld ausgewählt sein."
+
+#: controllers/pro/umUserImportController.php:151
+msgid "Email and Username field should be selected as any field."
+msgstr "E-Mail und Benutzername müssen als irgendein Feld ausgewählt sein."
+
+#: controllers/pro/umUserActivationController.php:28
+#: controllers/pro/umUserActivationController.php:99
+#: controllers/pro/umUserActivationController.php:180
+msgid "Activate"
+msgstr "Aktivieren"
+
+#: controllers/pro/umUserActivationController.php:31
+#: controllers/pro/umUserActivationController.php:99
+#: controllers/pro/umUserActivationController.php:185
+msgid "Deactivate"
+msgstr "Deaktivieren"
+
+#: controllers/pro/umUserActivationController.php:100
+msgid "Active"
+msgstr "Aktiv"
+
+#: controllers/pro/umUserActivationController.php:100
+msgid "Inactive"
+msgstr "Inaktiv"
+
+#: controllers/pro/umUserActivationController.php:136
+msgid "<strong>ERROR:</strong> your account is not yet activated."
+msgstr "<strong>FEHLER:</strong> Ihr Konto muss von einem Administrator freigegeben werden, bevor Sie sich einloggen können."
+
+#: controllers/pro/umUserActivationController.php:179
+#, php-format
+msgid "New user %s registered on your site."
+msgstr "Neue Benutzer %s haben sich auf Ihrer Seite angemeldet."
+
+#: controllers/pro/umUserActivationController.php:184
+#, php-format
+msgid "User %s is already activated."
+msgstr "Benutzer %s ist schon aktiviert."
+
+#: controllers/pro/umUserActivationController.php:190
+msgid "activated"
+msgstr "aktiviert"
+
+#: controllers/pro/umUserActivationController.php:192
+msgid "deactivated"
+msgstr "deaktiviert"
+
+#: controllers/pro/umUserActivationController.php:195
+#, php-format
+msgid "%1$s users have been %2$s"
+msgstr "%1$s Benutzer haben %2$s"
+
+#: controllers/pro/umUserActivationController.php:197
+#, php-format
+msgid "User has been %s"
+msgstr "Benutzer hat %s"
+
+#: controllers/pro/umLoginWidgetController.php:20
+msgid "User Meta Login"
+msgstr "User Meta Login"
+
+#: controllers/pro/umLoginWidgetController.php:21
+msgid "Login Widget"
+msgstr "Login Widget"
+
+#: controllers/pro/umLoginWidgetController.php:88
+msgid "Guest Title:"
+msgstr "Gäste Titel:"
+
+#: controllers/pro/umLoginWidgetController.php:91
+msgid "Only guest user can see this title"
+msgstr "Nur Gäste können diesen Titel sehen"
+
+#: controllers/pro/umLoginWidgetController.php:97
+msgid "Logged-In User Title:"
+msgstr "Angemeldete Benutzer Titel"
+
+#: controllers/pro/umLoginWidgetController.php:100
+msgid "Only logged-in user can see this title"
+msgstr "Nur angemeldete Benutzer können diesen Titel sehen"
+
+#: controllers/pro/umLoginWidgetController.php:106
+msgid "Hide this widget when viewing login page"
+msgstr "Verstecke dieses Widget während die Loginseite angezeigt wird."
+
+#: controllers/pro/umPreloadsProController.php:126
+#, php-format
+msgid "There is a new version <strong>%1$s</strong> of <strong>%2$s</strong> available. <a href=\"%3$s\">update automatically.</a>"
+msgstr "Es ist eine neue Version <strong>%1$s</strong> von <strong>%2$s</strong> verfügbar. <a href=\"%3$s\">automatisch aktualisieren.</a>"
+
+#: controllers/pro/umPreloadsProController.php:143
+#, php-format
+msgid "<strong>ERROR</strong>: Invalid %s."
+msgstr "<strong>FEHLER</strong>: Ungültig %s."
+
+#: controllers/pro/umPreloadsProController.php:146
+#, php-format
+msgid "<strong>ERROR</strong>: Incorrect Password. <a href=\"%s\" title=\"Password Lost and Found\">Lost your password</a>?"
+msgstr "<strong>FEHLER</strong>: Falsches Passwort. <a href=\"%s\" title=\"Password Lost and Found\">Passwort vergessen</a>?"
+
+#: controllers/pro/umPreloadsProController.php:156
+#, php-format
+msgid "Please set your login page from <a href=\"%s\">here</a>. "
+msgstr "Bitte Lizenzinfo zum <a href=\"%s\">Aktivieren von User Meta Pro</a> eingeben."
+
+#: controllers/pro/umEmailNotificationController.php:83
+msgid "To reset your password, visit the following address: "
+msgstr "Um das Passwort zurückzusetzen, bitte folgende Adresse aufrufen:"
+
+#: controllers/pro/umEmailNotificationController.php:138
+#, php-format
+msgid "Password: %s"
+msgstr "Passwort: %s"
+
+#: controllers/pro/umEmailNotificationController.php:145
+#: controllers/pro/umEmailNotificationController.php:151
+#, php-format
+msgid "Email verification url: %s"
+msgstr "Adresse für E-Mail-Überprüfung: %s"
+
+#: controllers/pro/umEmailNotificationController.php:148
+#: controllers/pro/umEmailNotificationController.php:153
+#, php-format
+msgid "Activation url: %s"
+msgstr "Adresse für Benutzerfreischaltung: %s"
+
+#: models/umSupportHtml.php:32
+#, php-format
+msgid "<p><strong>Step 1.</strong> Create Field from User Meta %s page.</p>"
+msgstr "<p><strong>Schritt 1.</strong> Feld erstellen mit der User Meta %s Seite.</p>"
+
+#: models/umSupportHtml.php:33
+#, php-format
+msgid "<p><strong>Step 2.</strong> Go to User Meta %s page. Choose a Form Name, drag and drop fields from right to left and save the form.</p>"
+msgstr "<p><strong>Schritt 2.</strong> User Meta %s Seite aufrufen, einen Formularnamen wählen, Felder von rechts nach links ziehen (\"drag and drop\") und das Formular speichern.</p>"
+
+#: models/umSupportHtml.php:34
+msgid "<p><strong>Step 3.</strong> Write shortcode to your page or post. Shortcode (e.g.): &#91;user-meta type=\"profile\" form=\"your_form_name\"&#93;</p>"
+msgstr "<p><strong>Schritt 3.</strong> Shortcode in Seite oder Artikel einfügen. Shortcode z.B.: &#91;user-meta type=\"profile\" form=\"your_form_name\"&#93;</p>"
+
+#: models/umSupportHtml.php:35
+msgid "Visit Plugin Site"
+msgstr "Besuche die Plugin-Site"
+
+#: models/umSupportHtml.php:72
+msgid "<p><strong>&#91;user-meta type=\"type_name\" form=\"your_form_name\"&#93;</strong></p>"
+msgstr "<p><strong>&#91;user-meta type=\"type_name\" form=\"your_form_name\"&#93;</strong></p>"
+
+#: models/umSupportHtml.php:73
+msgid "<li><strong>type=\"profile\"</strong> for showing profile page.</li>"
+msgstr "<li><strong>type=\"profile\"</strong> um die Profilseite anzuzeigen.</li>"
+
+#: models/umSupportHtml.php:74
+msgid "<li><strong>type=\"none\"</strong> for hiding update button.</li>"
+msgstr "<li><strong>type=\"none\"</strong> um \"Aktualisieren\" nicht anzuzeigen.</li>"
+
+#: models/umSupportHtml.php:75
+msgid "<li><strong>type=\"registration\"</strong> for showing registration page.</li>"
+msgstr "<li><strong>type=\"registration\"</strong> um die Registrierseite anzuzeigen.</li>"
+
+#: models/umSupportHtml.php:76
+msgid "<li><strong>type=\"both\"</strong> for showing profile page if user logged in, or showing registration page, if not user logged in.</li>"
+msgstr "<li><strong>type=\"both\"</strong> um die Profilseite anzuzeigen, wenn der Benutzer angemeldet ist und die Registrierseite, wenn der Benutzer nicht angemeldet ist.</li>"
+
+#: models/umSupportHtml.php:77
+msgid "<li><strong>type=\"login\"</strong> for showing login page.</li>"
+msgstr "<li><strong>type=\"login\"</strong> um die Anmeldeseite anzuzeigen.</li>"
+
+#: models/umSupportHtml.php:79
+msgid "<p>N.B. \"registration\", \"both\" and \"login\" is only supported in pro version.</p>"
+msgstr "<p>Anm.: \"registration\", \"both\" and \"login\" werden nur in der Pro-Version unterstützt.</p>"
+
+#: models/umSupportHtml.php:80
+msgid "<p>Admin user can see all others frontend profile from User Administration screen. To enable this feature, go to User Meta &#62;&#62; Settings, select profile page from Profile Page Selection and enable right sided checkbox.</p>"
+msgstr "<p>Administratoren können alle Frontend-Benutzerprofile in der Benutzerverwaltung sehen. Um diese Funktion zu verwenden, gehe zu User Meta &#62;&#62; Einstellungen, wähle die entsprechende Seite von \"Profilseitenauswahl\" und hake die Auswahl rechts an.</p>"
+
+#: models/umSupportHtml.php:81
+msgid "<p>In Case of extra field, you need to define unique meta_key. That meta_key will be use to save extra data in usermeta table. Without defining meta_key, extra data won't save.</p>"
+msgstr "<p>Bei Extrafeldern muss ein eindeutiger \"Meta Key\" definiert werden. Dieser wird benutzt um die Extradaten in der Usermeta-Tabelle zu speichern. Wird er nicht angegeben, werden diese Daten nicht gespeichert.</p>"
+
+#: models/umSupportArray.php:32
+#: models/umSupportArray.php:154
+#: models/umSupportArray.php:231
+msgid "Email"
+msgstr "E-Mail"
+
+#: models/umSupportArray.php:76
+msgid "Registration Date"
+msgstr "Registrierungsdatum"
+
+#: models/umSupportArray.php:81
+msgid "Role"
+msgstr "Rolle"
+
+#: models/umSupportArray.php:86
+msgid "Jabber"
+msgstr "Jabber / Google Talk"
+
+#: models/umSupportArray.php:91
+msgid "Aim"
+msgstr "AIM"
+
+#: models/umSupportArray.php:96
+msgid "Yim"
+msgstr "Yahoo IM"
+
+#: models/umSupportArray.php:101
+msgid "Avatar"
+msgstr "Avatar"
+
+#: models/umSupportArray.php:109
+msgid "Textbox"
+msgstr "Textbox"
+
+#: models/umSupportArray.php:114
+msgid "Paragraph"
+msgstr "Absatz"
+
+#: models/umSupportArray.php:119
+msgid "Rich Text"
+msgstr "Rich Text"
+
+#: models/umSupportArray.php:124
+msgid "Hidden Field"
+msgstr "Hidden Field"
+
+#: models/umSupportArray.php:129
+msgid "Drop Down"
+msgstr "Drop Down"
+
+#: models/umSupportArray.php:134
+msgid "Checkbox"
+msgstr "Checkbox"
+
+#: models/umSupportArray.php:139
+msgid "Select One (radio)"
+msgstr "Select One (radio)"
+
+#: models/umSupportArray.php:144
+msgid "Date / Time"
+msgstr "Date / Time"
+
+#: models/umSupportArray.php:159
+msgid "File Upload"
+msgstr "Datei-Upload"
+
+#: models/umSupportArray.php:164
+msgid "Image URL"
+msgstr "Foto URL"
+
+#: models/umSupportArray.php:169
+msgid "Phone Number"
+msgstr "Telefonnummer"
+
+#: models/umSupportArray.php:174
+msgid "Number"
+msgstr "Nummer"
+
+#: models/umSupportArray.php:184
+msgid "Country"
+msgstr "Land"
+
+#: models/umSupportArray.php:196
+msgid "Page Heading"
+msgstr "Seitenkopf"
+
+#: models/umSupportArray.php:201
+msgid "Section Heading"
+msgstr "Abschnittskopf"
+
+#: models/umSupportArray.php:211
+msgid "Captcha"
+msgstr "Captcha"
+
+#: models/umSupportArray.php:232
+msgid "Username or Email"
+msgstr "Benutzername oder E-Mail"
+
+#: models/umAjaxModel.php:21
+msgid "Action type not set"
+msgstr "Aktionstyp nicht eingegeben"
+
+#: models/umAjaxModel.php:23
+msgid "Form name not set"
+msgstr "Formularname nicht eingegeben"
+
+#: models/umAjaxModel.php:41
+msgid "No field to Update"
+msgstr "Es wurde kein Feld geändert"
+
+#: models/umAjaxModel.php:76
+#, php-format
+msgid "%s field is required"
+msgstr "%s Feld ist erforderlich"
+
+#: models/umAjaxModel.php:82
+#, php-format
+msgid "%1$s: \"%2$s\" already taken"
+msgstr "%1$s: \"%2$s\" bereits vergeben"
+
+#: models/umAjaxModel.php:88
+msgid "No data to update"
+msgstr "Es wurden keine Daten geändert"
+
+#: models/umAjaxModel.php:95
+msgid "User must be logged in to update profile"
+msgstr "Benutzer muss eingeloggt sein, um das Profil zu ändern"
+
+#: models/umAjaxModel.php:109
+msgid "Profile successfully updated."
+msgstr "Profil erfolgreich geändert."
+
+#: models/umAjaxModel.php:132
+#, php-format
+msgid "%s already taken"
+msgstr "%s bereits vergeben"
+
+#: models/pro/umSupportProModel.php:104
+msgid "The passwords do not match."
+msgstr "Die Passwörter stimmen nicht überein."
+
+#: models/pro/umSupportProModel.php:107
+msgid "Your password has been reset."
+msgstr "Ihr Passwort wurde zurückgesetzt."
+
+#: models/pro/umSupportProModel.php:126
+msgid "Invalid Parameter"
+msgstr "Ungültiger Parameter"
+
+#: models/pro/umSupportProModel.php:130
+msgid "Email not found"
+msgstr "E-Mail nicht gefunden."
+
+#: models/pro/umSupportProModel.php:133
+msgid "User already activated"
+msgstr "Benutzer ist schon aktiviert"
+
+#: models/pro/umSupportProModel.php:150
+msgid "email is successfully verified "
+msgstr "E-Mail-Adresse erfolgreich überprüft."
+
+#: models/pro/umSupportProModel.php:152
+msgid "Invalid Key"
+msgstr "Ungültiger Schlüssel"
+
+#: models/pro/umSupportProModel.php:259
+msgid "Registration successfully completed."
+msgstr "Registrierung erfolgreich durchgeführt."
+
+#: models/pro/umSupportProModel.php:261
+msgid "We have sent you a verification link to your email. Please complete your registration by clicking the link."
+msgstr "Wir haben Ihnen einen Link per E-Mail gesendet. Bitte klicken Sie auf diesen Link um Ihre Registrierung zu vervollständigen."
+
+#: models/pro/umSupportProModel.php:263
+msgid "Please wait until an admin approve your account."
+msgstr "Bitte warten Sie bis der Administrator Ihre Registrierung freigegeben hat."
+
+#: models/pro/umSupportProModel.php:265
+msgid "We have sent you a verification link to your email. Please verify your email by clicking the link and wait for admin approval."
+msgstr "Zur Bestätigung Ihrer E-Mail-Adresse haben wir Ihnen einen Link per E-Mail gesendet. Bitte klicken Sie auf diesen Link und warten dann auf die Freigabe durch den Administrator."
+
+#: models/pro/umSupportProModel.php:307
+msgid "Incorrect Captcha Code"
+msgstr "Ungültiger Captcha Code"
+
+#: models/pro/umSupportProModel.php:472
+msgid "Disable this notification"
+msgstr "Diese Benachrichtigung abschalten."
+
+#: models/pro/umAjaxProModel.php:14
+msgid "Check your e-mail for the confirmation link."
+msgstr "Prüfen Sie Ihr E-Mail-Postfach für den Bestätigungslink."
+
+#: models/pro/umAjaxProModel.php:36
+msgid "Login Successful"
+msgstr "Anmeldung erfolgreich"
+
+#: models/pro/umAjaxProModel.php:54
+msgid "There is some problem while updating"
+msgstr "Es gab Fehler während des Aktualisieren."
+
+#: models/pro/umAjaxProModel.php:61
+msgid "Successfully Saved."
+msgstr "Erfolgreich gespeichert."
+
+#: models/enc/umProSupportModel.php:88
+msgid "Successfully validated"
+msgstr "Erfolgreich überprüft."
+
+#: models/enc/umProSupportModel.php:89
+#, php-format
+msgid "Please purchase %s"
+msgstr "Bitte kaufen Sie %s"
+
+#: models/enc/umProSupportModel.php:90
+msgid "Invalid email or password."
+msgstr "Ungültige Email oder Passwort."
+
+#: models/enc/umProSupportModel.php:91
+msgid "Email not found."
+msgstr "E-Mail nicht gefunden."
+
+#: models/enc/umProSupportModel.php:99
+msgid "Something went wrong"
+msgstr "Etwas ist schief gelaufen"
+
+#: models/enc/umProSupportModel.php:161
+msgid "Redirecting for upgrading to Pro version... "
+msgstr "Weiterleiten zum Upgrade auf die Pro-Version..."
+
+#: models/enc/umProSupportModel.php:162
+msgid "if not redirecting,"
+msgstr "wenn nicht weitergeleitet,"
+
+#: models/enc/umProSupportModel.php:162
+msgid "click here for upgrading to Pro version"
+msgstr "Klicken zum Upgrade auf die Pro-Version"
+
+#: models/enc/umProSupportModel.php:194
+#, php-format
+msgid "Please enter your license information to <a href=\"%s\">activate User Meta Pro</a>."
+msgstr "Bitte Lizenzinfo zum <a href=\"%s\">Aktivieren von User Meta Pro</a> eingeben."
+
+#: helper/umLocalizeScript.php:16
+#, php-format
+msgid "Get pro version from %s to use this feature."
+msgstr "Bestellen Sie die Pro-Version von %s um dieses Feature zu benutzen."
+
+#: helper/umLocalizeScript.php:17
+msgid "Please Wait..."
+msgstr "Bitte warten ..."
+
+#: helper/umLocalizeScript.php:20
+msgid "Upload"
+msgstr "Upload"
+
+#: helper/umLocalizeScript.php:21
+msgid "Drop files here to upload"
+msgstr "Zum Uploaden hier die Dateien fallen lassen"
+
+#: helper/umLocalizeScript.php:22
+msgid "Cancel"
+msgstr "Abbrechen"
+
+#: helper/umLocalizeScript.php:23
+msgid "Failed"
+msgstr "Fehlgeschlagen"
+
+#: helper/umLocalizeScript.php:24
+#, php-format
+msgid "%1$s has invalid extension. Only %2$s are allowed."
+msgstr "%1$s hat eine ungültige Endung. Nur%2$s sind erlaubt."
+
+#: helper/umLocalizeScript.php:25
+#, php-format
+msgid "%1$s is too large, maximum file size is %2$s."
+msgstr "%1$s ist zu groß, maximale Dateigröße ist %2$s."
+
+#: helper/umLocalizeScript.php:26
+#, php-format
+msgid "%s is empty, please select files again without it."
+msgstr "%s ist leer, bitte wählen Sie nochmal Dateien ohne die erste."
+
+#: helper/umLocalizeScript.php:29
+msgid "Too weak"
+msgstr "Zu Schwach"
+
+#: helper/umLocalizeScript.php:30
+msgid "Weak password"
+msgstr "Schwaches Passwort"
+
+#: helper/umLocalizeScript.php:31
+msgid "Normal strength"
+msgstr "Normale Stärke"
+
+#: helper/umLocalizeScript.php:32
+msgid "Strong password"
+msgstr "Starkes Passwort"
+
+#: helper/umLocalizeScript.php:33
+msgid "Very strong password"
+msgstr "Sehr starkes Passwort"
+
+#: helper/umLocalizeScript.php:36
+msgid "* This field is required"
+msgstr "Dieses Feld ist erforderlich"
+
+#: helper/umLocalizeScript.php:37
+msgid "* Please select an option"
+msgstr "Bite wählen Sie eine Option"
+
+#: helper/umLocalizeScript.php:38
+msgid "* This checkbox is required"
+msgstr "Diese Box ist erforderlich"
+
+#: helper/umLocalizeScript.php:39
+msgid "* Minimum "
+msgstr "Minimum"
+
+#: helper/umLocalizeScript.php:40
+msgid "* Maximum "
+msgstr "Maximum"
+
+#: helper/umLocalizeScript.php:41
+msgid " characters allowed"
+msgstr "Buchstaben erlaubt"
+
+#: helper/umLocalizeScript.php:42
+msgid "* Minimum value is "
+msgstr "Minimaler Wert ist"
+
+#: helper/umLocalizeScript.php:43
+msgid "* Maximum value is "
+msgstr "Maximaler Wert ist"
+
+#: helper/umLocalizeScript.php:44
+msgid "* Date prior to "
+msgstr "Datum vor"
+
+#: helper/umLocalizeScript.php:45
+msgid "* Date past "
+msgstr "Datum nach"
+
+#: helper/umLocalizeScript.php:46
+msgid " options allowed"
+msgstr "Optionen sind erlaubt"
+
+#: helper/umLocalizeScript.php:47
+msgid "* Please select "
+msgstr "Bitte wählen Sie"
+
+#: helper/umLocalizeScript.php:48
+msgid " options"
+msgstr "Feldoptionen"
+
+#: helper/umLocalizeScript.php:49
+msgid "* Fields do not match"
+msgstr "Die Felder stimmen nicht überein."
+
+#: helper/umLocalizeScript.php:50
+msgid "* Invalid phone number"
+msgstr "Ungültige Telefonnummer"
+
+#: helper/umLocalizeScript.php:51
+msgid "* Invalid email address"
+msgstr "Ungültige Emailadresse"
+
+#: helper/umLocalizeScript.php:52
+msgid "* Not a valid integer"
+msgstr "Keine gültige ganze Zahl"
+
+#: helper/umLocalizeScript.php:53
+msgid "* Invalid floating decimal number"
+msgstr "Ungültige Fließkommazahl"
+
+#: helper/umLocalizeScript.php:54
+msgid "* Invalid date, must be in YYYY-MM-DD format"
+msgstr "Ungültiges Datum, muss im Format YYYY-MM-DD sein"
+
+#: helper/umLocalizeScript.php:55
+msgid "* Invalid time, must be in hh:mm:ss format"
+msgstr "Ungültige Zeit, muss im Format hh:mm:ss sein"
+
+#: helper/umLocalizeScript.php:56
+msgid "* Invalid datetime, must be in YYYY-MM-DD hh:mm:ss format"
+msgstr "Ungültige Zeitangabe, muss im Format YYYY-MM-DD hh:mm:ss sein"
+
+#: helper/umLocalizeScript.php:57
+msgid "* Invalid IP address"
+msgstr "Ungültige IP Adresse"
+
+#: helper/umLocalizeScript.php:58
+msgid "* Invalid URL"
+msgstr "Ungültige URL"
+
+#: helper/umLocalizeScript.php:59
+msgid "* Numbers only"
+msgstr "nur Zahlen"
+
+#: helper/umLocalizeScript.php:60
+msgid "* Letters only"
+msgstr "Nur Buchstaben"
+
+#: helper/umLocalizeScript.php:61
+msgid "* No special characters allowed"
+msgstr "Keine Sonderzeichen erlaubt"
+
+#: helper/umLocalizeScript.php:62
+msgid "* This user is already taken"
+msgstr "Dieser Benutzer ist bereits vergeben"
+
+#~ msgid "Name Format"
+#~ msgstr "Namensformat"
+
+#~ msgid "<h3>User Notification</h3>"
+#~ msgstr "<h3>Benutzerbenachrichtung</h3>"
+
+#~ msgid "Use placeholder %email_verification_url% if needed."
+#~ msgstr "Wenn nötig, verwende den Platzhalter %email_verification_url%."
+
+#~ msgid "<h3>Admin Notification</h3>"
+#~ msgstr "<h3>Admin-Benachrichtigung</h3>"
+
+#, fuzzy
+#~ msgid "Login Page (<i>%s</i>)"
+#~ msgstr "Anmeldeseite"

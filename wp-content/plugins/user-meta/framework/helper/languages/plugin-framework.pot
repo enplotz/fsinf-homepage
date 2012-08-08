@@ -1,0 +1,186 @@
+# Copyright (C) 2012 User Meta http://user-meta.com
+# This file is distributed under the same license as the User Meta package.
+msgid ""
+msgstr ""
+"Project-Id-Version: plugin-framework 1.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-04-10 16:27+0600\n"
+"PO-Revision-Date: 2012-06-18 16:27+0600\n"
+"Last-Translator: Khaled Saikat <support@user-meta>\n"
+"Language-Team: User Meta Pro <support@user-meta.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: /home/saikat/Desktop/user-meta/framework\n"
+
+#: /home/saikat/Desktop/user-meta/framework/views/metaBox.php:4
+msgid "Click to Remove"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/views/metaBox.php:12
+msgid "Click to toggle"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/phpunit/models/PluginFrameworkArrayTest.php:34
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:24
+msgid "Password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:17
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:21
+msgid "Security check"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:159
+msgid "Cannot create a user with an empty login name and empty email"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:220
+msgid "No file upload field found!"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:227
+msgid "File is empty."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:230
+#: /home/saikat/Desktop/user-meta/framework/helper/uploader.php:133
+msgid "Server error. Upload directory is not writable."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:233
+#, php-format
+msgid "File %s is too large."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:250
+#: /home/saikat/Desktop/user-meta/framework/helper/uploader.php:159
+#, php-format
+msgid "File %1$s has an invalid extension, it should be one of %2$s."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:262
+#: /home/saikat/Desktop/user-meta/framework/helper/uploader.php:176
+msgid "Could not save uploaded file."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkWPSupport.php:263
+#: /home/saikat/Desktop/user-meta/framework/helper/uploader.php:177
+msgid "The upload was cancelled, or server error encountered"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:22
+msgid "Username"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:23
+msgid "E-mail"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:25
+msgid "Nicename"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:26
+msgid "Website"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:27
+msgid "Display Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:28
+msgid "Nickname"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:29
+msgid "First Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:30
+msgid "Last Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:31
+msgid "Description"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:32
+msgid "Registration Date"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:33
+msgid "Role"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:34
+msgid "Jabber"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:35
+msgid "Aim"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkArray.php:36
+msgid "Yim"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:22
+msgid "<strong>ERROR</strong>: Enter a username or e-mail address."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:36
+msgid "<strong>ERROR</strong>: Invalid username or e-mail."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:50
+msgid "Password reset is not allowed for this user"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:74
+msgid "Someone requested that the password be reset for the following account:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:76
+#, php-format
+msgid "Username: %s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:77
+msgid "If this was a mistake, just ignore this email and nothing will happen."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:78
+msgid "To reset your password, visit the following address:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:89
+#, php-format
+msgid "[%s] Password Reset"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:96
+msgid "The e-mail could not be sent. Possible reason: your host may have disabled the mail() function..."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:120
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:123
+#: /home/saikat/Desktop/user-meta/framework/models/PluginFrameworkBuiltinFunction.php:128
+msgid "Invalid key"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/helper/uploader.php:137
+msgid "No files were uploaded."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/helper/uploader.php:143
+msgid "File is empty"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/framework/helper/uploader.php:147
+msgid "File is too large"
+msgstr ""
+

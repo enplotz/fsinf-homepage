@@ -1,0 +1,1645 @@
+# Copyright (C) 2012 User Meta http://user-meta.com
+# This file is distributed under the same license as the User Meta package.
+msgid ""
+msgstr ""
+"Project-Id-Version: User Meta Pro 1.1.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-04-10 16:32+0600\n"
+"PO-Revision-Date: 2012-06-18 16:34+0600\n"
+"Last-Translator: Khaled Saikat <support@user-meta>\n"
+"Language-Team: User Meta Pro <support@user-meta.com>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
+"X-Poedit-Basepath: .\n"
+"X-Poedit-SearchPath-0: /home/saikat/Desktop/user-meta\n"
+
+#: /home/saikat/Desktop/user-meta/views/formsEditorPage.php:6
+msgid "Forms Editor"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/formsEditorPage.php:6
+#: /home/saikat/Desktop/user-meta/views/formsEditorPage.php:39
+#: /home/saikat/Desktop/user-meta/views/form.php:75
+msgid "New Form"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/formsEditorPage.php:14
+#: /home/saikat/Desktop/user-meta/views/formsEditorPage.php:34
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:85
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:15
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:35
+msgid "Save Changes"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/formsEditorPage.php:51
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:132
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:57
+#: /home/saikat/Desktop/user-meta/views/email/emailNotificationPage.php:19
+msgid "3 steps to getting started"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/formsEditorPage.php:53
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:134
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:56
+#: /home/saikat/Desktop/user-meta/views/email/emailNotificationPage.php:21
+msgid "User Meta Pro"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/formsEditorPage.php:54
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:135
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:58
+#: /home/saikat/Desktop/user-meta/views/email/emailNotificationPage.php:13
+#: /home/saikat/Desktop/user-meta/views/email/emailNotificationPage.php:22
+msgid "Shortcode"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/generateField.php:120
+msgid "Retype "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:8
+msgid "User Meta Settings"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:19
+msgid "General"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:20
+msgid "Login"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:21
+msgid "Registration"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:22
+msgid "Redirection"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settingsPage.php:23
+msgid "Backend Profile"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:6
+msgid "Fields Editor"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:8
+msgid "Click field from right side panel for creating new field"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:52
+msgid "WordPress Default Fields"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:53
+msgid "Extra Fields"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/fieldsEditorPage.php:54
+msgid "Formatting Fields"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:16
+msgid "Field Title"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:27
+msgid "Field Type"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:37
+msgid "Field Description"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:45
+msgid "Meta Key"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:54
+msgid "Default Value"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:62
+msgid "Field Options"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:71
+msgid "Required"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:76
+msgid "Admin Only"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:81
+msgid "Read Only for all user"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:86
+msgid "Read Only for non admin"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:91
+msgid "Unique"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:96
+msgid "Non-Admin only"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:101
+msgid "Only on Registration Page"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:106
+msgid "Disable AJAX upload"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:111
+msgid "Hide default avatar"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:116
+msgid "Title Position"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:125
+msgid "CSS Class"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:133
+msgid "CSS Style"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:141
+msgid "Field Size"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:150
+msgid "Field Height"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:159
+msgid "Max Char"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:169
+msgid "Force to change username"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:173
+msgid "Retype Email"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:177
+msgid "Retype Password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:181
+msgid "Show password strength meter"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:186
+msgid "Show Divider"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:191
+msgid "Use Rich Text"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:208
+msgid "Allowed Extension"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:217
+msgid "Type Selection"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:222
+msgid "Date"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:222
+msgid "Time"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:222
+msgid "Date and Time"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:226
+msgid "Save meta value by"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:231
+msgid "Country Code"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:231
+msgid "Country Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:235
+msgid "Maximum Number"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:243
+msgid "Minimum Number"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:251
+msgid "Max File Size"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:254
+msgid "(in KB. Default: 1024KB)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:260
+msgid "Image Width (px)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:263
+msgid "(For Image Only. e.g. 640)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:269
+msgid "Image Height (px)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:272
+msgid "(For Image Only. e.g. 480)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:278
+msgid "reCaptcha Public Key"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:286
+msgid "reCaptcha Private Key"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:303
+msgid "By default, <strong>Required</strong> and <strong>Unique</strong> validation will be set with this field. <strong>Read Only</strong> will be set conditionally."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:309
+msgid "By default, <strong>Required</strong> and <strong>Unique</strong> validation will be set with this field."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:315
+msgid "<strong>Required</strong> validation will be set automatically when password field is being used by registration."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/field.php:407
+msgid "New Field"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/generateForm.php:10
+msgid "Form not found."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/generateForm.php:13
+msgid "Fields not found."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/generateForm.php:106
+msgid "Previous"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/generateForm.php:118
+msgid "Update"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/generateForm.php:120
+msgid "Register"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/form.php:11
+msgid "Form Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/form.php:16
+msgid "(Give a name to your form)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/form.php:30
+msgid "Fields in your form (Drag from available fields)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/form.php:31
+msgid "Available Fields"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/form.php:59
+msgid "Drag fields from right block to left block for make them available to your form."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/form.php:64
+msgid "Do not use AJAX submit"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/email/emailNotificationPage.php:7
+msgid "E-mail Notification"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/email/mailForm.php:7
+msgid "From E-mail"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/email/mailForm.php:15
+msgid "From Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/email/mailForm.php:23
+msgid "Plain Text"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/email/mailForm.php:24
+msgid "HTML"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/email/mailForm.php:28
+msgid "E-mail Format"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/email/mailForm.php:36
+msgid "Subject"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/email/mailForm.php:44
+msgid "Body"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/email/mailForm.php:52
+msgid "Disable Notification"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:10
+msgid "Version:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:13
+msgid "Account Details"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:14
+#, php-format
+msgid "Enter your email and password for %s to activate your pro version."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:19
+msgid "Email:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:27
+msgid "Password:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:34
+msgid "Save"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:44
+msgid "Enter email and password to activate Pro version"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:46
+msgid "Enter email and password for upgrade to pro version"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:53
+msgid "Click for upgrade to Pro"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/activationForm.php:62
+msgid "User Meta Pro Account Information"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/miscSettings.php:4
+#: /home/saikat/Desktop/user-meta/views/settings/backendProfile.php:4
+#, php-format
+msgid "This feature is only supported in Pro version. Get %s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/settings1.php:6
+msgid "Version: "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/settings1.php:11
+msgid "Profile Page Selection"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/settings1.php:20
+msgid "Show profile link to User Administration Page"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/generalSettings.php:17
+#, php-format
+msgid "Show profile link to <a href=\"%s\">Users<a> administration page."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/generalSettings.php:19
+msgid "Profile page should contain shortcode like:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/generalSettings.php:29
+msgid "E-mail Sender Setting"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/generalSettings.php:31
+msgid "Set default email sender information"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/generalSettings.php:34
+msgid "From Name:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/generalSettings.php:37
+#: /home/saikat/Desktop/user-meta/views/settings/generalSettings.php:45
+#: /home/saikat/Desktop/user-meta/views/pro/email/singleEmailForm.php:15
+#: /home/saikat/Desktop/user-meta/views/pro/email/singleEmailForm.php:24
+#: /home/saikat/Desktop/user-meta/views/pro/email/singleEmailForm.php:39
+msgid "(Leave blank to use default)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/generalSettings.php:42
+msgid "From Email:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/settings/generalSettings.php:50
+msgid "Email Format:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/fieldPro.php:71
+#, php-format
+msgid "Please provide reCaptcha public and private key from User Meta %s page"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/generateField.php:319
+msgid "Next"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/generateField.php:376
+msgid "Please set public and private key from User Meta >> Settings Page"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:21
+msgid "This e-mail will be sent to new user after registration."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:22
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:43
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:55
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:67
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:87
+msgid "User Notification"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:24
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:32
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:76
+#, php-format
+msgid "Use placeholder %s if needed."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:29
+msgid "This e-mail will be sent to admin after new user registration."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:30
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:74
+msgid "Admin Notification"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:34
+msgid "User Registration E-mail"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:41
+msgid "This e-mail will be sent to user upon activation."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:46
+msgid "User Activation E-mail"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:53
+msgid "This e-mail will be sent to user upon deactivation."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:58
+msgid "User Deactivation E-mail"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:66
+msgid "This email will be sent to user after email verified."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:73
+msgid "This email will be sent to admin after user email verified."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:78
+msgid "After email verified"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:85
+msgid "This e-mail will be sent to user when requested for reset password."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:89
+#, php-format
+msgid "Use placeholder <strong>%s</strong> or it will automatically included."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:91
+msgid "Lost Password E-mail"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:109
+msgid "Site Placeholder"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:118
+msgid "User Placeholder"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:127
+msgid "Custom Field"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:130
+msgid "Use those placeholders to email subject or body. Placeholder will be replaced with proper value."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/email/emailNotificationPage.php:132
+msgid "Placeholder"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:15
+msgid "Personal Options Heading"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:16
+msgid "Visual Editor"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:17
+msgid "Admin Color Scheme"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:18
+msgid "Keyboard Shortcuts"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:19
+msgid "Toolbar"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:23
+msgid "Name Heading"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:24
+msgid "Username"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:25
+msgid "First Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:26
+msgid "Last Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:27
+msgid "Nickname"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:28
+msgid "Display Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:32
+msgid "Contact Info Heading"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:33
+msgid "E-mail"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:34
+msgid "Website"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:35
+msgid "AIM"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:36
+msgid "Yahoo IM"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:37
+msgid "Jabber / Google Talk"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:41
+msgid "About Yourself Heading"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:42
+msgid "Biographical Info"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:43
+msgid "New Password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:47
+msgid "Hide WordPress default fields"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:48
+msgid "Select fields from below, which you need to hide from backend profile page"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:83
+msgid "Extra fields in backend profile"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:84
+msgid "Add extra fields to backend profile. drag from available fields block to backend profile block"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/backendProfile.php:85
+msgid "Fields in backend profile (Drag from available fields)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/registrationSettings.php:9
+msgid "User auto activation."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/registrationSettings.php:9
+msgid "User will be activated automatically after registration"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/registrationSettings.php:10
+msgid "Need email verification."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/registrationSettings.php:10
+msgid "A verification link will be sent to user email. User must verify the link to activate their account"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/registrationSettings.php:11
+msgid "Need admin approval."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/registrationSettings.php:11
+msgid "Admin needs to approve the new user"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/registrationSettings.php:12
+msgid "Need both email verification and admin approval."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/registrationSettings.php:12
+msgid "A verification link will be sent to user email. User must verify the link to activate their account and an admin needs to approve the account"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/registrationSettings.php:17
+msgid "User Activation"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/generalProSettings.php:9
+msgid "reCAPTCHA Settings"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/generalProSettings.php:11
+msgid "reCAPTCHA is a free CAPTCHA service that helps to digitize books, newspapers and old time radio shows."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/generalProSettings.php:11
+msgid "Read More"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/generalProSettings.php:15
+msgid "reCAPTCHA Public Key"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/generalProSettings.php:23
+msgid "reCAPTCHA Private Key"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/generalProSettings.php:29
+msgid "<p>User Meta plugin use reCAPTCHA as Captcha field. reCAPTCHA Public Key and reCAPTCHA Private Key are required for using Captcha validation. Get those key for free. <a href='http://www.google.com/recaptcha/whyrecaptcha' target='_blank'>Sign up now</a>.</p>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:10
+msgid "User Redirection Settings"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:12
+msgid "Disable redirection feature"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:18
+msgid "Set redirection on login, logout and registration"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:25
+msgid "Default (<em>Use default redirection</em>)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:26
+msgid "Referer (<em>Send the user back to the page where they comes from</em>)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:27
+msgid "Home"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:28
+msgid "Profile"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:29
+msgid "Dashboard"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:30
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:25
+msgid "Login Page"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:31
+msgid "<em> (Include http:// with url)</em>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:54
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:72
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:89
+msgid "Custom URL:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:62
+msgid "Login Redirection"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:79
+msgid "Logout Redirection "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/redirectionSettings.php:96
+msgid "Registration Redirection"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:13
+msgid "User login by"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:33
+msgid "Login page should contain shortcode:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:34
+msgid "Login page will be used for login, lost password, reset password and email verification process."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:36
+#, php-format
+msgid "Disable default login url (%s)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:41
+#, php-format
+msgid "Disable wp-login.php and redirect to front-end login page %s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:49
+msgid "Login Form"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:56
+#, php-format
+msgid "Use placeholder %login_form% for showing login form and %lostpassword_form% for showing lost password form. <br /> Note: %login_form% should be included. If not included, plugin will automatically include it."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:60
+msgid "Disable AJAX submit"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/settings/loginSettings.php:70
+msgid "Logged in user profile settings"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/lostPasswordForm.php:7
+msgid "Lost your password?"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/lostPasswordForm.php:13
+msgid "Please enter your username or email address. You will receive a link to create a new password via email."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/lostPasswordForm.php:19
+msgid "Username or E-mail"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/lostPasswordForm.php:29
+msgid "Get New Password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/loginForm.php:16
+msgid "Password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/loginForm.php:24
+msgid "Remember Me"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/resetPasswordForm.php:8
+#: /home/saikat/Desktop/user-meta/views/pro/login/resetPasswordForm.php:31
+msgid "Reset Password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/resetPasswordForm.php:9
+msgid "Enter your new password below."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/resetPasswordForm.php:15
+msgid "New password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/login/resetPasswordForm.php:23
+msgid "Confirm new password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep3.php:20
+msgid "Import completed."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep3.php:24
+msgid "Read: %1$S, Created: %2$s, Updated: %3$s, Skipped: %4$s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/importPage.php:9
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:107
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep1.php:18
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserImportController.php:15
+msgid "User Import"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:16
+msgid "Identify Uniquely"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:22
+msgid "By Email"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:23
+msgid "By Username"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:24
+msgid "By Both Email & Username"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:30
+msgid "CSV Header"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:31
+msgid "Assigning Field"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:33
+msgid "Sample Data"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:44
+msgid "Field Name"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:62
+msgid "User Role :"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:72
+msgid "Overwrite existing users."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:80
+msgid "Send email to new user."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:89
+#, php-format
+msgid " Add custom field to %s (if not already added)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:96
+msgid "Import"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:104
+msgid "Username will accept only alphanumeric characters plus these: _, space, ., -, *, and @. All other characters will replace with null."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:105
+msgid "In case of new user, If password field not set then user will get the password by email."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep2.php:110
+msgid "User Import Status"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep1.php:8
+msgid "Upload the <strong>CSV</strong> file only."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep1.php:15
+msgid "First row of CSV file will treat as Field Name."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/views/pro/userImport/formStep1.php:16
+msgid "Field will separate with comma (,) and Enclosed with the double quotation (\" \")."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umFieldsController.php:18
+msgid "User Meta Fields Editor"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umFieldsController.php:87
+msgid "Fields Successfully Saved."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umPreloadsController.php:133
+#, php-format
+msgid "There is a new version of %1$s available. <a href=\"%2$s\">update automatically</a>."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umSettingsController.php:14
+msgid "Settings"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umSettingsController.php:79
+msgid "Settings Successfully Saved."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umShortcodesController.php:94
+#, php-format
+msgid "Sorry. type=\"%s\" is not supported."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umShortcodesController.php:114
+msgid "You do not have permission to access this page."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umShortcodesController.php:117
+#, php-format
+msgid "You are already registered. See your <a href=\"%s\">profile</a>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umShortcodesController.php:119
+msgid "User registration is currently not allowed."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umFormsController.php:17
+msgid "User Meta Forms Editor"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umFormsController.php:79
+msgid "All form keys are required!"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umFormsController.php:81
+#, php-format
+msgid "Form key should be unique. \"%s\" is duplicated!"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umFormsController.php:93
+msgid "Form Successfully saved."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/umVersionUpdateController.php:47
+msgid "Upgrading from free version to pro version"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserImportController.php:56
+msgid "You do not have sufficient permissions to access this page."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserImportController.php:139
+msgid "CSV file not found for import!"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserImportController.php:141
+msgid "There is some error while importing."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserImportController.php:145
+msgid "Email field should be selected as any field."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserImportController.php:148
+msgid "Username field should be selected as any field."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserImportController.php:151
+msgid "Email and Username field should be selected as any field."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:28
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:99
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:180
+msgid "Activate"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:31
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:99
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:185
+msgid "Deactivate"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:100
+msgid "Active"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:100
+msgid "Inactive"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:136
+msgid "<strong>ERROR:</strong> your account is not yet activated."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:179
+#, php-format
+msgid "New user %s registered on your site."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:184
+#, php-format
+msgid "User %s is already activated."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:190
+msgid "activated"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:192
+msgid "deactivated"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:195
+#, php-format
+msgid "%1$s users have been %2$s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umUserActivationController.php:197
+#, php-format
+msgid "User has been %s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umLoginWidgetController.php:20
+msgid "User Meta Login"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umLoginWidgetController.php:21
+msgid "Login Widget"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umLoginWidgetController.php:88
+msgid "Guest Title:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umLoginWidgetController.php:91
+msgid "Only guest user can see this title"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umLoginWidgetController.php:97
+msgid "Logged-In User Title:"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umLoginWidgetController.php:100
+msgid "Only logged-in user can see this title"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umLoginWidgetController.php:106
+msgid "Hide this widget when viewing login page"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umPreloadsProController.php:126
+#, php-format
+msgid "There is a new version <strong>%1$s</strong> of <strong>%2$s</strong> available. <a href=\"%3$s\">update automatically.</a>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umPreloadsProController.php:143
+#, php-format
+msgid "<strong>ERROR</strong>: Invalid %s."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umPreloadsProController.php:146
+#, php-format
+msgid "<strong>ERROR</strong>: Incorrect Password. <a href=\"%s\" title=\"Password Lost and Found\">Lost your password</a>?"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umPreloadsProController.php:156
+#, php-format
+msgid "Please set your login page from <a href=\"%s\">here</a>. "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umEmailNotificationController.php:83
+msgid "To reset your password, visit the following address: "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umEmailNotificationController.php:138
+#, php-format
+msgid "Password: %s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umEmailNotificationController.php:145
+#: /home/saikat/Desktop/user-meta/controllers/pro/umEmailNotificationController.php:151
+#, php-format
+msgid "Email verification url: %s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/controllers/pro/umEmailNotificationController.php:148
+#: /home/saikat/Desktop/user-meta/controllers/pro/umEmailNotificationController.php:153
+#, php-format
+msgid "Activation url: %s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:32
+#, php-format
+msgid "<p><strong>Step 1.</strong> Create Field from User Meta %s page.</p>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:33
+#, php-format
+msgid "<p><strong>Step 2.</strong> Go to User Meta %s page. Choose a Form Name, drag and drop fields from right to left and save the form.</p>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:34
+msgid "<p><strong>Step 3.</strong> Write shortcode to your page or post. Shortcode (e.g.): &#91;user-meta type=\"profile\" form=\"your_form_name\"&#93;</p>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:35
+msgid "Visit Plugin Site"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:72
+msgid "<p><strong>&#91;user-meta type=\"type_name\" form=\"your_form_name\"&#93;</strong></p>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:73
+msgid "<li><strong>type=\"profile\"</strong> for showing profile page.</li>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:74
+msgid "<li><strong>type=\"none\"</strong> for hiding update button.</li>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:75
+msgid "<li><strong>type=\"registration\"</strong> for showing registration page.</li>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:76
+msgid "<li><strong>type=\"both\"</strong> for showing profile page if user logged in, or showing registration page, if not user logged in.</li>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:77
+msgid "<li><strong>type=\"login\"</strong> for showing login page.</li>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:79
+msgid "<p>N.B. \"registration\", \"both\" and \"login\" is only supported in pro version.</p>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:80
+msgid "<p>Admin user can see all others frontend profile from User Administration screen. To enable this feature, go to User Meta &#62;&#62; Settings, select profile page from Profile Page Selection and enable right sided checkbox.</p>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportHtml.php:81
+msgid "<p>In Case of extra field, you need to define unique meta_key. That meta_key will be use to save extra data in usermeta table. Without defining meta_key, extra data won't save.</p>"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:32
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:154
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:231
+msgid "Email"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:76
+msgid "Registration Date"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:81
+msgid "Role"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:86
+msgid "Jabber"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:91
+msgid "Aim"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:96
+msgid "Yim"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:101
+msgid "Avatar"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:109
+msgid "Textbox"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:114
+msgid "Paragraph"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:119
+msgid "Rich Text"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:124
+msgid "Hidden Field"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:129
+msgid "Drop Down"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:134
+msgid "Checkbox"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:139
+msgid "Select One (radio)"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:144
+msgid "Date / Time"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:159
+msgid "File Upload"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:164
+msgid "Image URL"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:169
+msgid "Phone Number"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:174
+msgid "Number"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:184
+msgid "Country"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:196
+msgid "Page Heading"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:201
+msgid "Section Heading"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:211
+msgid "Captcha"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umSupportArray.php:232
+msgid "Username or Email"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umAjaxModel.php:21
+msgid "Action type not set"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umAjaxModel.php:23
+msgid "Form name not set"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umAjaxModel.php:41
+msgid "No field to Update"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umAjaxModel.php:95
+#, php-format
+msgid "%s field is required"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umAjaxModel.php:101
+#, php-format
+msgid "%1$s: \"%2$s\" already taken"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umAjaxModel.php:107
+msgid "No data to update"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umAjaxModel.php:118
+msgid "User must be logged in to update profile"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umAjaxModel.php:135
+msgid "Profile successfully updated."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/umAjaxModel.php:158
+#, php-format
+msgid "%s already taken"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:104
+msgid "The passwords do not match."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:107
+msgid "Your password has been reset."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:126
+msgid "Invalid Parameter"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:130
+msgid "Email not found"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:133
+msgid "User already activated"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:150
+msgid "email is successfully verified "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:152
+msgid "Invalid Key"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:262
+msgid "Registration successfully completed."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:264
+msgid "We have sent you a verification link to your email. Please complete your registration by clicking the link."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:266
+msgid "Please wait until an admin approve your account."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:268
+msgid "We have sent you a verification link to your email. Please verify your email by clicking the link and wait for admin approval."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:310
+msgid "Incorrect Captcha Code"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umSupportProModel.php:475
+msgid "Disable this notification"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umAjaxProModel.php:14
+msgid "Check your e-mail for the confirmation link."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umAjaxProModel.php:36
+msgid "Login Successful"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umAjaxProModel.php:54
+msgid "There is some problem while updating"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/pro/umAjaxProModel.php:61
+msgid "Successfully Saved."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/enc/umProSupportModel.php:88
+msgid "Successfully validated"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/enc/umProSupportModel.php:89
+#, php-format
+msgid "Please purchase %s"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/enc/umProSupportModel.php:90
+msgid "Invalid email or password."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/enc/umProSupportModel.php:91
+msgid "Email not found."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/enc/umProSupportModel.php:99
+msgid "Something went wrong"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/enc/umProSupportModel.php:161
+msgid "Redirecting for upgrading to Pro version... "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/enc/umProSupportModel.php:162
+msgid "if not redirecting,"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/enc/umProSupportModel.php:162
+msgid "click here for upgrading to Pro version"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/models/enc/umProSupportModel.php:194
+#, php-format
+msgid "Please enter your license information to <a href=\"%s\">activate User Meta Pro</a>."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:16
+#, php-format
+msgid "Get pro version from %s to use this feature."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:17
+msgid "Please Wait..."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:20
+msgid "Upload"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:21
+msgid "Drop files here to upload"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:22
+msgid "Cancel"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:23
+msgid "Failed"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:24
+#, php-format
+msgid "%1$s has invalid extension. Only %2$s are allowed."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:25
+#, php-format
+msgid "%1$s is too large, maximum file size is %2$s."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:26
+#, php-format
+msgid "%s is empty, please select files again without it."
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:29
+msgid "Too weak"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:30
+msgid "Weak password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:31
+msgid "Normal strength"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:32
+msgid "Strong password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:33
+msgid "Very strong password"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:36
+msgid "* This field is required"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:37
+msgid "* Please select an option"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:38
+msgid "* This checkbox is required"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:39
+msgid "* Minimum "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:40
+msgid "* Maximum "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:41
+msgid " characters allowed"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:42
+msgid "* Minimum value is "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:43
+msgid "* Maximum value is "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:44
+msgid "* Date prior to "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:45
+msgid "* Date past "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:46
+msgid " options allowed"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:47
+msgid "* Please select "
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:48
+msgid " options"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:49
+msgid "* Fields do not match"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:50
+msgid "* Invalid phone number"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:51
+msgid "* Invalid email address"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:52
+msgid "* Not a valid integer"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:53
+msgid "* Invalid floating decimal number"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:54
+msgid "* Invalid date, must be in YYYY-MM-DD format"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:55
+msgid "* Invalid time, must be in hh:mm:ss format"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:56
+msgid "* Invalid datetime, must be in YYYY-MM-DD hh:mm:ss format"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:57
+msgid "* Invalid IP address"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:58
+msgid "* Invalid URL"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:59
+msgid "* Numbers only"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:60
+msgid "* Letters only"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:61
+msgid "* No special characters allowed"
+msgstr ""
+
+#: /home/saikat/Desktop/user-meta/helper/umLocalizeScript.php:62
+msgid "* This user is already taken"
+msgstr ""
+
