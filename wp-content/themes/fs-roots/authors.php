@@ -14,7 +14,7 @@ get_header(); ?>
         <?php roots_loop_after(); ?>
 
         <!-- Authors Details here -->
-
+        <ul class="unstyled">
         <?php
 
 			// Get the authors from the database ordered by user nicename
@@ -39,7 +39,7 @@ get_header(); ?>
 			$avatar = 'wavatar';
 		?>
 
-		<article class="authors-page">
+		<li class="authors-page">
 
 			<a href="<?php echo $user_link; ?>" title="<?php echo $curauth->display_name; ?>">
 				<?php echo get_avatar($curauth->user_email, '96', $avatar); ?>
@@ -51,16 +51,77 @@ get_header(); ?>
         	</h2>
       		</header>
       		<div class="entry-content">
-        		<p>
-					<?php echo $curauth->description; ?>
-				</p>	
+
+            <h3>
+             <?php echo $curauth->job_in_fs; ?>
+            </h3>
+
+            <table class="table table-striped">
+              <tbody>
+
+              <!-- Semester -->
+              <?php
+                // there must be a more elegant way to do this... :(
+                $cur_semester = $curauth->semester;
+                if (!is_null_or_empty_string($cur_semester)) :
+              ?>
+                <tr>
+                  <th class="table-key span2">Semester:</th>
+                  <td><?php echo $cur_semester; ?></td>
+                </tr>
+              <?php endif;?>
+
+              <!-- Bio -->
+              <?php
+                $cur_bio = $curauth->description;
+                if (!is_null_or_empty_string($cur_bio)) :
+              ?>
+                <tr>
+                  <th class="table-key span2">Bio:</th>
+                  <td><?php echo $cur_bio; ?></td>
+                </tr>
+              <?php endif;?>
+
+              <!-- Website -->
+              <?php
+                $cur_site = $curauth->user_url;
+                if (!is_null_or_empty_string($cur_site)) :
+              ?>
+                <tr>
+                  <th class="table-key span2">Website:</th>
+                  <td><a href="<?php echo $cur_site; ?>"><?php echo $cur_site; ?></a></td>
+                </tr>
+              <?php endif;?>
+
+              <!-- Jabber -->
+              <?php
+                $cur_jabber = $curauth->jabber;
+                if (!is_null_or_empty_string($cur_jabber)) :
+              ?>
+                <!-- <tr>
+                  <th class="table-key span2">Jabber:</th>
+                  <td><?php //echo $cur_jabber; ?></td>
+                </tr> -->
+              <?php endif;?>
+              </tbody>
+            </table>
+
+
+<?php
+//   if(constant("WP_DEBUG")){
+//     if( $all_meta_for_user = get_user_meta( $curauth->ID ) )
+//       array_map( function( $a ){ return $a[0]; }, get_user_meta( $curauth->ID ) );
+
+//     print_r( $all_meta_for_user );
+//   }
+?>
       		</div>
-		</article>
+		</li>
 
 		<?php endif; ?>
 
 	<?php endforeach; ?>
-
+</ul>
         <!-- END Authors Details -->
 
       </div><!-- /#main -->

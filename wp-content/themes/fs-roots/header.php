@@ -38,17 +38,14 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
+          <img class="logo" src="/fachschaft/img/logo-white.png" />
           <a class="brand" href="<?php echo home_url(); ?>/">
             <?php bloginfo('name'); ?>
           </a>
-          
-
-
-          
 
           <nav id="nav-main" class="nav-collapse" role="navigation">
             <?php wp_nav_menu(array('theme_location' => 'primary_navigation', 'walker' => new Roots_Navbar_Nav_Walker(), 'menu_class' => 'nav')); ?>
-            
+
             <ul class="nav pull-right">
             <?php global $user_identity, $current_user;
               get_currentuserinfo();
@@ -59,7 +56,7 @@
 
                   <?php
                     if (is_user_logged_in()) {
-                      echo $user_identity; 
+                      echo $user_identity;
                     } else {
                       echo "Hier nicht klicken!";
                     }
@@ -72,9 +69,9 @@
                   <li>
                     <a href="/fachschaft/user-profile/">Profil</a>
                   </li>
-                
+
                 <?php } else {   ?>
-    
+
                   <li><?php wp_register('', ''); ?></li>
 
                 <?php } ?>
