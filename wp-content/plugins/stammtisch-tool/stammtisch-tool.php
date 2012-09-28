@@ -114,24 +114,40 @@ function stammtisch_booking_form()
       <?= strftime('%A, %R', get_next_stammtisch_timestamp())?>
     </time>
   </dd>
-  <dt>Teilnehmer:</dt>
+  <dt>Teilnehmer: <?= get_number_of_participants() ?></dt>
 </dl>
-<p>Findet nicht statt oder findet statt :(</p>
-
 <?php
+  $req_number = get_option('stammtisch_required', STAMMTISCH_DEFAULT_REQUIRED);
+  $participants = get_number_of_participants();
+  if ($req_number > $participants) {
+    ?>
+    <p>Es <b>fehlen</b> noch <?= $req_number - $participants ?> Teilnehmer, damit der Stammtisch stattfinden kann.</p>
+    <?php
+  } else {
+    ?>
+      Der Stammtisch findet statt.
+    <?php
+  }
 
   /* Logged In */
   if ( is_user_logged_in() ){
+    if ( user_participates() ){
+      /* Link to remove me */
+?>
+      <a href="#">Ich komme doch nicht</a>
+<?php
+    } else {
 ?>
 <ul>
-  <li><a href="#">Komme</a></li>
-  <li><a href="#">Komme später</a>
+  <li><a href="#">Ich komme</a></li>
+  <li><a href="#">Ich komme später</a></li>
 </ul>
 <?php
+    }
   /* Not Logged In */
   } else {
 ?>
-<a href="#">Einloggen</a> oder <a href="#">Registrieren</a>
+<p>Bitte <a href="#">einloggen</a> oder <a href="#">registrieren</a>, um sich für den Stammtisch anmelden zu können.</p>
 <?php
   }
   $result = ob_get_contents();
@@ -153,4 +169,35 @@ function get_next_stammtisch_timestamp()
   $timestamp_today = time();
   $date_today = $timestamp_today + $diff_seconds;
   return strtotime(date('Y-m-d ', $date_today) . $daytime);
+}
+
+function get_number_of_participants()
+{
+  global $wpdb;
+  $number = $wpdb->get_var(
+    $wpdb->prepare(
+    "
+    SELECT  COUNT(user_id)
+    FROM  wp_stammtisch
+    WHERE  date = %s
+    ", strftime('%Y-%m-%d', get_next_stammtisch_timestamp())
+    ));
+  return $number;
+}
+
+function user_participates()
+{
+  global $wpdb;
+  $participates = $wpdb->get_var(
+    $wpdb->prepare(
+    "
+    SELECT  COUNT(user_id)
+    FROM  wp_stammtisch
+    WHERE  date = %s
+                AND
+                user_id = %d
+    ", strftime('%Y-%m-%d', get_next_stammtisch_timestamp()), get_current_user_id()
+    ));
+
+  return $participates;
 }
