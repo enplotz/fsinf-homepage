@@ -2,9 +2,9 @@
 Plugin Name: Stammtisch-Tool
 Plugin URI: http://fachschaft.inf.uni-konstanz.de/
 Description: Allows for easy booking of a regulars table.
-Author: Manuel Hotz
+Author: Manuel Hotz, Florian Junghanns, Leonard Wörteler
 Version: 0.1
-Author URI: http://enplotz.de
+Author URI: http://localhost:8888/fachschaft/fachschaft/mitglieder/
 */
 
 
