@@ -93,7 +93,64 @@ function stammtisch_validate_options($input)
   return $input;
 }
 
+/* Widget  */
 
+function stammtisch_booking_form()
+{
+  setlocale(LC_TIME, 'de_DE');
+  /* Load current participants and settings from DB */
 
+  /* Display settings and curr participants */
+  ob_start();
+?>
+<dl>
+  <dt>Ort:</dt>
+  <dd><a href="<?= get_option('stammtisch_url', '#') ?>"><?= get_option('stammtisch_location', 'unbekannt') ?></a></dd>
+  <dt>
+    Zeit:
+  </dt>
+  <dd>
+    <time datetime="<?= strftime('%d.%m.%Y %R', get_next_stammtisch_timestamp())?>">
+      <?= strftime('%A, %R', get_next_stammtisch_timestamp())?>
+    </time>
+  </dd>
+  <dt>Teilnehmer:</dt>
+</dl>
+<p>Findet nicht statt oder findet statt :(</p>
 
+<?php
 
+  /* Logged In */
+  if ( is_user_logged_in() ){
+?>
+<ul>
+  <li><a href="#">Komme</a></li>
+  <li><a href="#">Komme später</a>
+</ul>
+<?php
+  /* Not Logged In */
+  } else {
+?>
+<a href="#">Einloggen</a> oder <a href="#">Registrieren</a>
+<?php
+  }
+  $result = ob_get_contents();
+  ob_end_clean();
+  return $result;
+}
+
+add_shortcode('stammtisch_tool', 'stammtisch_booking_form');
+
+function get_next_stammtisch_timestamp()
+{
+  $day = get_option('stammtisch_day', STAMMTISCH_DEFAULT_DAY);
+  $daytime = get_option('stammtisch_time', STAMMTISCH_DEFAULT_TIME);
+
+  $today = (int) date('w');
+  $diff = ($day - $today + 7) % 7;
+  $diff_seconds = $diff * 60 * 60 * 24;
+
+  $timestamp_today = time();
+  $date_today = $timestamp_today + $diff_seconds;
+  return strtotime(date('Y-m-d ', $date_today) . $daytime);
+}

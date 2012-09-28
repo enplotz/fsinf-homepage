@@ -2,7 +2,7 @@
 	"folders":
 	[
 		{
-			"path": "/Applications/MAMP/htdocs/fachschaft/wp-content",
+			"path": "/Applications/MAMP/htdocs/fachschaft",
 			"folder_exclude_patterns": ["wp-admin", "wp-includes"]
 		}
 	]

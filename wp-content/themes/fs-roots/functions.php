@@ -78,3 +78,5 @@ function roots_entry_meta() {
 function is_null_or_empty_string($var){
     return (!isset($var) || trim($var)==='');
 }
+
+add_filter('widget_text', 'do_shortcode');
