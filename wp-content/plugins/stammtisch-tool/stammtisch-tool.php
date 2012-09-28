@@ -4,7 +4,8 @@ Plugin URI: http://fachschaft.inf.uni-konstanz.de/
 Description: Allows for easy booking of a regulars table.
 Author: Manuel Hotz, Florian Junghanns, Leonard Wörteler
 Version: 0.1
-Author URI: http://localhost:8888/fachschaft/fachschaft/mitglieder/
+Author URI: http://fachschaft.inf.uni-konstanz.de/
+License: A license will be determined in the near future.
 */
 
 
@@ -92,10 +93,10 @@ function stammtisch_admin_page()
                 <option name="stammtisch_day" <?= is_selected_day(1) ?> value="1">Montag</option>
                 <option name="stammtisch_day" <?= is_selected_day(2) ?> value="2">Dienstag</option>
                 <option name="stammtisch_day" <?= is_selected_day(3) ?> value="3">Mittwoch</option>
+                <option name="stammtisch_day" <?= is_selected_day(4) ?> value="4">Donnerstag</option>
                 <option name="stammtisch_day" <?= is_selected_day(5) ?> value="5">Freitag</option>
                 <option name="stammtisch_day" <?= is_selected_day(6) ?> value="6">Samstag</option>
                 <option name="stammtisch_day" <?= is_selected_day(7) ?> value="7">Sonntag</option>
-                <option name="stammtisch_day" <?= is_selected_day(4) ?> value="4">Donnerstag</option>
             </select>
             </div>
           </div>
@@ -257,7 +258,6 @@ function stammtisch_booking_form()
   <input type="hidden" value="join" name="participation"/>
   <button type="submit" class="btn btn-primary btn-small"><i class="icon-ok icon-white"></i> Ich komme</button>
 </form>
-
 <form action="" method="post">
   <input type="hidden" value="join_later" name="participation"/>
   <button type="submit" class="btn btn-small"><i class="icon-time"></i> Ich komme später</button>

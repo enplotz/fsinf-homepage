@@ -39,15 +39,13 @@ get_header(); ?>
 			$avatar = 'wavatar';
 		?>
 
-		<li class="authors-page">
-
-			<a href="<?php echo $user_link; ?>" title="<?php echo $curauth->display_name; ?>">
-				<?php echo get_avatar($curauth->user_email, '96', $avatar); ?>
-			</a>
-
+		<li class="authors-page" id="<?= slugify($curauth->display_name)?>">
 			<header>
+          <a href="<?php echo $user_link; ?>" title="<?php echo $curauth->display_name; ?>">
+            <?php echo get_avatar($curauth->user_email, '96', $avatar); ?>
+          </a>
         	<h2>
-        		<a href="<?php echo $user_link; ?>" title="<?php echo $curauth->display_name; ?>"><?php echo $curauth->display_name; ?></a>
+        		<a href="<?= the_permalink().'#'.slugify($curauth->display_name)?>" title="<?php echo $curauth->display_name; ?>"><?php echo $curauth->display_name; ?></a>
         	</h2>
       		</header>
       		<div class="entry-content">
