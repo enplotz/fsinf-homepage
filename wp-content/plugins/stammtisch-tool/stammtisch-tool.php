@@ -132,16 +132,33 @@ function stammtisch_booking_form()
   /* Logged In */
   if ( is_user_logged_in() ){
     if ( user_participates() ){
+
       /* Link to remove me */
 ?>
-      <a href="#">Ich komme doch nicht</a>
+      <form action="" method="post">
+        <input type="hidden" value="cancel" name="participation"/>
+        <button type="submit" class="btn btn-primary btn-small"><i class="icon-remove"></i> Ich komme doch nicht</button>
+      </form>
 <?php
     } else {
 ?>
-<ul>
-  <li><a href="#">Ich komme</a></li>
-  <li><a href="#">Ich komme später</a></li>
-</ul>
+
+<form action="" method="post">
+  <input type="hidden" value="join" name="participation"/>
+  <button type="submit" class="btn btn-primary btn-small"><i class="icon-ok icon-white"></i> Ich komme</button>
+</form>
+
+<form action="" method="post">
+  <input type="hidden" value="join_later" name="participation"/>
+  <button type="submit" class="btn btn-small"><i class="icon-time"></i> Ich komme später</button>
+</form>
+
+<?php
+  echo '<pre>';
+  print_r($_POST);
+  echo '</pre>';
+?>
+
 <?php
     }
   /* Not Logged In */
