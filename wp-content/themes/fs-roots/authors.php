@@ -39,7 +39,7 @@ get_header(); ?>
 			$avatar = 'wavatar';
 		?>
 
-		<li class="authors-page" id="<?= slugify($curauth->display_name)?>">
+		<li class="authors-page" id="<?= $curauth->user_login ?>">
 			<header>
           <a href="<?php echo $user_link; ?>" title="<?php echo $curauth->display_name; ?>">
             <?php echo get_avatar($curauth->user_email, '96', $avatar); ?>

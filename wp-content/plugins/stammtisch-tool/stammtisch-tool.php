@@ -17,8 +17,12 @@ define ('STAMMTISCH_DEFAULT_TIME', '20:00:00');
 /* Sunday 0, Saturday 6 */
 define ('STAMMTISCH_DEFAULT_DAY', 3);
 define ('STAMMTISCH_DEFAULT_LOCATION', 'Defne');
-define ('STAMMTISCH_DEFAULT_URL', 'http://defnekn.de');
+define ('STAMMTISCH_DEFAULT_URL', 'http://defne-kn.de');
+
+# TODO: make options
 define ('STAMMTISCH_DEFAULT_LOCK_HOURS', 3);
+# Responsible person must be user_login
+define ('STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON', 'max');
 
 
 $stammtisch_options =
@@ -312,7 +316,6 @@ function stammtisch_booking_form()
   <dt>Teilnehmer:</dt>
   <dd><?= get_number_of_participants() ?></dd>
 </dl>
-
 <?php
 
   /* Produce the alert */
@@ -350,6 +353,9 @@ function stammtisch_booking_form()
 <p>Bitte <a href="<?= wp_login_url() ?>">einloggen</a> oder <a href="<?= site_url('/wp-login.php?action=register') ?>">registrieren</a>, um sich für den Stammtisch anmelden zu können.</p>
 <?php
   }
+?>
+<p><small>Wendet euch für Rückfragen bitte an <a href="<?= site_url('/fachschaft/mitglieder/#'.STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON) ?>"><?= ucfirst(STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON) ?></a>.</small></p>
+<?php
   $result = ob_get_contents();
   ob_end_clean();
   return $result;
