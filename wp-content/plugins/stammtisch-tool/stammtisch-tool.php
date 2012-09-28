@@ -147,7 +147,7 @@ function stammtisch_booking_form()
   /* Not Logged In */
   } else {
 ?>
-<p>Bitte <a href="#">einloggen</a> oder <a href="#">registrieren</a>, um sich für den Stammtisch anmelden zu können.</p>
+<p>Bitte <a href="<?= wp_login_url() ?>">einloggen</a> oder <a href="<?= site_url('/wp-login.php?action=register') ?>">registrieren</a>, um sich für den Stammtisch anmelden zu können.</p>
 <?php
   }
   $result = ob_get_contents();
