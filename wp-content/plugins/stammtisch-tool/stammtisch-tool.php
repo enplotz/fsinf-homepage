@@ -131,8 +131,37 @@ function stammtisch_booking_form()
 
   /* Logged In */
   if ( is_user_logged_in() ){
-    if ( user_participates() ){
 
+    if ( array_key_exists('participation', $_POST)){
+      if ($_POST['participation'] === 'join') {
+        join_regulars_table(0);
+        ?>
+        <div class="alert alert-success">
+          <a class="close" data-dismiss="alert">×</a>
+          <p>Yay! Cool, dass du zum Stammtisch kommst!</p>
+        </div>
+        <?php
+      } elseif ($_POST['participation'] === 'join_later') {
+        join_regulars_table(1);
+        ?>
+        <div class="alert alert-success">
+          <a class="close" data-dismiss="alert">×</a>
+          <p>Yay! Cool, dass du zum Stammtisch kommst!</p>
+        </div>
+        <?php
+      } elseif ($_POST['participation'] === 'cancel') {
+        cancel_participation();
+        ?>
+        <div class="alert alert-success">
+          <a class="close" data-dismiss="alert">×</a>
+          <p>Schade, dass du doch nicht zum Stammtisch kommst :(</p>
+        </div>
+        <?php
+      }
+      }
+
+
+    if ( user_participates() ){
       /* Link to remove me */
 ?>
       <form action="" method="post">
@@ -217,4 +246,36 @@ function user_participates()
     ));
 
   return $participates;
+}
+
+function join_regulars_table($later){
+  global $wpdb;
+  $table_name = $wpdb->prefix . "stammtisch";
+  $wpdb->insert( $table_name,
+          array(
+                'user_id' => get_current_user_id(),
+                'date' => strftime('%Y-%m-%d', get_next_stammtisch_timestamp()),
+                'arrives_later' => $later
+          ),
+          array(
+                '%d',
+                '%s',
+                '%d'
+          )
+    );
+}
+
+function cancel_participation(){
+  global $wpdb;
+  $table_name = $wpdb->prefix . "stammtisch";
+  $wpdb->query(
+    $wpdb->prepare(
+            "
+            DELETE FROM $table_name
+            WHERE  date = %s
+                AND
+                user_id = %d
+            ", strftime('%Y-%m-%d', get_next_stammtisch_timestamp()), get_current_user_id()
+    )
+  );
 }
