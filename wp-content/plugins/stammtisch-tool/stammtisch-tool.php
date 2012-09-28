@@ -55,7 +55,7 @@ register_activation_hook(__FILE__,'stammtisch_install');
 /*
  * ADMIN MENU
  */
-
+if (is_admin()){
 add_action('admin_menu', 'stammtisch_add_admin_page');
 
 function stammtisch_add_admin_page()
@@ -63,17 +63,73 @@ function stammtisch_add_admin_page()
   add_menu_page(__('Stammtisch-Tool', 'stammtisch-tool'), __('Stammtisch-Tool', 'stammtisch-tool'), 'manage_options', 'stammtisch-tool', 'stammtisch_admin_page');
 }
 
+function is_selected_day($day_int)
+{
+  return (get_option('stammtisch_day', STAMMTISCH_DEFAULT_DAY) == $day_int) ? 'selected' : '';
+}
+
+
 function stammtisch_admin_page()
 {
+    global $stammtisch_options;
+
+    foreach ($stammtisch_options as $key => $value) {
+      if ( array_key_exists($key, $_POST)){
+        if($_POST[$key] != ''){
+          update_option($key, $_POST[$key]);
+        }
+      }
+    }
   ?>
     <div class="wrap">
         <div class="icon32" id="icon-options-general"></div>
-        <h2>Stammtisch Tool Administration</h2>
-        <form action="options.php" method="post">
-            <p class="submit">
-                <input name="Submit" type="submit" class="button-primary" value="<?php esc_attr_e('Save Changes','wptuts_textdomain'); ?>" />
-            </p>
+        <h2>Stammtisch-Tool Administration</h2>
+        <form action="" method="post" class="form-horizontal">
+          <div class="control-group">
+            <label class="control-label" for="stammtischDay">Tag</label>
+            <div class="controls">
+              <select name="stammtisch_day" id="stammtischDay">
+                <option name="stammtisch_day" <?= is_selected_day(1) ?> value="1">Montag</option>
+                <option name="stammtisch_day" <?= is_selected_day(2) ?> value="2">Dienstag</option>
+                <option name="stammtisch_day" <?= is_selected_day(3) ?> value="3">Mittwoch</option>
+                <option name="stammtisch_day" <?= is_selected_day(5) ?> value="5">Freitag</option>
+                <option name="stammtisch_day" <?= is_selected_day(6) ?> value="6">Samstag</option>
+                <option name="stammtisch_day" <?= is_selected_day(7) ?> value="7">Sonntag</option>
+                <option name="stammtisch_day" <?= is_selected_day(4) ?> value="4">Donnerstag</option>
+            </select>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="stammtischTime">Zeit</label>
+            <div class="controls">
+              <input type="text" name="stammtisch_time" id="stammtischTime" value="<?= get_option('stammtisch_time', STAMMTISCH_DEFAULT_TIME);?>" />
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="stammtischLocation">Ort</label>
+            <div class="controls">
+              <input type="text" name="stammtisch_location" id="stammtischLocation"  value="<?= get_option('stammtisch_location', STAMMTISCH_DEFAULT_LOCATION);?>" />
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="stammtischUrl">URL des Ortes</label>
+            <div class="controls">
+              <input type="url" name="stammtisch_url" id="stammtischUrl"  value="<?= get_option('stammtisch_url', STAMMTISCH_DEFAULT_URL);?>"/>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="stammtischRequired">Mindestanzahl an Teilnehmern</label>
+            <div class="controls">
+              <input type="number" name="stammtisch_required" id="stammtischRequired"  value="<?= get_option('stammtisch_required', STAMMTISCH_DEFAULT_REQUIRED);?>" />
+            </div>
+          </div>
+          <div class="control-group">
+            <div class="controls">
+              <button type="submit" class="btn"><?php esc_attr_e('Save Changes','stammtisch_tool_save'); ?></button>
+            </div>
+          </div>
         </form>
+        <form action="" method="post">
     </div><!-- wrap -->
 <?php
 }
@@ -84,7 +140,17 @@ function stammtisch_register_settings()
 
   foreach ($stammtisch_options as $key => $value) {
     register_setting('stammtisch_settings', $key, 'stammtisch_validate_options');
+    add_settings_section($key, $key, 'main_section_text', 'stammtisch-tool');
+    add_settings_field('stammtisch_text_string', 'Plugin Text Input', 'stammtisch_setting_string', 'stammtisch-tool', $key);
   }
+}
+
+function main_section_text() {
+  echo '<p>Main description of this section here.</p>';
+}
+
+function stammtisch_setting_string(){
+  echo "TEST";
 }
 
 function stammtisch_validate_options($input)
@@ -92,75 +158,90 @@ function stammtisch_validate_options($input)
   /* Do nothing until we have time for validation :P */
   return $input;
 }
+}
+/**********************************************************************/
 
-/* Widget  */
+/*
+ * WIDGET
+ * (als Text-Widget mit short_code [stammtisch_tool] einbinden)
+ */
 
 function stammtisch_booking_form()
 {
   setlocale(LC_TIME, 'de_DE');
-  /* Load current participants and settings from DB */
+
+  /* Process POST values and prepare alerts for later display*/
+  if (is_user_logged_in()){
+    if ( array_key_exists('participation', $_POST)){
+      if ($_POST['participation'] === 'join') {
+        join_regulars_table(0);
+
+        $stammtisch_alert = '<div class="alert alert-success">
+          <a class="close" data-dismiss="alert">×</a>
+          <p>Yay! Cool, dass du zum Stammtisch kommst!</p>
+        </div>';
+      } elseif ($_POST['participation'] === 'join_later') {
+        join_regulars_table(1);
+
+        $stammtisch_alert = '<div class="alert alert-success">
+          <a class="close" data-dismiss="alert">×</a>
+          <p>Yay! Cool, dass du zum Stammtisch kommst!</p>
+        </div>';
+
+      } elseif ($_POST['participation'] === 'cancel') {
+        cancel_participation();
+        $stammtisch_alert = '<div class="alert alert-success">
+          <a class="close" data-dismiss="alert">×</a>
+          <p>Schade, dass du doch nicht zum Stammtisch kommst :(</p>
+        </div>';
+      }
+      }
+  }
 
   /* Display settings and curr participants */
   ob_start();
+
+    $req_number = get_option('stammtisch_required', STAMMTISCH_DEFAULT_REQUIRED);
+  $participants = get_number_of_participants();
+  if ($req_number > $participants) {
+    if (($req_number - $participants) === 1) {
 ?>
+      <p>Es <b>fehlt</b> noch ein Teilnehmer, damit der Stammtisch stattfinden kann. Auf, auf!</p>
+<?php
+    } else {
+?>
+      <p>Es <b>fehlen</b> noch <?= $req_number - $participants ?> Teilnehmer, damit der Stammtisch stattfinden kann.</p>
+<?php
+    }
+  } else {
+?>
+    <div class="alert">
+      <a class="close" data-dismiss="alert">×</a>
+      <p>Der Stammtisch findet statt!</p>
+    </div>
+<?php
+  }
+?>
+<h4>Nächstes Treffen:</h4>
+<p><time datetime="<?= strftime('%d.%m.%Y %R', get_next_stammtisch_timestamp())?>">
+      <?= strftime('%A, %R', get_next_stammtisch_timestamp())?>
+    </time></p>
 <dl>
   <dt>Ort:</dt>
   <dd><a href="<?= get_option('stammtisch_url', '#') ?>"><?= get_option('stammtisch_location', 'unbekannt') ?></a></dd>
-  <dt>
-    Zeit:
-  </dt>
-  <dd>
-    <time datetime="<?= strftime('%d.%m.%Y %R', get_next_stammtisch_timestamp())?>">
-      <?= strftime('%A, %R', get_next_stammtisch_timestamp())?>
-    </time>
-  </dd>
-  <dt>Teilnehmer: <?= get_number_of_participants() ?></dt>
+  <dt>Teilnehmer:</dt>
+  <dd><?= get_number_of_participants() ?></dd>
 </dl>
+
 <?php
-  $req_number = get_option('stammtisch_required', STAMMTISCH_DEFAULT_REQUIRED);
-  $participants = get_number_of_participants();
-  if ($req_number > $participants) {
-    ?>
-    <p>Es <b>fehlen</b> noch <?= $req_number - $participants ?> Teilnehmer, damit der Stammtisch stattfinden kann.</p>
-    <?php
-  } else {
-    ?>
-      Der Stammtisch findet statt.
-    <?php
+
+  /* Produce the alert */
+  if (isset($stammtisch_alert)){
+    echo $stammtisch_alert;
   }
 
   /* Logged In */
   if ( is_user_logged_in() ){
-
-    if ( array_key_exists('participation', $_POST)){
-      if ($_POST['participation'] === 'join') {
-        join_regulars_table(0);
-        ?>
-        <div class="alert alert-success">
-          <a class="close" data-dismiss="alert">×</a>
-          <p>Yay! Cool, dass du zum Stammtisch kommst!</p>
-        </div>
-        <?php
-      } elseif ($_POST['participation'] === 'join_later') {
-        join_regulars_table(1);
-        ?>
-        <div class="alert alert-success">
-          <a class="close" data-dismiss="alert">×</a>
-          <p>Yay! Cool, dass du zum Stammtisch kommst!</p>
-        </div>
-        <?php
-      } elseif ($_POST['participation'] === 'cancel') {
-        cancel_participation();
-        ?>
-        <div class="alert alert-success">
-          <a class="close" data-dismiss="alert">×</a>
-          <p>Schade, dass du doch nicht zum Stammtisch kommst :(</p>
-        </div>
-        <?php
-      }
-      }
-
-
     if ( user_participates() ){
       /* Link to remove me */
 ?>
@@ -181,12 +262,6 @@ function stammtisch_booking_form()
   <input type="hidden" value="join_later" name="participation"/>
   <button type="submit" class="btn btn-small"><i class="icon-time"></i> Ich komme später</button>
 </form>
-
-<?php
-  echo '<pre>';
-  print_r($_POST);
-  echo '</pre>';
-?>
 
 <?php
     }
@@ -279,3 +354,4 @@ function cancel_participation(){
     )
   );
 }
+/**********************************************************************/
