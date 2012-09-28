@@ -4,7 +4,7 @@ Plugin Name: Custom Field Template
 Plugin URI: http://wpgogo.com/development/custom-field-template.html
 Description: This plugin adds the default custom fields on the Write Post/Page.
 Author: Hiroaki Miyashita
-Version: 2.0.4
+Version: 2.0.5
 Author URI: http://wpgogo.com/
 */
 
@@ -57,10 +57,10 @@ class custom_field_template {
 
 		if ( isset($_REQUEST['cftsearch_submit']) ) :
 			if ( !empty($_REQUEST['limit']) )
-				add_action( 'post_limits', array(&$this, 'custom_field_template_post_limits'));
-			add_filter( 'posts_join', array(&$this, 'custom_field_template_posts_join') );
+				add_action( 'post_limits', array(&$this, 'custom_field_template_post_limits'), 100);
+			add_filter( 'posts_join', array(&$this, 'custom_field_template_posts_join'), 100 );
 			add_filter( 'posts_where', array(&$this, 'custom_field_template_posts_where'), 100 );
-			add_filter( 'posts_orderby',  array(&$this, 'custom_field_template_posts_orderby' ) );
+			add_filter( 'posts_orderby',  array(&$this, 'custom_field_template_posts_orderby'), 100 );
 		endif;
 		
 		if ( function_exists('add_shortcode') ) :
@@ -341,7 +341,7 @@ class custom_field_template {
 	}
 	
 	function custom_field_template_admin_head() {
-		global $wp_version;
+		global $wp_version, $post;
 		$options = $this->get_custom_field_template_data();
 
 		if ( !defined('WP_PLUGIN_DIR') )
@@ -737,7 +737,8 @@ class custom_field_template {
 		wp_enqueue_script( 'jquery' );
 		wp_enqueue_script( 'jquery-form' );
 		wp_enqueue_script( 'bgiframe', '/' . PLUGINDIR . '/' . $plugin_dir . '/js/jquery.bgiframe.js', array('jquery') ) ;
-		wp_enqueue_script( 'textarearesizer', '/' . PLUGINDIR . '/' . $plugin_dir . '/js/jquery.textarearesizer.js', array('jquery') );
+		if (strpos($_SERVER['REQUEST_URI'], 'custom-field-template') !== false ) 
+			wp_enqueue_script( 'textarearesizer', '/' . PLUGINDIR . '/' . $plugin_dir . '/js/jquery.textarearesizer.js', array('jquery') );
 		if( strstr($_SERVER['REQUEST_URI'], 'wp-admin/post-new.php') || strstr($_SERVER['REQUEST_URI'], 'wp-admin/post.php') || strstr($_SERVER['REQUEST_URI'], 'wp-admin/page-new.php') || strstr($_SERVER['REQUEST_URI'], 'wp-admin/page.php') || strstr($_SERVER['REQUEST_URI'], 'wp-admin/edit.php') || (is_object($post) && $post->post_type=='page') ) :
 			wp_enqueue_script('date', '/' . PLUGINDIR . '/' . $plugin_dir . '/js/date.js', array('jquery') );
 			wp_enqueue_script('datePicker', '/' . PLUGINDIR . '/' . $plugin_dir . '/js/jquery.datePicker.js', array('jquery') );
@@ -985,6 +986,7 @@ type = file';
 					if ( isset($_POST["custom_field_template_custom_post_type"][$i]) ) $options['custom_fields'][$j]['custom_post_type'] = $_POST["custom_field_template_custom_post_type"][$i];
 					if ( isset($_POST["custom_field_template_template_files"][$i]) ) $options['custom_fields'][$j]['template_files'] = $_POST["custom_field_template_template_files"][$i];					
 					if ( isset($_POST["custom_field_template_disable"][$i]) ) $options['custom_fields'][$j]['disable'] = $_POST["custom_field_template_disable"][$i];					
+					$options['custom_fields'][$j]['format'] = isset($_POST["custom_field_template_format"][$i]) ? $_POST["custom_field_template_format"][$i] : '';
 					$j++;
 				}
 			}			
@@ -1028,9 +1030,9 @@ type = file';
 			unset($options['shortcode_format'], $options['shortcode_format_use_php']);
 			$j = 0;
 			for($i=0;$i<count($_POST["custom_field_template_shortcode_format"]);$i++) {
-				if( $_POST["custom_field_template_shortcode_format"][$i] ) :
+				if( !empty($_POST["custom_field_template_shortcode_format"][$i]) ) :
 					$options['shortcode_format'][$j] = $_POST["custom_field_template_shortcode_format"][$i];
-					$options['shortcode_format_use_php'][$j] = $_POST["custom_field_template_shortcode_format_use_php"][$i];
+					$options['shortcode_format_use_php'][$j] = isset($_POST["custom_field_template_shortcode_format_use_php"][$i]) ? $_POST["custom_field_template_shortcode_format_use_php"][$i] : '';
 					$j++;
 				endif;
 			}			
@@ -1039,7 +1041,7 @@ type = file';
 		elseif ( !empty($_POST['custom_field_template_php_submit']) ) :
 			unset($options['php']);
 			for($i=0;$i<count($_POST["custom_field_template_php"]);$i++) {
-				if( $_POST["custom_field_template_php"][$i] )
+				if( isset($_POST["custom_field_template_php"][$i]) )
 					$options['php'][] = $_POST["custom_field_template_php"][$i];
 			}			
 			update_option('custom_field_template_data', $options);
@@ -1160,6 +1162,19 @@ margin-bottom:0pt;
 <input type="text" name="custom_field_template_category[<?php echo $i; ?>]" id="custom_field_template_category[<?php echo $i; ?>]" value="<?php if ( isset($options['custom_fields'][$i]['category']) ) echo esc_attr(stripcslashes($options['custom_fields'][$i]['category'])); ?>" size="80"<?php if ( empty($options['custom_fields'][$i]['category']) ) : echo ' style="display:none;"'; endif; ?> /></p>
 <p><label for="custom_field_template_template_files[<?php echo $i; ?>]"><a href="javascript:void(0);" onclick="jQuery(this).parent().next().next().toggle();"><?php echo sprintf(__('Page Template file name(s) (comma-deliminated)', 'custom-field-template'), $i); ?></a></label>:<br />
 <input type="text" name="custom_field_template_template_files[<?php echo $i; ?>]" id="custom_field_template_template_files[<?php echo $i; ?>]" value="<?php if ( isset($options['custom_fields'][$i]['template_files']) ) echo esc_attr(stripcslashes($options['custom_fields'][$i]['template_files'])); ?>" size="80"<?php if ( empty($options['custom_fields'][$i]['template_files']) ) : echo ' style="display:none;"'; endif; ?> /></p>
+<p><label for="custom_field_template_format[<?php echo $i; ?>]"><a href="javascript:void(0);" onclick="jQuery(this).parent().next().next().toggle();"><?php echo sprintf(__('Template Format', 'custom-field-template'), $i); ?></a></label>:<br />
+<select name="custom_field_template_format[<?php echo $i; ?>]" <?php if ( !isset($options['custom_fields'][$i]['format']) || !is_numeric($options['custom_fields'][$i]['format']) ) : echo ' style="display:none;"'; endif; ?>>
+<option value=""></option>
+<?php
+	if ( isset($options['shortcode_format']) ) $count = count($options['shortcode_format']);
+	else $count = 0;
+	for ($j=0;$j<$count;$j++) :
+?>
+<option value="<?php echo $j; ?>"<?php if ( isset($options['custom_fields'][$i]['format']) && is_numeric($options['custom_fields'][$i]['format']) ) selected($j, $options['custom_fields'][$i]['format']); ?>>FORMAT #<?php echo $j; ?></option>
+<?php
+	endfor;
+?>
+</select></p>
 <p><label for="custom_field_template_content[<?php echo $i; ?>]"><?php echo sprintf(__('Template Content', 'custom-field-template'), $i); ?></label>:<br />
 <textarea name="custom_field_template_content[<?php echo $i; ?>]" class="resizable large-text" id="custom_field_template_content[<?php echo $i; ?>]" rows="10" cols="80"><?php if ( isset($options['custom_fields'][$i]['content']) ) echo stripcslashes($options['custom_fields'][$i]['content']); ?></textarea></p>
 </td></tr>
@@ -1505,6 +1520,9 @@ hideKey = true<br />
 <th>cols</th><td></td><td></td><td></td><td></td><td>cols = 40</td><td></td>
 </tr>
 <tr>
+<th>wrap</th><td></td><td></td><td></td><td></td><td>wrap = off</td><td></td>
+</tr>
+<tr>
 <th>tinyMCE</th><td></td><td></td><td></td><td></td><td>tinyMCE = true</td><td></td>
 </tr>
 <tr>
@@ -1714,6 +1732,15 @@ hideKey = true<br />
 ?>
 <div class="postbox" style="min-width:200px;">
 <div class="handlediv" title="<?php _e('Click to toggle', 'custom-field-template'); ?>"><br /></div>
+<h3><?php _e('Custom Field Template Manual', 'custom-field-template'); ?></h3>
+<div class="inside">
+<p><?php _e('Do you have any trouble with the plugin setup? Please visit the following manual site.', 'custom-field-template'); ?></p>
+<p style="text-align:center"><a href="http://ja.wpcft.com/" target="_blank"><?php _e('Custom Field Template Manual', 'custom-field-template'); ?></a></p>
+</div>
+</div>
+
+<div class="postbox" style="min-width:200px;">
+<div class="handlediv" title="<?php _e('Click to toggle', 'custom-field-template'); ?>"><br /></div>
 <h3><?php _e('CMS x WP', 'custom-field-template'); ?></h3>
 <div class="inside">
 <p><?php _e('There are much more plugins which are useful for developing business websites such as membership sites or ec sites. You could totally treat WordPress as CMS by use of CMS x WP plugins.', 'custom-field-template'); ?></p>
@@ -1762,7 +1789,7 @@ jQuery(this).addClass("closed");
 	
 	function make_textfield( $name, $sid, $data ) {
 		$cftnum = $size = $default = $hideKey = $label = $code = $class = $style = $before = $after = $maxlength = $multipleButton = $date = $dateFirstDayOfWeek = $dateFormat = $startDate = $endDate = $readOnly = $onclick = $ondblclick = $onkeydown = $onkeypress = $onkeyup = $onmousedown = $onmouseup = $onmouseover = $onmouseout = $onmousemove = $onfocus = $onblur = $onchange = $onselect = '';
-		$hide = $addfield = $out = '';
+		$hide = $addfield = $out = $out_key = $out_value = '';
 		extract($data);
 		$options = $this->get_custom_field_template_data();
 
@@ -1816,37 +1843,39 @@ jQuery(this).addClass("closed");
 			$addfield .= '</div>';
 		endif;
 				
-		$out .= 
+		$out_key = '<span' . $hide . '><label for="' . $name . $sid . '_' . $cftnum . '">' . $title . '</label></span>'.$addfield;
+		
+		$out = 
 			'<dl id="dl_' . $name . $sid . '_' . $cftnum . '" class="dl_text">' .
-			'<dt><span' . $hide . '><label for="' . $name . $sid . '_' . $cftnum . '">' . $title . '</label></span>'.$addfield.'</dt>' .
+			'<dt>'.$out_key.'</dt>' .
 			'<dd>';
 
 		if ( !empty($label) && empty($options['custom_field_template_replace_keys_by_labels']) )
-			$out .= '<p class="label">' . stripcslashes($label) . '</p>';
-		$out .= trim($before).'<input id="' . $name . $sid . '_' . $cftnum . '" name="' . $name . '['. $sid . '][]" value="' . esc_attr(trim($value)) . '" type="text" size="' . $size . '"' . $class . $style . $maxlength . $event_output . $readOnly . ' />'.trim($after);
+			$out_value .= '<p class="label">' . stripcslashes($label) . '</p>';
+		$out_value .= trim($before).'<input id="' . $name . $sid . '_' . $cftnum . '" name="' . $name . '['. $sid . '][]" value="' . esc_attr(trim($value)) . '" type="text" size="' . $size . '"' . $class . $style . $maxlength . $event_output . $readOnly . ' />'.trim($after);
 		
 		if ( $date == true ) :
-			$out .= '<script type="text/javascript">' . "\n" .
+			$out_value .= '<script type="text/javascript">' . "\n" .
 					'// <![CDATA[' . "\n";
-			if ( is_numeric($dateFirstDayOfWeek) ) $out .= 'Date.firstDayOfWeek = ' . stripcslashes(trim($dateFirstDayOfWeek)) . ";\n";
-			if ( $dateFormat ) $out .= 'Date.format = "' . stripcslashes(trim($dateFormat)) . '"' . ";\n";
-			$out .=	'jQuery(document).ready(function() { jQuery(".datePicker").css("float", "left"); jQuery(".datePicker").datePicker({';
-			if ( $startDate ) $out .= "startDate: " . stripcslashes(trim($startDate));
-			if ( $startDate && $endDate ) $out .= ",";
-			if ( $endDate ) $out .= "endDate: " . stripcslashes(trim($endDate)) . "";
-			$out .= '}); });' . "\n" .
+			if ( is_numeric($dateFirstDayOfWeek) ) $out_value .= 'Date.firstDayOfWeek = ' . stripcslashes(trim($dateFirstDayOfWeek)) . ";\n";
+			if ( $dateFormat ) $out_value .= 'Date.format = "' . stripcslashes(trim($dateFormat)) . '"' . ";\n";
+			$out_value .=	'jQuery(document).ready(function() { jQuery(".datePicker").css("float", "left"); jQuery(".datePicker").datePicker({';
+			if ( $startDate ) $out_value .= "startDate: " . stripcslashes(trim($startDate));
+			if ( $startDate && $endDate ) $out_value .= ",";
+			if ( $endDate ) $out_value .= "endDate: " . stripcslashes(trim($endDate)) . "";
+			$out_value .= '}); });' . "\n" .
 					'// ]]>' . "\n" .
 					'</script>';
 		endif;
 
-		$out .= '</dd></dl>'."\n";
+		$out .= $out_value.'</dd></dl>'."\n";
 			
-		return $out;
+		return array($out, $out_key, $out_value);
 	}
 	
 	function make_checkbox( $name, $sid, $data ) {
 		$cftnum = $value = $valueLabel = $checked = $hideKey = $label = $code = $class = $style = $before = $after = $onclick = $ondblclick = $onkeydown = $onkeypress = $onkeyup = $onmousedown = $onmouseup = $onmouseover = $onmouseout = $onmousemove = $onfocus = $onblur = $onchange = $onselect = '';
-		$hide = $addfield = $out = '';
+		$hide = $addfield = $out = $out_key = $out_value = '';
 		extract($data);
 		$options = $this->get_custom_field_template_data();
 
@@ -1882,28 +1911,30 @@ jQuery(this).addClass("closed");
 
 		$id = $name . '_' . $this->sanitize_name( $value ) . '_' . $sid . '_' . $cftnum;
 
+		$out_key = '<span' . $hide . '>' . $title . '</span>';
+
 		$out .= 
 			'<dl id="dl_' . $id . '" class="dl_checkbox">' .
-			'<dt><span' . $hide . '>' . $title . '</span></dt>' .
+			'<dt>'.$out_key.'</dt>' .
 			'<dd>';
 		
 		if ( !empty($label) && !$options['custom_field_template_replace_keys_by_labels'] && $cftnum == 0 )
-			$out .= '<p class="label">' . stripcslashes($label) . '</p>';
-		$out .=	'<label for="' . $id . '" class="selectit"><input id="' . $id . '" name="' . $name . '[' . $sid . '][' . $cftnum . ']" value="' . esc_attr(stripcslashes(trim($value))) . '"' . $checked . ' type="checkbox"' . $class . $style . $event_output . ' /> ';
+			$out_value .= '<p class="label">' . stripcslashes($label) . '</p>';
+		$out_value .=	'<label for="' . $id . '" class="selectit"><input id="' . $id . '" name="' . $name . '[' . $sid . '][' . $cftnum . ']" value="' . esc_attr(stripcslashes(trim($value))) . '"' . $checked . ' type="checkbox"' . $class . $style . $event_output . ' /> ';
 		if ( $valueLabel )
-			$out .= stripcslashes(trim($valueLabel));
+			$out_value .= stripcslashes(trim($valueLabel));
 		else
-			$out .= stripcslashes(trim($value));
-		$out .= '</label>';
+			$out_value .= stripcslashes(trim($value));
+		$out_value .= '</label> ';
 
-		$out .= '</dd></dl>'."\n";
+		$out .= $out_value.'</dd></dl>'."\n";
 		
-		return $out;
+		return array($out, $out_key, $out_value);
 	}
 	
 	function make_radio( $name, $sid, $data ) {
 		$cftnum = $values = $valueLabels = $clearButton = $default = $hideKey = $label = $code = $class = $style = $before = $after = $multipleButton = $onclick = $ondblclick = $onkeydown = $onkeypress = $onkeyup = $onmousedown = $onmouseup = $onmouseover = $onmouseout = $onmousemove = $onfocus = $onblur = $onchange = $onselect = '';
-		$hide = $addfield = $out = '';
+		$hide = $addfield = $out = $out_key = $out_value = '';
 		extract($data);
 		$options = $this->get_custom_field_template_data();
 
@@ -1929,7 +1960,8 @@ jQuery(this).addClass("closed");
 		endif;
 		
 		if ( $hideKey == true ) $hide = ' class="hideKey"';
-		if ( !empty($class) ) $class = ' class="' . $class . '"';
+		$class .= ' '.$name . $sid;
+		if ( !empty($class) ) $class = ' class="' . trim($class) . '"';
 		if ( !empty($style) ) $style = ' style="' . $style . '"';
 
 		if ( !empty($label) && !empty($options['custom_field_template_replace_keys_by_labels']) )
@@ -1946,27 +1978,26 @@ jQuery(this).addClass("closed");
 			$addfield .= '<div style="margin-top:-1em;">';
 			$addfield .= '<a href="#clear" onclick="var tmp = jQuery(this).parent().parent().parent().clone().insertAfter(jQuery(this).parent().parent().parent());tmp.find('."'input'".').attr('."'checked',false".');if(tmp.find('."'input'".').attr('."'name'".').match(/\[([0-9]+)\]$/)) { matchval = RegExp.$1; matchval++;tmp.find('."'input'".').attr('."'name',".'tmp.find('."'input'".').attr('."'name'".').replace(/\[([0-9]+)\]$/, \'[\'+matchval+\']\'));}jQuery(this).parent().css('."'visibility','hidden'".');jQuery(this).parent().prev().css('."'visibility','hidden'".'); return false;">' . __('Add New', 'custom-field-template') . '</a>';
 			$addfield .= '</div>';
-		endif;		
+		endif;
+		
+		$out_key = '<span' . $hide . '>' . $title . '</span>'.$addfield;
+
+		if( $clearButton == true ) {
+			$out_key .= '<div>';
+			$out_key .= '<a href="#clear" onclick="jQuery(\'.'.$name . $sid.'\').attr(\'checked\', false); return false;">' . __('Clear', 'custom-field-template') . '</a>';
+			$out_key .= '</div>';
+		}	
 
 		$out .= 
 			'<dl id="dl_' . $name . $sid . '_' . $cftnum . '" class="dl_radio">' .
-			'<dt><span' . $hide . '>' . $title . '</span>'.$addfield;
-			
-		if( $clearButton == true ) {
-			$out .= '<div>';
-			$out .= '<a href="#clear" onclick="jQuery(this).parent().parent().parent().find(\'input\').attr(\'checked\', \'\'); return false;">' . __('Clear', 'custom-field-template') . '</a>';
-			$out .= '</div>';
-		}
-			
-		$out .=
-			'</dt>' .
+			'<dt>'.$out_key.'</dt>' .
 			'<dd>';
 
 		if ( !empty($label) && empty($options['custom_field_template_replace_keys_by_labels']) )
-			$out .= '<p class="label">' . stripcslashes($label) . '</p>';
+			$out_value .= '<p class="label">' . stripcslashes($label) . '</p>';
 		$i = 0;
 		
-		$out .= trim($before).'<input name="' . $name . '[' . $sid . '][' . $cftnum . ']" value="" type="hidden" />';
+		$out_value .= trim($before).'<input name="' . $name . '[' . $sid . '][' . $cftnum . ']" value="" type="hidden" />';
 
 		if ( is_array($values) ) :
 			foreach( $values as $val ) {
@@ -1974,24 +2005,25 @@ jQuery(this).addClass("closed");
 			
 				$checked = ( stripcslashes(trim( $val )) == trim( $selected ) ) ? 'checked="checked"' : '';
 			
-				$out .=	
+				$out_value .=	
 					'<label for="' . $id . '" class="selectit"><input id="' . $id . '" name="' . $name . '[' . $sid . '][' . $cftnum . ']" value="' . esc_attr(trim(stripcslashes($val))) . '" ' . $checked . ' type="radio"' . $class . $style . $event_output . ' /> ';
 				if ( isset($valueLabels[$i]) )
-					$out .= stripcslashes(trim($valueLabels[$i]));
+					$out_value .= stripcslashes(trim($valueLabels[$i]));
 				else
-					$out .= stripcslashes(trim($val));
-				$out .= '</label><br />';
+					$out_value .= stripcslashes(trim($val));
+				$out_value .= '</label> ';
 				$i++;
 			}
-		endif;	 
-		$out .= trim($after).'</dd></dl>'."\n";
+		endif;
+		$out_value .= trim($after);
+		$out .= $out_value.'</dd></dl>'."\n";
 		
-		return $out;			
+		return array($out, $out_key, $out_value);
 	}
 	
 	function make_select( $name, $sid, $data ) {
 		$cftnum = $values = $valueLabels = $default = $hideKey = $label = $code = $class = $style = $before = $after = $selectLabel = $multipleButton = $onclick = $ondblclick = $onkeydown = $onkeypress = $onkeyup = $onmousedown = $onmouseup = $onmouseover = $onmouseout = $onmousemove = $onfocus = $onblur = $onchange = $onselect = '';
-		$hide = $addfield = $out = '';
+		$hide = $addfield = $out = $out_key = $out_value = '';
 		extract($data);
 		$options = $this->get_custom_field_template_data();
 
@@ -2034,44 +2066,47 @@ jQuery(this).addClass("closed");
 			$addfield .= '<div style="margin-top:-1em;">';
 			$addfield .= '<a href="#clear" onclick="jQuery(this).parent().parent().parent().clone().insertAfter(jQuery(this).parent().parent().parent()).find('."'select'".').val('."''".');jQuery(this).parent().css('."'visibility','hidden'".');jQuery(this).parent().prev().css('."'visibility','hidden'".'); return false;">' . __('Add New', 'custom-field-template') . '</a>';
 			$addfield .= '</div>';
-		endif;		
+		endif;
+		
+		$out_key = '<span' . $hide . '><label for="' . $name . $sid . '_' . $cftnum . '">' . $title . '</label></span>'.$addfield;
 
 		$out .= 
 			'<dl id="dl_' . $name . $sid . '_' . $cftnum . '" class="dl_select">' .
-			'<dt><span' . $hide . '><label for="' . $name . $sid . '_' . $cftnum . '">' . $title . '</label></span>'.$addfield.'</dt>' .
+			'<dt>'.$out_key.'</dt>' .
 			'<dd>';
 			
 		if ( !empty($label) && !$options['custom_field_template_replace_keys_by_labels'] )
-			$out .= '<p class="label">' . stripcslashes($label) . '</p>';
-		$out .=	trim($before).'<select id="' . $name . $sid . '_' . $cftnum . '" name="' . $name . '[' . $sid . '][]"' . $class . $style . $event_output . '>';
+			$out_value .= '<p class="label">' . stripcslashes($label) . '</p>';
+		$out_value .=	trim($before).'<select id="' . $name . $sid . '_' . $cftnum . '" name="' . $name . '[' . $sid . '][]"' . $class . $style . $event_output . '>';
 		
 		if ( $selectLabel )
-			$out .= '<option value="">' . stripcslashes(trim($selectLabel)) . '</option>';
+			$out_value .= '<option value="">' . stripcslashes(trim($selectLabel)) . '</option>';
 		else
-			$out .= '<option value="">' . __('Select', 'custom-field-template') . '</option>';
+			$out_value .= '<option value="">' . __('Select', 'custom-field-template') . '</option>';
 		
 		$i = 0;
 		if ( is_array($values) ) :
 			foreach( $values as $val ) {
 				$checked = ( stripcslashes(trim( $val )) == trim( $selected ) ) ? 'selected="selected"' : '';
 		
-				$out .=	'<option value="' . esc_attr(stripcslashes(trim($val))) . '" ' . $checked . '>';
+				$out_value .=	'<option value="' . esc_attr(stripcslashes(trim($val))) . '" ' . $checked . '>';
 				if ( isset($valueLabels[$i]) )
-					$out .= stripcslashes(trim($valueLabels[$i]));
+					$out_value .= stripcslashes(trim($valueLabels[$i]));
 				else
-					$out .= stripcslashes(trim($val));
-				$out .= '</option>';
+					$out_value .= stripcslashes(trim($val));
+				$out_value .= '</option>';
 				$i++;
 			}
 		endif;
-		$out .= '</select>'.trim($after).'</dd></dl>'."\n";
+		$out_value .= '</select>'.trim($after);
+		$out .= $out_value.'</dd></dl>'."\n";
 		
-		return $out;
+		return array($out, $out_key, $out_value);
 	}
 	
 	function make_textarea( $name, $sid, $data ) {
-		$cftnum = $rows = $cols = $tinyMCE = $htmlEditor = $mediaButton = $default = $hideKey = $label = $code = $class = $style = $before = $after = $multipleButton = $mediaOffMedia = $mediaOffImage = $mediaOffVideo = $mediaOffAudio = $onclick = $ondblclick = $onkeydown = $onkeypress = $onkeyup = $onmousedown = $onmouseup = $onmouseover = $onmouseout = $onmousemove = $onfocus = $onblur = $onchange = $onselect = '';
-		$hide = $addfield = $out = $media = $editorcontainer_class = '';
+		$cftnum = $rows = $cols = $tinyMCE = $htmlEditor = $mediaButton = $default = $hideKey = $label = $code = $class = $style = $wrap = $before = $after = $multipleButton = $mediaOffMedia = $mediaOffImage = $mediaOffVideo = $mediaOffAudio = $onclick = $ondblclick = $onkeydown = $onkeypress = $onkeyup = $onmousedown = $onmouseup = $onmouseover = $onmouseout = $onmousemove = $onfocus = $onblur = $onchange = $onselect = '';
+		$hide = $addfield = $out = $out_key = $out_value = $media = $editorcontainer_class = '';
 		extract($data);
 		$options = $this->get_custom_field_template_data();
 
@@ -2103,7 +2138,7 @@ jQuery(this).addClass("closed");
 		$rand = rand();
 
 		if( $tinyMCE == true ) {
-			$out = '<script type="text/javascript">' . "\n" .
+			$out_value = '<script type="text/javascript">' . "\n" .
 					'// <![CDATA[' . "\n" .
 					'jQuery(document).ready(function() {if ( typeof tinyMCE != "undefined" ) {' . "\n";
 					
@@ -2115,12 +2150,12 @@ jQuery(this).addClass("closed");
 				$editorcontainer_class = ' class="wp-editor-container"';
 			endif;
 			if ( !empty($options['custom_field_template_use_wpautop']) ) :
-				$out .=	'document.getElementById("'. sha1($name . $rand) . '").value = document.getElementById("'. sha1($name . $rand) . '").value; '.$load_tinyMCE.' tinyMCEID.push("'. sha1($name . $rand) . '");' . "\n";
+				$out_value .=	'document.getElementById("'. sha1($name . $rand) . '").value = document.getElementById("'. sha1($name . $rand) . '").value; '.$load_tinyMCE.' tinyMCEID.push("'. sha1($name . $rand) . '");' . "\n";
 			else:
-				$out .=	'document.getElementById("'. sha1($name . $rand) . '").value = switchEditors.wpautop(document.getElementById("'. sha1($name . $rand) . '").value); '.$load_tinyMCE.' tinyMCEID.push("'. sha1($name . $rand) . '");' . "\n";
+				$out_value .=	'document.getElementById("'. sha1($name . $rand) . '").value = switchEditors.wpautop(document.getElementById("'. sha1($name . $rand) . '").value); '.$load_tinyMCE.' tinyMCEID.push("'. sha1($name . $rand) . '");' . "\n";
 			endif;
-			$out .= '}});' . "\n";
-			$out .= '// ]]>' . "\n" . '</script>';
+			$out_value .= '}});' . "\n";
+			$out_value .= '// ]]>' . "\n" . '</script>';
 		}
 		
 		if ( substr($wp_version, 0, 3) >= '2.5' ) {
@@ -2177,6 +2212,7 @@ jQuery(this).addClass("closed");
 		if ( !empty($class) ) $content_class .= ' ' . $class;
 		$content_class .= '"';
 		if ( !empty($style) ) $style = ' style="' . $style . '"';
+		if ( !empty($wrap) && ($wrap == 'soft' || $wrap == 'hard' || $wrap == 'off') ) $wrap = ' wrap="' . $wrap . '"';
 
 		if ( !empty($label) && !empty($options['custom_field_template_replace_keys_by_labels']) )
 			$title = stripcslashes($label);
@@ -2215,43 +2251,46 @@ jQuery(this).addClass("closed");
 			$addfield .= '</div>';
 		endif;		
 		
+		$out_key = '<span' . $hide . '><label for="' . $name . $sid . '_' . $cftnum . '">' . $title . '</label></span><br />' . $addfield . $media . $switch;
+		
 		$out .= 
 			'<dl id="dl_' . $name . $sid . '_' . $cftnum . '" class="dl_textarea">' .
-			'<dt><span' . $hide . '><label for="' . $name . $sid . '_' . $cftnum . '">' . $title . '</label></span><br />' . $addfield . $media . $switch . '</dt>' .
+			'<dt>'.$out_key.'</dt>' .
 			'<dd>';
 
 		if ( !empty($label) && empty($options['custom_field_template_replace_keys_by_labels']) )
-			$out .= '<p class="label">' . stripcslashes($label) . '</p>';
+			$out_value .= '<p class="label">' . stripcslashes($label) . '</p>';
 		
-		$out .= trim($before);
+		$out_value .= trim($before);
 
-		if ( ($htmlEditor == true || $tinyMCE == true) && substr($wp_version, 0, 3) < '3.3' ) $out .= '<div class="quicktags">';
+		if ( ($htmlEditor == true || $tinyMCE == true) && substr($wp_version, 0, 3) < '3.3' ) $out_value .= '<div class="quicktags">';
 		
 		if ( $htmlEditor == true ) :
 			if ( substr($wp_version, 0, 3) < '3.3' ) :
 				if( $tinyMCE == true ) $quicktags_hide = ' jQuery(\'#qt_' . sha1($name . $rand) . '_qtags\').hide();';
-				$out .= '<script type="text/javascript">' . "\n" . '// <![CDATA[' . '
+				$out_value .= '<script type="text/javascript">' . "\n" . '// <![CDATA[' . '
 		jQuery(document).ready(function() { qt_' . sha1($name . $rand) . ' = new QTags(\'qt_' . sha1($name . $rand) . '\', \'' . sha1($name . $rand) . '\', \'editorcontainer_' . sha1($name . $rand) . '\', \'more\'); ' . $quicktags_hide . ' });' . "\n" . '// ]]>' . "\n" . '</script>';
 				$editorcontainer_class = ' class="editorcontainer"';
 			else :
 				if( $tinyMCE == true ) $quicktags_hide = ' jQuery(\'#qt_' . sha1($name . $rand) . '_toolbar\').hide();';
-				$out .= '<script type="text/javascript">' . "\n" . '// <![CDATA[' . '
+				$out_value .= '<script type="text/javascript">' . "\n" . '// <![CDATA[' . '
 		jQuery(document).ready(function() { new QTags(\'' . sha1($name . $rand) . '\'); QTags._buttonsInit(); ' . $quicktags_hide . ' }); ' . "\n";
-				$out .=  '// ]]>' . "\n" . '</script>';
+				$out_value .=  '// ]]>' . "\n" . '</script>';
 				$editorcontainer_class = ' class="wp-editor-container"';
 			endif;
 		endif;
 		
-		$out .= '<div' . $editorcontainer_class . ' id="editorcontainer_' . sha1($name . $rand) . '"><textarea id="' . sha1($name . $rand) . '" name="' . $name . '[' . $sid . '][]" rows="' .$rows. '" cols="' . $cols . '"' . $content_class . $style . $event_output . '>' . esc_attr(trim($value)) . '</textarea><input type="hidden" name="'.$name.'_rand['.$sid.']" value="'.$rand.'" /></div>';
-		if ( ($htmlEditor == true || $tinyMCE == true) && substr($wp_version, 0, 3) < '3.3' ) $out .= '</div>';
-		$out .= trim($after).'</dd></dl>'."\n";
+		$out_value .= '<div' . $editorcontainer_class . ' id="editorcontainer_' . sha1($name . $rand) . '"><textarea id="' . sha1($name . $rand) . '" name="' . $name . '[' . $sid . '][]" rows="' .$rows. '" cols="' . $cols . '"' . $content_class . $style . $event_output . $wrap . '>' . esc_attr(trim($value)) . '</textarea><input type="hidden" name="'.$name.'_rand['.$sid.']" value="'.$rand.'" /></div>';
+		if ( ($htmlEditor == true || $tinyMCE == true) && substr($wp_version, 0, 3) < '3.3' ) $out_value .= '</div>';
+		$out_value .= trim($after);
+		$out .= $out_value.'</dd></dl>'."\n";
 		
-		return $out;
+		return array($out, $out_key, $out_value);
 	}
 	
 	function make_file( $name, $sid, $data ) {
 		$cftnum = $size = $hideKey = $label = $class = $style = $before = $after = $multipleButton = $relation = $mediaLibrary = $mediaPicker = '';
-		$hide = $addfield = $out = $picker = '';
+		$hide = $addfield = $out = $out_key = $out_value = $picker = '';
 		extract($data);
 		$options = $this->get_custom_field_template_data();
 
@@ -2292,15 +2331,17 @@ jQuery(this).addClass("closed");
 			$picker = __(' OR ', 'custom-field-template');
 			$picker .= '<a href="'.$image_upload_iframe_src.'&post_id='.$_REQUEST[ 'post' ].'&TB_iframe=1&tab='.$tab.'" class="thickbox" onclick="jQuery('."'#cft_current_template'".').val(jQuery(this).parent().parent().parent().parent().attr(\'id\').replace(\'cft_\',\'\'));jQuery('."'#cft_clicked_id'".').val(jQuery(this).parent().find(\'input\').attr(\'id\'));">'.__('Select by Media Picker', 'custom-field-template').'</a>';
 		endif;
-				
+		
+		$out_key = '<span' . $hide . '><label for="' . $name . $sid . '_' . $cftnum . '">' . $title . '</label></span>'.$addfield;
+			
 		$out .= 
 			'<dl id="dl_' . $name . $sid . '_' . $cftnum . '" class="dl_file">' .
-			'<dt><span' . $hide . '><label for="' . $name . $sid . '_' . $cftnum . '">' . $title . '</label></span>'.$addfield.'</dt>' .
+			'<dt>'.$out_key.'</dt>' .
 			'<dd>';
 
 		if ( !empty($label) && !$options['custom_field_template_replace_keys_by_labels'] )
-			$out .= '<p class="label">' . stripcslashes($label) . '</p>';
-		$out .= trim($before).'<input id="' . $name . $sid . '_' . $cftnum . '" name="' . $name . '['.$sid.'][]" type="file" size="' . $size . '"' . $class . $style . ' onchange="if (jQuery(this).val()) { jQuery(\'#cft_save_button\'+jQuery(this).parent().parent().parent().parent().attr(\'id\').replace(\'cft_\',\'\')).attr(\'disabled\', true); jQuery(\'#post-preview\').hide(); } else { jQuery(\'#cft_save_button\').attr(\'disabled\', false); jQuery(\'#post-preview\').show(); }" />'.trim($after).$picker;
+			$out_value .= '<p class="label">' . stripcslashes($label) . '</p>';
+		$out_value .= trim($before).'<input id="' . $name . $sid . '_' . $cftnum . '" name="' . $name . '['.$sid.'][]" type="file" size="' . $size . '"' . $class . $style . ' onchange="if (jQuery(this).val()) { jQuery(\'#cft_save_button\'+jQuery(this).parent().parent().parent().parent().attr(\'id\').replace(\'cft_\',\'\')).attr(\'disabled\', true); jQuery(\'#post-preview\').hide(); } else { jQuery(\'#cft_save_button\').attr(\'disabled\', false); jQuery(\'#post-preview\').show(); }" />'.trim($after).$picker;
 
 		if ( isset($value) && ( $value = intval($value) ) && $thumb_url = wp_get_attachment_image_src( $value, 'thumbnail', true ) ) :
 			$thumb_url = $thumb_url[0];
@@ -2313,15 +2354,15 @@ jQuery(this).addClass("closed");
 				$title = '<a href="'.$image_upload_iframe_src.'&post_id='.$_REQUEST[ 'post' ].'&TB_iframe=1&tab='.$tab.'" class="thickbox">'.$title.'</a>';
 			endif;
 			
-			$out .= '<p><label for="'.$name . $sid . '_' . $cftnum . '_delete"><input type="checkbox" name="'.$name . '_delete[' . $sid . '][' . $cftnum . ']" id="'.$name . $sid . '_' . $cftnum . '_delete" value="1" class="delete_file_checkbox" /> ' . __('Delete', 'custom-field-template') . '</label> <img src="'.$thumb_url.'" width="32" height="32" style="vertical-align:middle;" /> ' . $title . ' </p>';
-			$out .= '<input type="hidden" id="' . $name . $sid . '_' . $cftnum . '_hide" name="'.$name . '[' . $sid . '][' . $cftnum . ']" value="' . $value . '" />';
+			$out_value .= '<p><label for="'.$name . $sid . '_' . $cftnum . '_delete"><input type="checkbox" name="'.$name . '_delete[' . $sid . '][' . $cftnum . ']" id="'.$name . $sid . '_' . $cftnum . '_delete" value="1" class="delete_file_checkbox" /> ' . __('Delete', 'custom-field-template') . '</label> <img src="'.$thumb_url.'" width="32" height="32" style="vertical-align:middle;" /> ' . $title . ' </p>';
+			$out_value .= '<input type="hidden" id="' . $name . $sid . '_' . $cftnum . '_hide" name="'.$name . '[' . $sid . '][' . $cftnum . ']" value="' . $value . '" />';
 		else :
-			$out .= '<input type="hidden" id="' . $name . $sid . '_' . $cftnum . '_hide" name="'.$name . '[' . $sid . '][' . $cftnum . ']" value="" />';
+			$out_value .= '<input type="hidden" id="' . $name . $sid . '_' . $cftnum . '_hide" name="'.$name . '[' . $sid . '][' . $cftnum . ']" value="" />';
 		endif;
 
-		$out .= '</dd></dl>'."\n";
+		$out .= $out_value.'</dd></dl>'."\n";
 
-		return $out;		
+		return array($out, $out_key, $out_value);
 	}
 
 
@@ -2355,7 +2396,7 @@ jQuery(this).addClass("closed");
 					return;
 				endif;
 			else :
-				if ( $_REQUEST['post_type']!=$options['custom_fields'][$id]['post_type'] && $post->post_type!=$options['custom_fields'][$id]['post_type'] ) :
+				if ( (isset($_REQUEST['post_type']) && $_REQUEST['post_type']!=$options['custom_fields'][$id]['post_type']) && $post->post_type!=$options['custom_fields'][$id]['post_type'] ) :
 					return;
 				endif;
 			endif;
@@ -2450,9 +2491,14 @@ jQuery(this).addClass("closed");
 		$out .= '<div id="cft_'.$id.'">';
 		$out .= '<div>';
 		$out .= '<input type="hidden" name="custom-field-template-id[]" id="custom-field-template-id" value="' . $id . '" />';
+
+		if ( isset($options['custom_fields'][$id]['format']) && is_numeric($options['custom_fields'][$id]['format']) )
+			$format = stripslashes($options['shortcode_format'][$options['custom_fields'][$id]['format']]);
+
+		$last_title = '';
 		foreach( $fields as $field_key => $field_val ) :
 			foreach( $field_val as $title => $data ) {
-				$class = $style = $addfield = '';
+				$class = $style = $addfield = $tmpout = $out_all = $out_key = $out_value = $duplicator = '';
 				if ( isset($data['parentSN']) && is_numeric($data['parentSN']) ) $parentSN = $data['parentSN'];
 				else $parentSN = $field_key;
 					if ( isset($data['level']) && is_numeric($data['level']) ) :
@@ -2461,13 +2507,13 @@ jQuery(this).addClass("closed");
 					if( $data['type'] == 'break' ) {
 						if ( !empty($data['class']) ) $class = ' class="' . $data['class'] . '"';
 						if ( !empty($data['style']) ) $style = ' style="' . $data['style'] . '"';
-						$out .= '</div><div' . $class . $style . '>';
+						$tmpout .= '</div><div' . $class . $style . '>';
 					}
 					else if( $data['type'] == 'fieldset_open' ) {
 						if ( !empty($data['class']) ) $class = ' class="' . $data['class'] . '"';
 						if ( !empty($data['style']) ) $style = ' style="' . $data['style'] . '"';
-						$out .= '<fieldset' . $class . $style . '>'."\n";
-						$out .= '<input type="hidden" name="' . $this->sanitize_name( $title ) . '[]" value="1" />'."\n";
+						$tmpout .= '<fieldset' . $class . $style . '>'."\n";
+						$tmpout .= '<input type="hidden" name="' . $this->sanitize_name( $title ) . '[]" value="1" />'."\n";
 					
 						if ( isset($data['multipleButton']) && $data['multipleButton'] == true ) :
 							$addfield .= ' <span>';
@@ -2494,36 +2540,53 @@ jQuery(this).addClass("closed");
 						if ( isset($data['legend']) || isset($addfield) ) :
 							if ( !isset($data['legend']) ) $data['legend'] = '';
 							if ( !isset($addfield) ) $addfield = '';
-							$out .= '<legend>' . stripcslashes(trim($data['legend'])) . $addfield . '</legend>';
+							$tmpout .= '<legend>' . stripcslashes(trim($data['legend'])) . $addfield . '</legend>';
 						endif;
 					}
 					else if( $data['type'] == 'fieldset_close' ) {
-						$out .= '</fieldset>';
+						$tmpout .= '</fieldset>';
 					}
 					else if( $data['type'] == 'textfield' || $data['type'] == 'text' ) {
-						$out .= $this->make_textfield( $title, $parentSN, $data );
+						list($out_all,$out_key,$out_value) = $this->make_textfield( $title, $parentSN, $data );
 					}
 					else if( $data['type'] == 'checkbox' ) {
-						$out .= $this->make_checkbox( $title, $parentSN, $data );
+						list($out_all,$out_key,$out_value) = $this->make_checkbox( $title, $parentSN, $data );
 					}
 					else if( $data['type'] == 'radio' ) {
 						$data['values'] = explode( '#', $data['value'] );
 						if ( isset($data['valueLabel']) ) $data['valueLabels'] = explode( '#', $data['valueLabel'] );
-						$out .= $this->make_radio( $title, $parentSN, $data );
+						list($out_all,$out_key,$out_value) = $this->make_radio( $title, $parentSN, $data );
 					}
 					else if( $data['type'] == 'select' ) {
 						$data['values'] = explode( '#', $data['value'] );
 						if ( isset($data['valueLabel']) ) $data['valueLabels'] = explode( '#', $data['valueLabel'] );
-						$out .= $this->make_select( $title, $parentSN, $data );
+						list($out_all,$out_key,$out_value) = $this->make_select( $title, $parentSN, $data );
 					}
 					else if( $data['type'] == 'textarea' ) {
-						$out .= $this->make_textarea( $title, $parentSN, $data );
+						list($out_all,$out_key,$out_value) = $this->make_textarea( $title, $parentSN, $data );
 					}
 					else if( $data['type'] == 'file' ) {
-						$out .= $this->make_file( $title, $parentSN, $data );
-				}
+						list($out_all,$out_key,$out_value) = $this->make_file( $title, $parentSN, $data );
+					}
+				if ( isset($options['custom_fields'][$id]['format']) && is_numeric($options['custom_fields'][$id]['format']) ) :
+					$duplicator = '['.$title.']';
+					$preg_key = preg_quote($title, '/');
+					$out_key = str_replace('\\', '\\\\', $out_key); 
+					$out_key = str_replace('$', '\$', $out_key); 
+					$out_value = str_replace('\\', '\\\\', $out_value); 
+					$out_value = str_replace('$', '\$', $out_value); 
+					$format = preg_replace('/\[\['.$preg_key.'\]\]/', $out_key, $format);
+					$format = preg_replace('/\['.$preg_key.'\]/', $out_value.$duplicator, $format);
+					if ( !empty($last_title) && $last_title != $title ) $format = preg_replace('/\['.preg_quote($last_title,'/').'\]/', '', $format);
+					$last_title = $title;
+				else :
+					$out .= $tmpout.$out_all;
+				endif;
 			}
 		endforeach;
+		if ( !empty($last_title) ) $format = preg_replace('/\['.preg_quote($last_title,'/').'\]/', '', $format);
+		if ( isset($options['custom_fields'][$id]['format']) && is_numeric($options['custom_fields'][$id]['format']) ) $out .= $format;
+
 		$out .= '<script type="text/javascript">' . "\n" .
 				'// <![CDATA[' . "\n";
 		$out .= '	jQuery(document).ready(function() {' . "\n" .
@@ -2777,9 +2840,9 @@ jQuery("#edButtonPreview").trigger("click"); }' . "\n";*/
 					continue;
 			endif;
 		
-			$cat_ids = explode(',', $options['custom_fields'][$i]['category']);
-			$template_files = explode(',', $options['custom_fields'][$i]['template_files']);
-			$post_ids = explode(',', $options['custom_fields'][$i]['post']);
+			$cat_ids = isset($options['custom_fields'][$i]['category']) ? explode(',', $options['custom_fields'][$i]['category']) : array();
+			$template_files = isset($options['custom_fields'][$i]['template_files']) ? explode(',', $options['custom_fields'][$i]['template_files']) : array();
+			$post_ids = isset($options['custom_fields'][$i]['post']) ? explode(',', $options['custom_fields'][$i]['post']) : array();
 			$cat_ids = array_filter( $cat_ids );
 			$template_files = array_filter( $template_files );
 			$post_ids = array_filter( $post_ids );
@@ -2887,7 +2950,7 @@ jQuery("#edButtonPreview").trigger("click"); }' . "\n";*/
 			return $id;
 		
 		if ( !isset($_REQUEST['custom-field-template-id']) ) :
-			unset($options['posts'][$id]);
+			if ( isset($options['posts'][$id]) ) unset($options['posts'][$id]);
 			update_option('custom_field_template_data', $options);
 			return $id;
 		endif;
@@ -2947,7 +3010,7 @@ jQuery("#edButtonPreview").trigger("click"); }' . "\n";*/
 					continue;
 				endif;
 
-				unset($field_key);
+				$field_key = 0;
 				if ( isset($_REQUEST[$name]) && is_array($_REQUEST[$name]) ) :
 					foreach( $_REQUEST[$name] as $tmp_key => $tmp_val ) :
 						$field_key = $tmp_key;
@@ -3199,7 +3262,7 @@ jQuery("#edButtonPreview").trigger("click"); }' . "\n";*/
 							endif;
 							if ( isset($data['multiple']) && $data['multiple'] == true && $data['type'] != 'checkbox' && $data['type'] != 'fieldset_open' && !isset($fieldset) ) :
 								$counter = isset($_REQUEST[$this->sanitize_name($title)][$tmp_parentSN+$gap]) ? count($_REQUEST[$this->sanitize_name($title)][$tmp_parentSN+$gap]) : 0;
-								if ( $data['type'] == 'file' && $_FILES[$this->sanitize_name($title)] ) $counter = (int)count($_FILES[$this->sanitize_name($title)]['name'][$tmp_parentSN+$gap])+1;
+								if ( $data['type'] == 'file' && !empty($_FILES[$this->sanitize_name($title)]) ) $counter = (int)count($_FILES[$this->sanitize_name($title)]['name'][$tmp_parentSN+$gap])+1;
 								if ( isset($_REQUEST['post_ID']) )	$org_counter = count($this->get_post_meta( $_REQUEST['post_ID'], $title ));
 								else if ( isset($_REQUEST['post']) ) $org_counter = count($this->get_post_meta( $_REQUEST['post'], $title ));
 								else $org_counter = 1;
@@ -3828,7 +3891,7 @@ jQuery("#edButtonPreview").trigger("click"); }' . "\n";*/
 
 	function custom_field_template_posts_join($sql) {
 		if ( !in_array($_REQUEST['orderby'], array('post_author', 'post_date', 'post_title', 'post_modified', 'menu_order', 'post_parent', 'ID')) ):
-			if ( ($_REQUEST['order'] == 'ASC' || $_REQUEST['order'] == 'DESC') && $_REQUEST['orderby'] ) :
+			if ( (strtoupper($_REQUEST['order']) == 'ASC' || strtoupper($_REQUEST['order']) == 'DESC') && !empty($_REQUEST['orderby']) ) :
 				global $wpdb;
 
 				$sql = $wpdb->prepare(" LEFT JOIN `" . $wpdb->postmeta . "` AS meta ON (`" . $wpdb->posts . "`.ID = meta.post_id AND meta.meta_key = %s)", $_REQUEST['orderby']); 
@@ -3855,6 +3918,7 @@ jQuery("#edButtonPreview").trigger("click"); }' . "\n";*/
 					$sql = " meta.meta_value " . $_REQUEST['order'];
 				endif;
 			endif;
+			echo $sql;
 			return $sql;
 		endif;
 

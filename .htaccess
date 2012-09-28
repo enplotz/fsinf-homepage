@@ -567,3 +567,8 @@ RewriteRule . /fachschaft/index.php [L]
 </IfModule>
 
 # END WordPress
+
+# BEGIN Shibboleth
+# AuthType Shibboleth
+# Require Shibboleth
+# END Shibboleth

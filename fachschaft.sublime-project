@@ -1,0 +1,9 @@
+{
+	"folders":
+	[
+		{
+			"path": "/Applications/MAMP/htdocs/fachschaft/wp-content",
+			"folder_exclude_patterns": ["wp-admin", "wp-includes"]
+		}
+	]
+}
