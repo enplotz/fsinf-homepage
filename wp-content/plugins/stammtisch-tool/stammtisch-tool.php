@@ -78,10 +78,21 @@ function is_selected_day($day_int)
 function stammtisch_admin_page()
 {
 
-  /* Process cancelation of admin for specific user */
+  /* Process addition or cancelation by admin for specific user */
   if (is_admin()){
-    if ( array_key_exists('participation_cancel_for', $_POST)){
-        cancel_participation_for($_POST['participation_cancel_for']);
+
+    if ( array_key_exists('participation_cancel_for', $_POST))
+    {
+      cancel_participation_for($_POST['participation_cancel_for']);
+    }
+
+    if (array_key_exists('add_participation_for', $_POST))
+    {
+      if (array_key_exists('joins_later', $_POST)){
+        add_participation_for($_POST['add_participation_for'], true);
+      } else {
+        add_participation_for($_POST['add_participation_for'], false);
+      }
     }
   }
 
@@ -143,9 +154,9 @@ function stammtisch_admin_page()
             </div>
           </div>
         </form>
-        <form action="" method="post">
-          <div class="span6">
-            <h4>Teilnehmer des aktuellen Stammtisches:</h4>
+        <div class="row">
+      <div class="span6">
+            <h4>Teilnehmer des aktuellen Stammtisches</h4>
             <!--<pre>
               <?= print_r(get_participants()) ?>
             </pre>-->
@@ -202,6 +213,35 @@ function stammtisch_admin_page()
               </tbody>
             </table>
           </div>
+          <div class="span4 well">
+            <h4>Teilnehmer hinzufügen</h4>
+
+              <form action="" method="post">
+                <!-- TODO: auf user_login wechseln -->
+                <label class="control-label" for="inputUser">User ID</label>
+                  <div class="controls">
+                    <input type="number" id="inputEmail" placeholder="1" name="add_participation_for" class="span2"/>
+                  </div>
+
+            <div class="control-group">
+              <div class="controls">
+                <label class="checkbox">
+                  <i class="icon-time"></i>
+                  <input type="checkbox" value="1" name="joins_later">
+                  Erscheint später.
+                </label>
+                <button type="submit" class="btn"><i class="icon-ok"></i> Hinzufügen!</button>
+              </div>
+            </div>
+              </form>
+
+              <?php echo '<pre>';
+               print_r($_POST);
+               echo '</php>';
+               ?>
+
+          </div>
+        </div>
     </div><!-- wrap -->
 <?php
 }
@@ -432,6 +472,24 @@ function get_participants()
     ", strftime('%Y-%m-%d', get_next_stammtisch_timestamp())
     ));
   return $results;
+}
+
+function add_participation_for($user_id, $later)
+{
+  global $wpdb;
+  $table_name = $wpdb->prefix . "stammtisch";
+  $wpdb->insert( $table_name,
+          array(
+                'user_id' => $user_id,
+                'date' => strftime('%Y-%m-%d', get_next_stammtisch_timestamp()),
+                'arrives_later' => $later
+          ),
+          array(
+                '%d',
+                '%s',
+                '%d'
+          )
+    );
 }
 
 function join_regulars_table($later){
