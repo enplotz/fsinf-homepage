@@ -217,7 +217,7 @@ function stammtisch_admin_page()
             <h4>Teilnehmer hinzufügen</h4>
 
               <form action="" method="post">
-                <!-- TODO: auf user_login wechseln -->
+                <!-- TODO: auf user_login wechseln und prüfen obs den gibt... -->
                 <label class="control-label" for="inputUser">User ID</label>
                   <div class="controls">
                     <input type="number" id="inputEmail" placeholder="1" name="add_participation_for" class="span2"/>
@@ -234,12 +234,6 @@ function stammtisch_admin_page()
               </div>
             </div>
               </form>
-
-              <?php echo '<pre>';
-               print_r($_POST);
-               echo '</php>';
-               ?>
-
           </div>
         </div>
     </div><!-- wrap -->
@@ -370,7 +364,7 @@ function stammtisch_booking_form()
 ?>
       <form action="" method="post">
         <input type="hidden" value="cancel" name="participation"/>
-        <button type="submit" class="btn btn-primary btn-small"><i class="icon-remove"></i> Ich komme doch nicht</button>
+        <button type="submit" class="btn btn-primary btn-small"><i class="icon-remove icon-white"></i> Ich komme doch nicht</button>
       </form>
 <?php
     } else {
