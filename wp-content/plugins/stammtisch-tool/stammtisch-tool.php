@@ -25,35 +25,43 @@ define ('STAMMTISCH_DEFAULT_LOCK_HOURS', 3);
 define ('STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON', 'max');
 
 
-$stammtisch_options =
-  array(
+function stammtisch_options()
+{
+  return array(
     "stammtisch_required" => STAMMTISCH_DEFAULT_REQUIRED,
     "stammtisch_time"     => STAMMTISCH_DEFAULT_TIME,
     "stammtisch_day"      => STAMMTISCH_DEFAULT_DAY,
     "stammtisch_location" => STAMMTISCH_DEFAULT_LOCATION,
     "stammtisch_url"      => STAMMTISCH_DEFAULT_URL
-  );
+ );
+}
 
+function stammtisch_weekday($day_int) {
+  $week = array('Sonntag', 'Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag');
+  return $week[($day_int + 7) % 7];
+}
 
-function stammtisch_install (){
-  global $wpdb, $stammtisch_options;
+function stammtisch_install() {
+  global $wpdb;
 
   $table_name = $wpdb->prefix . "stammtisch";
 
   $sql = "CREATE TABLE  $table_name (
-            user_id BIGINT( 20 ) UNSIGNED NOT NULL,
+            user_id BIGINT(20) UNSIGNED NOT NULL,
             date DATE NOT NULL,
-            arrives_later TINYINT( 1 ) NOT NULL,
-            PRIMARY KEY  (  user_id ,  date )
-          ) ENGINE = INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
+            arrives_later TINYINT(1) NOT NULL,
+            PRIMARY KEY  ( user_id ,  date)
+         ) ENGINE = INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;";
 
   require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
   dbDelta($sql);
 
-  foreach ($stammtisch_options as $name => $default) {
+  foreach (stammtisch_options() as $name => $default) {
     add_option($name, $default);
   }
 }
+
+# TODO: uninstall
 
 register_activation_hook(__FILE__,'stammtisch_install');
 /**********************************************************************/
@@ -61,7 +69,7 @@ register_activation_hook(__FILE__,'stammtisch_install');
 /*
  * ADMIN MENU
  */
-if (is_admin()){
+if (is_admin()) {
 add_action('admin_menu', 'stammtisch_add_admin_page');
 
 function stammtisch_add_admin_page()
@@ -74,35 +82,24 @@ function is_selected_day($day_int)
   return (get_option('stammtisch_day', STAMMTISCH_DEFAULT_DAY) == $day_int) ? 'selected' : '';
 }
 
-
 function stammtisch_admin_page()
 {
 
   /* Process addition or cancelation by admin for specific user */
-  if (is_admin()){
+  if (is_admin()) {
 
-    if ( array_key_exists('participation_cancel_for', $_POST))
-    {
+    if (array_key_exists('participation_cancel_for', $_POST)) {
       cancel_participation_for($_POST['participation_cancel_for']);
     }
 
-    if (array_key_exists('add_participation_for', $_POST))
-    {
-      if (array_key_exists('joins_later', $_POST)){
-        add_participation_for($_POST['add_participation_for'], true);
-      } else {
-        add_participation_for($_POST['add_participation_for'], false);
-      }
+    if (array_key_exists('add_participation_for', $_POST)) {
+      add_participation_for($_POST['add_participation_for'], array_key_exists('joins_later', $_POST));
     }
   }
 
-    global $stammtisch_options;
-
-    foreach ($stammtisch_options as $key => $value) {
-      if ( array_key_exists($key, $_POST)){
-        if($_POST[$key] != ''){
-          update_option($key, $_POST[$key]);
-        }
+    foreach (stammtisch_options() as $key => $value) {
+      if (array_key_exists($key, $_POST) && $_POST[$key] !== '') {
+        update_option($key, $_POST[$key]);
       }
     }
   ?>
@@ -114,13 +111,12 @@ function stammtisch_admin_page()
             <label class="control-label" for="stammtischDay">Tag</label>
             <div class="controls">
               <select name="stammtisch_day" id="stammtischDay">
-                <option name="stammtisch_day" <?= is_selected_day(1) ?> value="1">Montag</option>
-                <option name="stammtisch_day" <?= is_selected_day(2) ?> value="2">Dienstag</option>
-                <option name="stammtisch_day" <?= is_selected_day(3) ?> value="3">Mittwoch</option>
-                <option name="stammtisch_day" <?= is_selected_day(4) ?> value="4">Donnerstag</option>
-                <option name="stammtisch_day" <?= is_selected_day(5) ?> value="5">Freitag</option>
-                <option name="stammtisch_day" <?= is_selected_day(6) ?> value="6">Samstag</option>
-                <option name="stammtisch_day" <?= is_selected_day(7) ?> value="7">Sonntag</option>
+<?php
+for($i = 1; $i <= 7; $i++):
+?>                <option name="stammtisch_day" <?= is_selected_day($i) ?> value="<?=$i?>"><?=stammtisch_weekday($i)?></option>
+<?php
+endfor;
+?>
             </select>
             </div>
           </div>
@@ -157,9 +153,6 @@ function stammtisch_admin_page()
         <div class="row">
       <div class="span6">
             <h4>Teilnehmer des aktuellen Stammtisches</h4>
-            <!--<pre>
-              <?= print_r(get_participants()) ?>
-            </pre>-->
 <?php
             $participants = get_participants();
             if (count($participants) > 0) {
@@ -180,30 +173,29 @@ function stammtisch_admin_page()
               </thead>
               <tbody>
 <?php
-            for ($i=0; $i < count($participants); $i++) {
+              foreach ($participants as $participant):
 ?>
-                <tr>
-                  <td>
-                    <?= $participants[$i]->display_name; ?>
-                  </td>
-                  <td>
+                  <tr>
+                    <td>
+                      <?= $participant->display_name; ?>
+                    </td>
+                    <td>
 <?php
-                    if ($participants[$i]->arrives_later){
-                    echo '<i class="icon-time"></i> später';
-                    } else {
-                    echo '<i class="icon-ok"></i> regulär';
-                    }
+                      if ($participant->arrives_later) {
+                      echo '<i class="icon-time"></i> später';
+                      } else {
+                      echo '<i class="icon-ok"></i> regulär';
+                      }
 ?>
-                  </td>
-                  <td>
-                    <form action="" method="post">
-                      <input type="hidden" value="<?= $participants[$i]->user_id ?>" name="participation_cancel_for"/>
-                      <button type="submit" class="btn btn-danger btn-small"><i class="icon-remove icon-white"></i> Nimmt doch nicht teil</button>
-                    </form>
-                  </td>
-                </tr>
-<?php
-            }
+                    </td>
+                    <td>
+                      <form action="" method="post">
+                        <input type="hidden" value="<?= $participant->user_id ?>" name="participation_cancel_for"/>
+                        <button type="submit" class="btn btn-danger btn-small"><i class="icon-remove icon-white"></i> Nimmt doch nicht teil</button>
+                      </form>
+                    </td>
+                  </tr>
+<?php         endforeach;
             } else {
 ?>
               <p>Der aktuelle Stammtisch hat noch keine Teilnehmer.</p>
@@ -234,36 +226,16 @@ function stammtisch_admin_page()
               </div>
             </div>
               </form>
+              <pre>
+          <?= print_r($_POST, true) ?>
+        </pre>
           </div>
         </div>
     </div><!-- wrap -->
+
 <?php
 }
 
-function stammtisch_register_settings()
-{
-  global $stammtisch_options;
-
-  foreach ($stammtisch_options as $key => $value) {
-    register_setting('stammtisch_settings', $key, 'stammtisch_validate_options');
-    add_settings_section($key, $key, 'main_section_text', 'stammtisch-tool');
-    add_settings_field('stammtisch_text_string', 'Plugin Text Input', 'stammtisch_setting_string', 'stammtisch-tool', $key);
-  }
-}
-
-function main_section_text() {
-  echo '<p>Main description of this section here.</p>';
-}
-
-function stammtisch_setting_string(){
-  echo "TEST";
-}
-
-function stammtisch_validate_options($input)
-{
-  /* Do nothing until we have time for validation :P */
-  return $input;
-}
 }
 /**********************************************************************/
 
@@ -277,10 +249,10 @@ function stammtisch_booking_form()
   setlocale(LC_TIME, 'de_DE');
 
   /* Process POST values and prepare alerts for later display*/
-  if (is_user_logged_in()){
-    if ( array_key_exists('participation', $_POST)){
+  if (is_user_logged_in()) {
+    if (array_key_exists('participation', $_POST)) {
       if ($_POST['participation'] === 'join') {
-        if ( join_regulars_table(0) ){
+        if (join_regulars_table(false)) {
           $stammtisch_alert = '<div class="alert alert-success">
             <a class="close" data-dismiss="alert">×</a>
             <p>Yay! Cool, dass du zum Stammtisch kommst!</p>
@@ -294,7 +266,7 @@ function stammtisch_booking_form()
 
       } elseif ($_POST['participation'] === 'join_later') {
 
-        if (join_regulars_table(1)){
+        if (join_regulars_table(true)) {
           $stammtisch_alert = '<div class="alert alert-success">
                         <a class="close" data-dismiss="alert">×</a>
                         <p>Yay! Cool, dass du zum Stammtisch kommst!</p>
@@ -353,13 +325,13 @@ function stammtisch_booking_form()
 <?php
 
   /* Produce the alert */
-  if (isset($stammtisch_alert)){
+  if (isset($stammtisch_alert)) {
     echo $stammtisch_alert;
   }
 
   /* Logged In */
-  if ( is_user_logged_in() ){
-    if ( user_participates() ){
+  if (is_user_logged_in()) {
+    if (user_participates()) {
       /* Link to remove me */
 ?>
       <form action="" method="post">
@@ -401,37 +373,26 @@ function get_next_stammtisch_timestamp()
 {
   $day = get_option('stammtisch_day', STAMMTISCH_DEFAULT_DAY);
   $daytime = get_option('stammtisch_time', STAMMTISCH_DEFAULT_TIME);
-
-  $today = (int) date('w');
-  $diff = ($day - $today + 7) % 7;
-  $diff_seconds = $diff * 60 * 60 * 24;
-
-  $timestamp_today = time();
-  $date_today = $timestamp_today + $diff_seconds;
+  $date_today = strtotime(sprintf("+%d days", ($day - intval(date('w')) + 7) % 7));
   return strtotime(date('Y-m-d ', $date_today) . $daytime);
 }
 
 function get_number_of_participants()
 {
   global $wpdb;
-  $number = $wpdb->get_var(
+  return $wpdb->get_var(
     $wpdb->prepare(
     "
     SELECT  COUNT(user_id)
     FROM  wp_stammtisch
     WHERE  date = %s
     ", strftime('%Y-%m-%d', get_next_stammtisch_timestamp())
-    ));
-  return $number;
+   ));
 }
 
 function can_participate()
 {
-  if (get_next_stammtisch_timestamp() - time() < 60 * 60 * STAMMTISCH_DEFAULT_LOCK_HOURS) {
-    return false;
-  } else {
-    return true;
-  }
+  return get_next_stammtisch_timestamp() - time() >= 60 * 60 * STAMMTISCH_DEFAULT_LOCK_HOURS;
 }
 
 function user_participates()
@@ -446,7 +407,7 @@ function user_participates()
                 AND
                 user_id = %d
     ", strftime('%Y-%m-%d', get_next_stammtisch_timestamp()), get_current_user_id()
-    ));
+   ));
 
   return $participates;
 }
@@ -464,7 +425,7 @@ function get_participants()
     INNER JOIN  wp_users wu ON ws.user_id = wu.id
     WHERE  date = %s
     ", strftime('%Y-%m-%d', get_next_stammtisch_timestamp())
-    ));
+   ));
   return $results;
 }
 
@@ -472,37 +433,24 @@ function add_participation_for($user_id, $later)
 {
   global $wpdb;
   $table_name = $wpdb->prefix . "stammtisch";
-  $wpdb->insert( $table_name,
+  $wpdb->insert($table_name,
           array(
                 'user_id' => $user_id,
                 'date' => strftime('%Y-%m-%d', get_next_stammtisch_timestamp()),
-                'arrives_later' => $later
-          ),
+                'arrives_later' => intval($later)
+         ),
           array(
                 '%d',
                 '%s',
                 '%d'
-          )
-    );
+         )
+   );
 }
 
-function join_regulars_table($later){
-  if (can_participate()){
-  global $wpdb;
-  $table_name = $wpdb->prefix . "stammtisch";
-  $wpdb->insert( $table_name,
-          array(
-                'user_id' => get_current_user_id(),
-                'date' => strftime('%Y-%m-%d', get_next_stammtisch_timestamp()),
-                'arrives_later' => $later
-          ),
-          array(
-                '%d',
-                '%s',
-                '%d'
-          )
-    );
-  return true;
+function join_regulars_table($later) {
+  if (can_participate()) {
+    add_participation_for(get_current_user_id(), $later);
+    return true;
   }
   return false;
 }
@@ -511,7 +459,7 @@ function cancel_participation_for($user_id)
 {
   global $wpdb;
   $table_name = $wpdb->prefix . "stammtisch";
-  if (is_admin()){
+  if (is_admin()) {
     $wpdb->query(
     $wpdb->prepare(
             "
@@ -520,12 +468,12 @@ function cancel_participation_for($user_id)
                 AND
                 user_id = %d
             ", strftime('%Y-%m-%d', get_next_stammtisch_timestamp()), $user_id
-    )
-  );
+   )
+ );
   }
 }
 
-function cancel_participation(){
+function cancel_participation() {
   global $wpdb;
   $table_name = $wpdb->prefix . "stammtisch";
   $wpdb->query(
@@ -536,7 +484,7 @@ function cancel_participation(){
                 AND
                 user_id = %d
             ", strftime('%Y-%m-%d', get_next_stammtisch_timestamp()), get_current_user_id()
-    )
-  );
+   )
+ );
 }
 /**********************************************************************/
