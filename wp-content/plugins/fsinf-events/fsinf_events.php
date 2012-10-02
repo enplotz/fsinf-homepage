@@ -303,7 +303,15 @@ function fsinf_events_register()
       $errors[$field] = "WTF?";
     }
   }
-  return $errors;
+
+  return empty($errors) ? fsinf_save_registration($validated) : $errors;
+}
+
+function fsinf_save_registration($fields)
+{
+  global $wpdb;
+  echo '<pre>'.print_r($fields, true).'</pre>';
+  return array();
 }
 
 /*
