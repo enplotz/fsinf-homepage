@@ -59,6 +59,7 @@ function fsinf_events_install() {
                                   tent_size TINYINT UNSIGNED NOT NULL ,
                                   notes TEXT NOT NULL ,
                                   admitted TINYINT( 1 ) NOT NULL ,
+                                  paid TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT  0,
                                   PRIMARY KEY (  mail_address ,  event_id )
                                   ) ENGINE = INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
   ";
