@@ -425,26 +425,61 @@ $bachelor = empty($errors) || array_key_exists($field_name, $errors) || intval($
 
         <fieldset>
           <legend>Organisatorisches</legend>
-          <label>Kannst du mit dem Auto kommen?
-            <input type="checkbox" name="has_car" value="1"/>
-          </label>
-          <label>Wie viele Plätze im Auto? Inkl. Fahrer
-            <input type="number" name="car_seats" value="1" min="1" max="127"/>
-          </label>
+
+<?php
+$field_name = 'has_car';
+$selected = !empty($errors) && array_key_exists($field_name, $_POST);
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+            <div class="controls">
+              <label class="checkbox inline">Ich habe ein Auto und kann damit zur Hütte fahren.
+                <input type="checkbox" name="<?=$field_name?>" value="1" <?= $selected ? ' checked="checked"' : '' ?>/>
+              </label>
+            </div>
+          </div>
+
+<?php
+$field_name = 'car_seats';
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+          <label class="control-label" for="<?=$field_name?>">Wie viele Plätze im Auto? Inkl. Fahrer</label>
+          <div class="controls">
+            <input type="number" name="<?=$field_name?>" id="<?=$field_name?>" value="<?= fsinf_field_contents($field_name, $errors) ?>" placeholder="z.B. 5" min="1" max="127"/>
+            <span class="help-inline"><?= @$errors[$field_name] ?></span>
+          </div></div>
+
 <?php  if (intval($curr_event->camping)) :
 ?>
-          <label>Kannst du mit dem Zelt kommen?
-            <input type="checkbox" name="has_tent" value="1"/>
-          </label>
-          <label>Wie viele Plätze im Zelt?
-            <input type="number" name="tent_size" value="1" min="1" max="127"/>
-          </label>
+<?php
+$field_name = 'has_tent';
+$selected = !empty($errors) && array_key_exists($field_name, $_POST);
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+            <div class="controls">
+              <label class="checkbox inline">Ich habe ein Zelt und kann dies mitnehmen.
+                <input type="checkbox" name="<?=$field_name?>" value="1" <?= $selected ? ' checked="checked"' : '' ?>/>
+              </label>
+            </div>
+          </div>
+
+<?php
+$field_name = 'tent_size';
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+          <label class="control-label" for="<?=$field_name?>">Wie viele Plätze im Zelt? Inkl. Fahrer</label>
+          <div class="controls">
+            <input type="number" name="<?=$field_name?>" id="<?=$field_name?>" value="<?= fsinf_field_contents($field_name, $errors) ?>" placeholder="z.B. 4" min="1" max="127"/>
+            <span class="help-inline"><?= @$errors[$field_name] ?></span>
+          </div></div>
 <?php endif;
 ?>
-          <label>Bemerkungen (Vegi o.ä.)
-          <textarea name="notes" rows="4"></textarea>
-          </label>
+
+<?php
+$field_name = 'notes';
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+          <label class="control-label" for="<?=$field_name?>">Bemerkungen (Vegi o.ä)</label>
+          <div class="controls">
+            <textarea placeholder="z.B. Ich bin Vegetarier/Veganer/Pescetarier..." name="<?=$field_name?>" id="<?=$field_name?>" rows="4"><?= fsinf_field_contents($field_name, $errors) ?></textarea>
+          </div>
+        </div>
         </fieldset>
+
         <div class="form-actions">
           <button type="submit" class="btn btn-primary" name="fsinf_events_register" value="Anmelden">Anmelden</button>
           <button type="button" class="btn">Abbrechen</button>
