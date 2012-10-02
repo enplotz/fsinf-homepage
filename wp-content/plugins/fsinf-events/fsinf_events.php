@@ -163,13 +163,50 @@ function fsinf_events_config()
     )
   );
 }
+// Function from Wordpress Source Code v. 3.4.2
+function fsinf_is_email( $email) {
+        // Test for the minimum length the email can be
+        if ( strlen( $email ) < 3 ) return false;
 
+        // Test for an @ character after the first position
+        if ( strpos( $email, '@', 1 ) === false ) return false;
+
+        // Split out the local and domain parts
+        list( $local, $domain ) = explode( '@', $email, 2 );
+
+        // LOCAL PART
+        // Test for invalid characters
+        if ( !preg_match( '/^[a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~\.-]+$/', $local ) ) return false;
+
+        // DOMAIN PART
+        // Test for sequences of periods
+        if ( preg_match( '/\.{2,}/', $domain ) ) return false;
+
+        // Test for leading and trailing periods and whitespace
+        if ( trim( $domain, " \t\n\r\0\x0B." ) !== $domain ) return false;
+
+        // Split the domain into subs
+        $subs = explode( '.', $domain );
+
+        // Assume the domain will have at least two subs
+        if ( 2 > count( $subs ) ) return false;
+
+        // Loop through each sub
+        foreach ( $subs as $sub ) {
+                // Test for leading and trailing hyphens and whitespace
+                if ( trim( $sub, " \t\n\r\0\x0B-" ) !== $sub ) return false;
+                // Test for invalid characters
+                if ( !preg_match('/^[a-z0-9-]+$/i', $sub ) ) return false;
+        }
+        return true;
+}
 
 function fsinf_validate_email($address)
 {
-  $validated = is_email($address);
-  $ok = $validated === false;
-  return array($ok, $ok ? $validated : "Ungültige Mail-Adresse.");
+  $ne = fsinf_validate_ne_string($address);
+  if(!$ne[0]) return $ne;
+  $ok = fsinf_is_email($ne[1]);
+  return array($ok, $ok ? $ne[1] : "Ungültige Mail-Adresse.");
 }
 
 function fsinf_validate_ne_string($str)
@@ -188,6 +225,16 @@ function fsinf_validate_semester($semester)
 function fsinf_validate_bool($value)
 {
   return array(true, $value == 1);
+}
+
+function error_class($field_name, $errors)
+{
+  return array_key_exists($field_name, $errors) ? 'error' : '';
+}
+
+function fsinf_field_contents($field_name, $errors)
+{
+  return empty($errors) || !array_key_exists($field_name, $_POST) ? '' : htmlspecialchars($_POST[$field_name]);
 }
 
 function fsinf_events_register()
@@ -298,36 +345,86 @@ function fsfin_events_booking_form()
   }
 
 ?>  <h2>Anmeldung zum Event: <?= htmlspecialchars($curr_event->title); ?></h2>
-      <form method="POST" action="">
-        <label>Vorname
-          <input type="text" name="first_name" maxlength="255"/>
-        </label>
-        <label>Nachname
-          <input type="text" name="last_name" maxlength="255"/>
-        </label>
-        <label>E-Mail-Adresse
-          <input type="email" name="mail_address" maxlength="127"/>
-        </label>
-        <label>Handy-Nummer
-          <input type="text" name="mobile_phone" maxlength="255"/>
-        </label>
-        <label>Semester
-        <select name="semester" id="semester">
-<?php
-for($i = 1; $i <= 6; $i++):
-?>                <option value="<?=$i?>"><?=$i?>. Semester</option>
-<?php
-endfor;
-?>                <option value="99">Anderes Semester (>6)</option>
+      <form method="POST" action="" class="form-horizontal">
 
-            </select>
-          </label>
-          <label>Bachelor
-            <input type="radio" name="bachelor" value="1" checked/>
-          </label>
-          <label>Master
-            <input type="radio" name="bachelor" value="0"/>
-          </label>
+        <fieldset>
+          <legend>Persönliches</legend>
+<?php
+$field_name = 'first_name';
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+          <label class="control-label" for="<?=$field_name?>">Vorname</label>
+          <div class="controls">
+          <input type="text" name="<?=$field_name?>" id="<?=$field_name?>" maxlength="255" value="<?= fsinf_field_contents($field_name, $errors) ?>"/>
+          <span class="help-inline"><?= @$errors[$field_name] ?></span>
+          </div>
+        </div>
+
+<?php
+$field_name = 'last_name';
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+          <label class="control-label" for="<?=$field_name?>">Nachname</label>
+          <div class="controls">
+          <input type="text" name="<?=$field_name?>" id="<?=$field_name?>" maxlength="255" value="<?= fsinf_field_contents($field_name, $errors) ?>"/>
+          <span class="help-inline"><?= @$errors[$field_name] ?></span>
+          </div>
+        </div>
+
+<?php
+$field_name = 'mail_address';
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+          <label class="control-label" for="<?=$field_name?>">E-Mail-Adresse</label>
+          <div class="controls">
+          <input type="email" name="<?=$field_name?>" id="<?=$field_name?>" maxlength="127" value="<?= fsinf_field_contents($field_name, $errors) ?>"/>
+          <span class="help-inline"><?= @$errors[$field_name] ?></span>
+          </div>
+        </div>
+
+<?php
+$field_name = 'mobile_phone';
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+          <label class="control-label" for="<?=$field_name?>">Handy-Nummer</label>
+          <div class="controls">
+          <input type="text" name="<?=$field_name?>" id="<?=$field_name?>" maxlength="255" value="<?= fsinf_field_contents($field_name, $errors) ?>"/>
+          <span class="help-inline"><?= @$errors[$field_name] ?></span>
+          </div>
+        </div>
+      </fieldset>
+        <fieldset>
+          <legend>Studium</legend>
+<?php
+$field_name = 'semester';
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+          <label class="control-label" for="<?=$field_name?>">Semester</label>
+          <div class="controls">
+        <select name="<?=$field_name?>" id="<?=$field_name?>">
+<?php
+$semesters = array(1, 2, 3, 4, 5, 6, 99);
+$selected = array_key_exists($field_name, $errors) ? 1 : intval($_POST[$field_name]);
+foreach($semesters as $i):
+?>                <option value="<?=$i?>"<?= $i == $selected ? ' selected="selected"' : '' ?>><?= $i <= 6 ? "$i. Semester" : 'Anderes Semester (>6)' ?></option>
+<?php
+endforeach;
+?>            </select>
+          <span class="help-inline"><?= @$errors[$field_name] ?></span>
+          </div>
+        </div>
+<?php
+$field_name = 'bachelor';
+$bachelor = empty($errors) || array_key_exists($field_name, $errors) || intval($_POST[$field_name]) == 1;
+?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
+            <div class="controls">
+              <label class="radio" >Bachelor
+                <input type="radio" name="bachelor" value="1"<?= $bachelor ? ' checked="checked"' : ''?>/>
+              </label>
+              <label class="radio" >Master
+                <input type="radio" name="bachelor" value="0"<?= !$bachelor ? ' checked="checked"' : ''?>/>
+              </label>
+            </div>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Organisatorisches</legend>
           <label>Kannst du mit dem Auto kommen?
             <input type="checkbox" name="has_car" value="1"/>
           </label>
@@ -347,8 +444,11 @@ endfor;
           <label>Bemerkungen (Vegi o.ä.)
           <textarea name="notes" rows="4"></textarea>
           </label>
-
-          <input type="submit" class="btn btn-primary" name="fsinf_events_register" value="Anmelden"/>
+        </fieldset>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary" name="fsinf_events_register" value="Anmelden">Anmelden</button>
+          <button type="button" class="btn">Abbrechen</button>
+        </div>
       </form>
 
 <?php
