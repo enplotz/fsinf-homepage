@@ -86,55 +86,92 @@ function fsinf_events_add_pages() {
     add_submenu_page('fsinf-events-top-level-handle', __('All Events','fsinf-events-all'), __('All Events','fsinf-events-all'), 'manage_options', 'fsinf-all-events-page', 'fsinf_all_events_page');
 }
 
+function fsinf_alert_info($input_string)
+{
+  echo "<div class='alert alert-info span4'>
+          $input_string
+        </div>";
+}
+
+function is_admitted($participant)
+{
+  return intval($participant->admitted);
+}
+
 // mt_toplevel_page() displays the page content for the custom FSInf-Events menu
 function fsinf_events_toplevel_page() {
     echo "<h2>" . __( 'FSInf-Events', 'fsinf-events' ) . "</h2>";
+    echo "<div class=row>";
+    if (array_key_exists('participation_paid_by', $_POST) && participation_paid_by() == 1){
+      fsinf_alert_info("Benutzer hat bezahlt.");
+    }
+    if (array_key_exists('participation_not_paid_by', $_POST) && participation_not_paid_by() == 1){
+      fsinf_alert_info("Benutzer hat nicht mehr bezahlt.");
+    }
+    if (array_key_exists('participation_admitted_for', $_POST) && participation_admitted_for() == 1){
+      fsinf_alert_info("Benutzer ist zugelassen.");
+    }
+    if (array_key_exists('participation_not_admitted_for', $_POST) && participation_not_admitted_for() == 1){
+      fsinf_alert_info("Benutzer ist nicht mehr zugelassen.");
+    }
+    if (array_key_exists('participation_cancel_for', $_POST) && participation_cancel_for() == 1){
+      fsinf_alert_info("Benutzer nimmt nicht mehr teil.");
+    }
+
 ?>
-    <div id="fsinf-events-list">
+</div>
+<div class="row">
+    <div id="fsinf-events-list" class="span8">
       <?php
           $current_event = fsinf_get_current_event();
       ?>
-            <h3>Aktuelles Event: <?= htmlspecialchars($current_event->title)?></h3>
-            <?php if (!empty($_POST)) var_dump($_POST) ;?>
+            <h3>Aktuelles Event: <?= htmlspecialchars($current_event->title)?> <small>am <?php setlocale(LC_TIME, "de_DE"); echo strftime("%d. %b %G",strtotime(htmlspecialchars($current_event->starts_at)))?></small></h3>
 <?php
 
             $registrations = fsinf_get_registrations();
-            #var_dump($registrations);
-            if (count($registrations) > 0) {
+            $number_registrations = count($registrations);
+
+            $admitted_registrations = array_filter($registrations, 'is_admitted');
+            $number_admitted_registrations = count($admitted_registrations);
+
+            $number_seats = 0;
+            foreach ($registrations as $registrant) {
+              $number_seats += $registrant->car_seats;
+            }
+
+            $number_seats_admitted = 0;
+            foreach ($admitted_registrations as $registrant) {
+              $number_seats_admitted += $registrant->car_seats;
+            }
+
+?>          <ul>
+              <li>Anzahl Teilnahmen insgesamt: <?= $number_registrations ?></li>
+              <li>Anzahl Teilnahmen zugelassen: <?= $number_admitted_registrations ?></li>
+              <li>Anzahl Sitzplätze insgesamt: <?= $number_seats ?></li>
+              <li>Anzahl Sitzplätze zugelassen: <?= $number_seats_admitted ?></li>
+            </ul>
+<?php
+            if ($number_seats_admitted >= $number_admitted_registrations):
+?>            <p class="alert alert-success span3">Genug Sitzplätze</p>
+<?php       else:
+?>            <p class="alert alert-error span3">Nicht genug Sitzplätze</p>
+<?php
+            endif;
+            if ($number_registrations > 0) {
 ?>
             <table class="table table-bordered table-hover">
               <thead>
                 <tr>
-                  <th>
-                    Bearbeiten
-                  </th>
-                  <th>
-                    Teilnehmer
-                  </th>
-                  <th>
-                    E-Mail
-                  </th>
-                  <th>
-                    Handy
-                  </th>
-                  <th>
-                    Semester
-                  </th>
-                  <th>
-                    Auto
-                  </th>
-                  <th>
-                    Zelt
-                  </th>
-                  <th>
-                    Zugelassen
-                  </th>
-                  <th>
-                    Bezahlt
-                  </th>
-                  <th>
-                    Anmerkungen
-                  </th>
+                  <th>Bearbeiten</th>
+                  <th>Teilnehmer</th>
+                  <th>E-Mail</th>
+                  <th>Handy</th>
+                  <th>Semester</th>
+                  <th>Auto</th>
+                  <th>Zelt</th>
+                  <th>Zugelassen</th>
+                  <th>Bezahlt</th>
+                  <th>Anmerkungen</th>
                 </tr>
               </thead>
               <tbody>
@@ -144,7 +181,6 @@ function fsinf_events_toplevel_page() {
                   <tr>
                     <td>
                         <form action="" method="post">
-                          <input type="hidden" value="<?= $current_event->id;?>" name="event_id"/>
                       <div class="btn-group">
                           <?php
                             if (!$participant->paid):
@@ -189,7 +225,7 @@ function fsinf_events_toplevel_page() {
                     <td>
 <?php
                     if ($participant->has_car == 1) :
-?>                  Ein Auto mit <?= htmlspecialchars($participant->has_car)?> <?= htmlspecialchars($participant->has_car) == 1 ? 'Sitz' : 'Sitzen'?>
+?>                  Ein Auto mit <?= htmlspecialchars($participant->car_seats)?> <?= htmlspecialchars($participant->car_seats) == 1 ? 'Sitz' : 'Sitzen'?>
 <?php
                     else:
 ?>                  Kein Auto
@@ -200,7 +236,7 @@ function fsinf_events_toplevel_page() {
                     <td>
 <?php
                     if ($participant->has_tent == 1) :
-?>                  Ein Zelt mit <?= htmlspecialchars($participant->has_tent)?> <?= htmlspecialchars($participant->has_tent) == 1 ? 'Schlafplatz' : 'Schlafplätzen'?>
+?>                  Ein Zelt mit <?= htmlspecialchars($participant->tent_size)?> <?= htmlspecialchars($participant->tent_size) == 1 ? 'Schlafplatz' : 'Schlafplätzen'?>
 <?php
                     else:
 ?>                  Kein Zelt
@@ -228,11 +264,110 @@ function fsinf_events_toplevel_page() {
               </tbody>
             </table>
           </div>
-
+      </div>
 <?php
 }
 
-function fsinf_get_registrations(){
+function participation_paid_by()
+{
+if (is_admin()){
+  $current_event = fsinf_get_current_event();
+  if (array_key_exists('participation_paid_by', $_POST)){
+    global $wpdb;
+    $changed = $wpdb->update(
+        FSINF_PARTICIPANTS_TABLE,
+        array('paid' => 1),
+        array('mail_address' => $_POST['participation_paid_by'], 'event_id' => $current_event->id),
+        array('%d'),
+        array('%s', '%d')
+    );
+    return $changed;
+  }
+}
+}
+
+function participation_not_paid_by()
+{
+if (is_admin()){
+  $current_event = fsinf_get_current_event();
+  if (array_key_exists('participation_not_paid_by', $_POST)){
+    global $wpdb;
+    $changed = $wpdb->update(
+        FSINF_PARTICIPANTS_TABLE,
+        array('paid' => 0),
+        array('mail_address' => $_POST['participation_not_paid_by'], 'event_id' => $current_event->id),
+        array('%d'),
+        array('%s', '%d')
+    );
+    return $changed;
+  }
+}
+}
+
+function participation_admitted_for()
+{
+  if (is_admin()){
+  $current_event = fsinf_get_current_event();
+  if (array_key_exists('participation_admitted_for', $_POST)){
+    global $wpdb;
+    $changed = $wpdb->update(
+        FSINF_PARTICIPANTS_TABLE,
+        array('admitted' => 1),
+        array('mail_address' => $_POST['participation_admitted_for'], 'event_id' => $current_event->id),
+        array('%d'),
+        array('%s', '%d')
+    );
+    return $changed;
+  }
+}
+}
+
+function participation_not_admitted_for()
+{
+if (is_admin()){
+  $current_event = fsinf_get_current_event();
+  if (array_key_exists('participation_not_admitted_for', $_POST)){
+    global $wpdb;
+    $changed = $wpdb->update(
+        FSINF_PARTICIPANTS_TABLE,
+        array('admitted' => 0),
+        array('mail_address' => $_POST['participation_not_admitted_for'], 'event_id' => $current_event->id),
+        array('%d'),
+        array('%s', '%d')
+    );
+    return $changed;
+  }
+}
+}
+
+/*
+DELETE FROM `wp_fsinf_participants` WHERE `mail_address` = \'d@d.d\' AND `wp_fsinf_participants`.`event_id` = 1
+DELETE FROM 'wp_fsinf_participants' WHERE mail_address = 'd@d.d' AND event_id = 1
+ */
+
+function participation_cancel_for()
+{
+  if (is_admin()){
+    $current_event = fsinf_get_current_event();
+    if (array_key_exists('participation_cancel_for', $_POST)){
+    global $wpdb;
+    $table_name = $wpdb->prefix . "fsinf_participants";
+    $changed = $wpdb->query(
+            $wpdb->prepare(
+              "DELETE FROM $table_name
+               WHERE mail_address = %s
+               AND event_id = %d
+              ",
+              $_POST['participation_cancel_for'], $current_event->id
+              )
+    );
+    return $changed;
+  }
+  }
+}
+
+function fsinf_get_registrations()
+{
   global $wpdb;
   $current_event = fsinf_get_current_event();
   $results = $wpdb->get_results(
