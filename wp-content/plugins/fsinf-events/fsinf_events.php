@@ -10,6 +10,7 @@ License: A license will be determined in the near future.
 */
 
 // Constants
+global $wpdb;
 
 define('FSINF_EVENTS_TABLE', $wpdb->prefix . "fsinf_events");
 define('FSINF_PARTICIPANTS_TABLE', $wpdb->prefix . "fsinf_participants");
@@ -23,6 +24,8 @@ register_activation_hook(__FILE__,'fsinf_events_install');
 // Add shortcode for latest event
 add_shortcode('fsinf_current_event', 'fsfin_events_booking_form');
 
+// Add JS to Admin head
+add_action('admin_head', 'fsinf_events_js');
 
 /* Database */
 function fsinf_events_install() {
@@ -86,6 +89,163 @@ function fsinf_events_add_pages() {
 // mt_toplevel_page() displays the page content for the custom FSInf-Events menu
 function fsinf_events_toplevel_page() {
     echo "<h2>" . __( 'FSInf-Events', 'fsinf-events' ) . "</h2>";
+?>
+    <div id="fsinf-events-list">
+      <?php
+          $current_event = fsinf_get_current_event();
+      ?>
+            <h3>Aktuelles Event: <?= htmlspecialchars($current_event->title)?></h3>
+            <?php if (!empty($_POST)) var_dump($_POST) ;?>
+<?php
+
+            $registrations = fsinf_get_registrations();
+            #var_dump($registrations);
+            if (count($registrations) > 0) {
+?>
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>
+                    Bearbeiten
+                  </th>
+                  <th>
+                    Teilnehmer
+                  </th>
+                  <th>
+                    E-Mail
+                  </th>
+                  <th>
+                    Handy
+                  </th>
+                  <th>
+                    Semester
+                  </th>
+                  <th>
+                    Auto
+                  </th>
+                  <th>
+                    Zelt
+                  </th>
+                  <th>
+                    Zugelassen
+                  </th>
+                  <th>
+                    Bezahlt
+                  </th>
+                  <th>
+                    Anmerkungen
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+<?php
+              foreach ($registrations as $participant):
+?>
+                  <tr>
+                    <td>
+                        <form action="" method="post">
+                          <input type="hidden" value="<?= $current_event->id;?>" name="event_id"/>
+                      <div class="btn-group">
+                          <?php
+                            if (!$participant->paid):
+                          ?>
+                            <button type="submit" class="btn btn-small" title="Hat bezahlt" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_paid_by"><i class="icon-shopping-cart"></i></button>
+                          <?php
+                            else:
+                          ?>
+                            <button type="submit" class="btn btn-small" title="Hat nicht bezahlt" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_not_paid_by"><i class="icon-remove-sign"></i></button>
+                          <?php
+                            endif;
+                          ?>
+                          <?php
+                            if (!$participant->admitted):
+                          ?>
+                            <button type="submit" class="btn btn-small" title="Zugelassen" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_admitted_for"><i class="icon-ok"></i></button>
+                          <?php
+                            else:
+                          ?>
+                            <button type="submit" class="btn btn-small" title="Nicht mehr zugelassen" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_not_admitted_for"><i class="icon-remove"></i></button>
+                          <?php
+                            endif;
+                          ?>
+                          <button type="submit" class="btn btn-danger btn-small" title="Entfernen" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_cancel_for"><i class="icon-trash icon-white"></i></button>
+                      </div>
+                        </form>
+                    </td>
+                    </td>
+                    </td>
+                    <td>
+                      <?= $participant->first_name .' '.$participant->last_name; ?>
+                    </td>
+                    <td>
+                      <?= $participant->mail_address; ?>
+                    </td>
+                    <td>
+                      <?= $participant->mobile_phone; ?>
+                    </td>
+                    <td>
+                      <?= $participant->semester <= 6 ? $participant->semester.'.' : 'Höheres'?> Sem. <?= $participant->bachelor == 1 ? 'Bachelor' : 'Master' ?>
+                    </td>
+                    <td>
+<?php
+                    if ($participant->has_car == 1) :
+?>                  Ein Auto mit <?= htmlspecialchars($participant->has_car)?> <?= htmlspecialchars($participant->has_car) == 1 ? 'Sitz' : 'Sitzen'?>
+<?php
+                    else:
+?>                  Kein Auto
+<?php
+                    endif;
+?>
+                    </td>
+                    <td>
+<?php
+                    if ($participant->has_tent == 1) :
+?>                  Ein Zelt mit <?= htmlspecialchars($participant->has_tent)?> <?= htmlspecialchars($participant->has_tent) == 1 ? 'Schlafplatz' : 'Schlafplätzen'?>
+<?php
+                    else:
+?>                  Kein Zelt
+<?php
+                    endif;
+?>
+                    </td>
+                    <td>
+                      <?= $participant->admitted == 1 ? 'Yep' : 'Nope'; ?>
+                    </td>
+                    <td>
+                      <?= $participant->paid == 1 ? 'Yep' : 'Nope'; ?>
+                    </td>
+                    <td>
+                      <pre><?= $participant->notes; ?></pre>
+                    </td>
+                  </tr>
+<?php         endforeach;
+            } else {
+?>
+              <p>Das aktuelle Event hat noch keine Teilnehmer.</p>
+<?php
+            }
+?>
+              </tbody>
+            </table>
+          </div>
+
+<?php
+}
+
+function fsinf_get_registrations(){
+  global $wpdb;
+  $current_event = fsinf_get_current_event();
+  $results = $wpdb->get_results(
+    $wpdb->prepare(sprintf(
+      "SELECT  mail_address, event_id, first_name, last_name, mobile_phone, semester, bachelor, has_car, has_tent, car_seats, tent_size, notes, admitted, paid
+       FROM  %s
+       WHERE  event_id = %d
+       ORDER BY semester ASC
+      ", FSINF_PARTICIPANTS_TABLE, $current_event->id
+      )
+    )
+    );
+  return $results;
 }
 
 // mt_sublevel_page() displays the page content for the first submenu
@@ -151,12 +311,12 @@ function fsinf_events_config()
       'car_seats' => array(
         'type' => 'int',
         'max_value' => 127,
-        'default' => false,
+        'default' => 0,
       ),
       'tent_size' => array(
         'type' => 'int',
         'max_value' => 127,
-        'default' => false,
+        'default' => 0,
       ),
       'notes' => array(
         'type' => 'string'
@@ -238,6 +398,32 @@ function fsinf_field_contents($field_name, $errors)
   return empty($errors) || !array_key_exists($field_name, $_POST) ? '' : htmlspecialchars($_POST[$field_name]);
 }
 
+function fsinf_get_current_event()
+{
+    // Get current event
+  global $wpdb;
+  return $wpdb->get_row(sprintf(
+    "SELECT id, title, place, starts_at, ends_at, description, camping
+     FROM %s
+     WHERE starts_at > NOW()
+     ORDER BY starts_at ASC
+     LIMIT 1",
+    FSINF_EVENTS_TABLE
+  ));
+}
+
+function fsinf_get_registration_params()
+{
+  $config = fsinf_events_config();
+  $params = array();
+  foreach (array_keys($config['participants']) as $field) {
+      if (array_key_exists($field, $_POST)) {
+        $params[$field] = $_POST[$field];
+      }
+  }
+  return $params;
+}
+
 function fsinf_events_register()
 {
   $validated = array();
@@ -270,7 +456,7 @@ function fsinf_events_register()
         $errors[$field] = "Eingabe fehlt.";
       }
     } elseif ($spec['type'] == 'int') {
-      if (array_key_exists($field, $_POST) && is_string($_POST[$field])) {
+      if (array_key_exists($field, $_POST) && is_string($_POST[$field]) && strlen(trim($_POST[$field])) !== 0) {
         $value = trim($_POST[$field]);
         if (!ctype_digit($value)) {
           $errors[$field] = "Bitte nur Ganzzahlen eingeben.";
@@ -311,8 +497,109 @@ function fsinf_events_register()
 function fsinf_save_registration($fields)
 {
   global $wpdb;
+  $config = fsinf_events_config();
+  $cfg = $config['participants'];
+  $types = array();
+  foreach(array_keys($fields) as $name)
+    $types[$name] = $cfg[$name]['type'] === 'int' ? '%d' : '%s';
+
+  $current_event = fsinf_get_current_event();
+  $fields['event_id'] = $current_event->id;
+  $types['event_id'] = '%d';
+
+  $fields['admitted'] = intval(in_array($fields['semester'], array(1,2)));
+  $types['admitted'] = '%d';
+
+  $result = $wpdb->insert(FSINF_PARTICIPANTS_TABLE,
+          $fields,
+          $types
+    );
   echo '<pre>'.print_r($fields, true).'</pre>';
   return array();
+}
+
+function fsinf_bank_account_information()
+{
+?>  <h4>Kontodaten</h4>
+    <dl>
+      <dt>Inhaber:</dt>
+      <dd>hier ausgeben</dd>
+    </dl>
+<?php
+}
+
+function fsinf_print_success_message(){
+  $current_event = fsinf_get_current_event();
+?>  <div class="alert alert-success alert-block">
+      <a href="#" class="close" data-dismiss="alert">×</a>
+      <h4>Erfolgreich angemeldet!</h4>
+      <p>Du hast dich soeben erfolgreich für das Event
+        <b><?=htmlspecialchars($current_event->title)?></b> angemeldet.</p>
+        <p>Bitte Zahle die Teilnahmegebühr auf untenstehendes Konto ein.</p>
+    </div>
+<?php
+        fsinf_bank_account_information();
+?>
+        <p>Folgende Informationen
+        wurden dir auch an
+        <b>
+          <?= array_key_exists('mail_address',$_POST) ? htmlspecialchars($_POST['mail_address']) : 'keine E-Mail-Adresse angegeben?' ?>
+        </b> gesendet:
+ <?php
+        $registration_data = fsinf_get_registration_params();
+?>
+        <dl>
+          <dt>Name</dt>
+          <dd><?= htmlspecialchars($registration_data['first_name'])?> <?= htmlspecialchars($registration_data['last_name'])?></dd>
+          <dt>Handy-Nummer</dt>
+          <dd><?= htmlspecialchars($registration_data['mobile_phone'])?></dd>
+          <dt>Semester</dt>
+          <dd><?= htmlspecialchars($registration_data['semester']) <= 6 ? htmlspecialchars($registration_data['semester']).'.' : 'Höheres' ?> Semester im <?= htmlspecialchars($registration_data['bachelor']) == 1 ? 'Bachelor' : 'Master' ?></dd>
+          <dt>Auto</dt>
+          <dd>
+<?php
+        if (array_key_exists('has_car', $registration_data)) :
+          if ($registration_data['has_car'] == 1) :
+            ?>
+            Ein Auto mit <?= htmlspecialchars($registration_data['car_seats'])?> <?= htmlspecialchars($registration_data['car_seats']) == 1 ? 'Sitz' : 'Sitzen'?>
+          <?php
+          endif;
+        else:
+?>        Kein Auto
+<?php
+        endif;
+?>
+          </dd>
+          <dt>Zelt</dt>
+          <dd>
+<?php
+        if (array_key_exists('has_tent', $registration_data)) :
+          if ($registration_data['has_tent'] == 1) :
+            ?>
+            Ein Zelt mit <?= htmlspecialchars($registration_data['tent_size'])?> <?= htmlspecialchars($registration_data['tent_size']) == 1 ? 'Schlafplatz' : 'Schlafplätzen'?>
+          <?php
+          endif;
+        else:
+?>        Kein Zelt
+<?php
+        endif;
+?>
+          </dd>
+          <dt>Deine Nachricht an uns</dt>
+          <dd>
+<?php
+        if (array_key_exists('notes', $registration_data)) :
+            echo htmlspecialchars($registration_data['notes']);
+        else:
+?>        Keine Nachricht
+<?php
+        endif;
+?>
+          </dd>
+        </dl>
+      </p>
+  <hr/>
+<?php
 }
 
 /*
@@ -322,16 +609,7 @@ function fsinf_save_registration($fields)
 
 function fsfin_events_booking_form()
 {
-  // Get current event
-  global $wpdb;
-  $curr_event = $wpdb->get_row(sprintf(
-    "SELECT id, title, place, starts_at, ends_at, description, camping
-     FROM %s
-     WHERE starts_at > NOW()
-     ORDER BY starts_at ASC
-     LIMIT 1",
-    FSINF_EVENTS_TABLE
-  ));
+  $curr_event = fsinf_get_current_event();
 
   if(is_null($curr_event)) {
 ?>  <div class="alert alert-info">
@@ -346,14 +624,16 @@ function fsfin_events_booking_form()
   if (array_key_exists('fsinf_events_register', $_POST)) {
     $errors = fsinf_events_register();
     if(count($errors) == 0):
-?>  <p>Erfolgreich angemeldet.</p>
-<?php
+      fsinf_print_success_message();
     else:
-      echo '<pre>'. print_r($errors, true) . '</pre>';
+?>    <div class="alert alert-error">
+        Das Formular enthält noch fehlerhafte Eingaben. Bitte korrigiere diese und schicke es erneut ab.
+      </div>
+<?php
     endif;
   }
 
-?>  <h2>Anmeldung zum Event: <?= htmlspecialchars($curr_event->title); ?></h2>
+?>  <h2>Anmeldung zum Event: <?= htmlspecialchars($curr_event->title) ?></h2>
       <form method="POST" action="" class="form-horizontal">
 
         <fieldset>
@@ -496,9 +776,5 @@ $field_name = 'notes';
       </form>
 
 <?php
-  echo '<pre>'.print_r($_POST, true).'</pre>';
+  #echo '<pre>'.print_r($_POST, true).'</pre>';
 }
-
-
-
-

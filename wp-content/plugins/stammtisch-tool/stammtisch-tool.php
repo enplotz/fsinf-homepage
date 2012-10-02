@@ -113,7 +113,7 @@ function stammtisch_admin_page()
               <select name="stammtisch_day" id="stammtischDay">
 <?php
 for($i = 1; $i <= 7; $i++):
-?>                <option name="stammtisch_day" <?= is_selected_day($i) ?> value="<?=$i?>"><?=stammtisch_weekday($i)?></option>
+?>                <option <?= is_selected_day($i) ?> value="<?=$i?>"><?=stammtisch_weekday($i)?></option>
 <?php
 endfor;
 ?>
