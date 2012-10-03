@@ -27,6 +27,7 @@ if (stristr($_SERVER['SERVER_SOFTWARE'], 'apache') !== false) {
       'css/(.*)'      => THEME_PATH . '/css/$1',
       'js/(.*)'       => THEME_PATH . '/js/$1',
       'img/(.*)'      => THEME_PATH . '/img/$1',
+      'font/(.*)'     => THEME_PATH . '/font/$1',
       'plugins/(.*)'  => RELATIVE_PLUGIN_PATH . '/$1'
     );
     $wp_rewrite->non_wp_rules = $roots_new_non_wp_rules;
