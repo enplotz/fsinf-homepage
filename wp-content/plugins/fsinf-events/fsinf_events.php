@@ -408,7 +408,7 @@ function fsinf_get_coming_events($count)
 {
   global $wpdb;
   return $wpdb->get_results($wpdb->prepare(sprintf(
-    "SELECT id, title, place, starts_at, ends_at, description, camping
+    "SELECT id, title, place, starts_at, ends_at, description, camping, max_participants, fee
      FROM %s
      WHERE starts_at > NOW()
      ORDER BY starts_at ASC
@@ -420,7 +420,7 @@ function fsinf_get_past_events($count)
 {
   global $wpdb;
   return $wpdb->get_results($wpdb->prepare(sprintf(
-    "SELECT id, title, place, starts_at, ends_at, description, camping
+    "SELECT id, title, place, starts_at, ends_at, description, camping, max_participants, fee
      FROM %s
      WHERE starts_at < NOW()
      ORDER BY ends_at DESC
@@ -506,8 +506,8 @@ function fsinf_all_events_page() {
               <td><?= $event->place ?></td>
               <td><?= $event->description ?></td>
               <td><?= $event->camping == 1 ? 'Zelten' : 'Hütte' ?></td>
-              <td>TODO max teilnehmer</td>
-              <td>TODO gebühr</td>
+              <td><?= $event->max_participants ?></td>
+              <td><?= formatted_fee_for($event) ?></td>
             </tr>
 <?php
           endforeach;
@@ -542,8 +542,8 @@ function fsinf_all_events_page() {
               <td><?= $event->place ?></td>
               <td><?= $event->description ?></td>
               <td><?= $event->camping == 1 ? 'Zelten' : 'Hütte' ?></td>
-              <td>TODO max teilnehmer</td>
-              <td>TODO gebühr</td>
+              <td><?= $event->max_participants ?></td>
+              <td><?= formatted_fee_for($event) ?></td>
             </tr>
 <?php
           endforeach;
@@ -1174,7 +1174,9 @@ function fsfin_events_details()
   $number_admitted_registrations = count($admitted_registrations);
 
   $empty_places = $current_event->max_participants - $number_admitted_registrations;
-
+?>
+  <span title="Angemeldet: <?= $number_admitted_registrations ?>">
+<?php
   foreach ($admitted_registrations as $person) {
       if ($person->paid):
 ?>
@@ -1190,6 +1192,10 @@ function fsfin_events_details()
 <?php
     endif;
     }
+?>
+    </span>
+    <span title="Frei: <?=$empty_places?>">
+<?php
     for ($i=0; $i < $empty_places; $i++) {
 ?>
       <span style="font-size: 32px; line-height: 32px; color: green; margin-right: -9px;">
@@ -1198,6 +1204,7 @@ function fsfin_events_details()
 <?php
     }
 ?>
+</span>
 <p>Blau: bezahlt | Rot: nicht bezahlt | Grün: frei</p>
 <!--
   <table class="table table-hover">
