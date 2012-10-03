@@ -27,6 +27,9 @@ add_shortcode('fsinf_current_event', 'fsfin_events_booking_form');
 // Add JS to Admin head
 add_action('admin_head', 'fsinf_events_js');
 
+// Send HTML Emails
+#add_filter('wp_mail_content_type',create_function('', 'return "text/html";'));
+
 /* Database */
 function fsinf_events_install() {
   global $wpdb;
@@ -41,7 +44,9 @@ function fsinf_events_install() {
                             starts_at DATETIME NOT NULL ,
                             ends_at DATETIME NOT NULL ,
                             description TEXT NOT NULL ,
-                            camping TINYINT( 1 ) NOT NULL
+                            camping TINYINT( 1 ) NOT NULL,
+                            max_participants MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+                            fee MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
                             ) ENGINE = INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
   ";
   dbDelta($sql_fsinf_events_table);
@@ -80,10 +85,10 @@ function fsinf_events_add_pages() {
     add_menu_page(__('FSInf-Events','fsinf-events'), __('FSInf-Events','fsinf-events'), 'manage_options', 'fsinf-events-top-level-handle', 'fsinf_events_toplevel_page' );
 
     // Add a submenu to the custom top-level menu:
-    add_submenu_page('fsinf-events-top-level-handle', __('New Event','fsinf-events-new'), __('New Event','fsinf-events-new'), 'manage_options', 'fsinf-add-event-page', 'fsinf_add_event_page');
+    add_submenu_page('fsinf-events-top-level-handle', __('Neues Event','fsinf-events-new'), __('Neues Event','fsinf-events-new'), 'manage_options', 'fsinf-add-event-page', 'fsinf_add_event_page');
 
     // Add a second submenu to the custom top-level menu:
-    add_submenu_page('fsinf-events-top-level-handle', __('All Events','fsinf-events-all'), __('All Events','fsinf-events-all'), 'manage_options', 'fsinf-all-events-page', 'fsinf_all_events_page');
+    add_submenu_page('fsinf-events-top-level-handle', __('Alle Events','fsinf-events-all'), __('Alle Events','fsinf-events-all'), 'manage_options', 'fsinf-all-events-page', 'fsinf_all_events_page');
 }
 
 function fsinf_alert_info($input_string)
@@ -143,8 +148,11 @@ function fsinf_events_toplevel_page() {
             foreach ($admitted_registrations as $registrant) {
               $number_seats_admitted += $registrant->car_seats;
             }
-
+            $fee_string = ($current_event->fee / 100) . ',' . ($current_event->fee % 100) . ($current_event->fee % 10);
+            $fee = floatval($fee_string)
 ?>          <ul>
+              <li>Teilnahmegebühr: <?php setlocale(LC_MONETARY, 'de_DE'); echo money_format('%#3.2i', $fee); ?></li>
+              <li>Maximale Teilnehmerzahl: <?= $current_event->max_participants ?></li>
               <li>Anzahl Teilnahmen insgesamt: <?= $number_registrations ?></li>
               <li>Anzahl Teilnahmen zugelassen: <?= $number_admitted_registrations ?></li>
               <li>Anzahl Sitzplätze insgesamt: <?= $number_seats ?></li>
@@ -389,10 +397,155 @@ function fsinf_add_event_page() {
     echo "<h2>" . __( 'Create a new Event', 'fsinf-events' ) . "</h2>";
 }
 
+function fsinf_get_coming_events($count)
+{
+  global $wpdb;
+  return $wpdb->get_results($wpdb->prepare(sprintf(
+    "SELECT id, title, place, starts_at, ends_at, description, camping
+     FROM %s
+     WHERE starts_at > NOW()
+     ORDER BY starts_at ASC
+     LIMIT %d",
+    FSINF_EVENTS_TABLE, $count
+  )));
+}
+function fsinf_get_past_events($count)
+{
+  global $wpdb;
+  return $wpdb->get_results($wpdb->prepare(sprintf(
+    "SELECT id, title, place, starts_at, ends_at, description, camping
+     FROM %s
+     WHERE starts_at < NOW()
+     ORDER BY ends_at DESC
+     LIMIT %d",
+    FSINF_EVENTS_TABLE, $count
+  )));
+}
+
+function fsinf_remove_event()
+{
+  if (is_admin()){
+    if (array_key_exists('fsinf_remove_event', $_POST)){
+      global $wpdb;
+      $ok = $wpdb->query($wpdb->prepare(sprintf(
+        "DELETE FROM %s
+         WHERE id = %d
+        ", FSINF_EVENTS_TABLE, $_POST['fsinf_remove_event']
+        )));
+      if($ok):
+?>
+      <div class="alert alert-success">
+        Event erfolgreich entfernt.
+      </div>
+<?php
+      else:
+?>
+      <div class="alert alert-error">
+        Kein Event mit dieser ID vorhanden.
+      </div>
+<?php
+      endif;
+    }
+  }
+}
+
 // mt_sublevel_page2() displays the page content for the second submenu
 // of the custom FSInf-Events menu
 function fsinf_all_events_page() {
-    echo "<h2>" . __( 'All Events', 'fsinf-events' ) . "</h2>";
+
+    $current_event = fsinf_get_current_event();
+    ?>
+    <h2>Alle Events</h2>
+    <div class="row">
+      <div class="span12">
+        <h3>Aktuelles Event: <?= $current_event->title ?> <small>am <?php setlocale(LC_TIME, "de_DE"); echo strftime("%d. %b %G",strtotime(htmlspecialchars($current_event->starts_at)))?></h3>
+      </div>
+      <div class="span12">
+<?php
+      // Process requests
+      if (array_key_exists('fsinf_remove_event', $_POST)){
+        fsinf_remove_event();
+      }
+?>
+        <h3>Kommende 5 Events</h3>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+            <th>Bearbeiten</th>
+            <th>Titel</th>
+            <th>Beginn</th>
+            <th>Ende</th>
+            <th>Ort</th>
+            <th>Beschreibung</th>
+            <th>Art</th>
+            <th>Max. Teilnehmer</th>
+            <th>Gebühr</th>
+          </tr>
+          </thead>
+          <tbody>
+<?php
+          $coming_events = fsinf_get_coming_events(5);
+          foreach ($coming_events as $event) :
+?>
+            <tr>
+              <td>
+                <form action="" method="post">
+                  <button type="submit" class="btn btn-danger btn-small" title="Entfernen" value="<?=$event->id?>" name="fsinf_remove_event"><i class="icon-trash icon-white"></i></button>
+                </form>
+              </td>
+              <td><?= $event->title ?></td>
+              <td><?= $event->starts_at ?></td>
+              <td><?= $event->ends_at ?></td>
+              <td><?= $event->place ?></td>
+              <td><?= $event->description ?></td>
+              <td><?= $event->camping == 1 ? 'Zelten' : 'Hütte' ?></td>
+              <td>TODO max teilnehmer</td>
+              <td>TODO gebühr</td>
+            </tr>
+<?php
+          endforeach;
+?>
+          </tbody>
+        </table>
+      </div>
+      <div class="span12">
+        <h3>Vergangene 5 Events</h3>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+            <th>Titel</th>
+            <th>Beginn</th>
+            <th>Ende</th>
+            <th>Ort</th>
+            <th>Beschreibung</th>
+            <th>Art</th>
+            <th>Max. Teilnehmer</th>
+            <th>Gebühr</th>
+          </tr>
+          </thead>
+          <tbody>
+<?php
+          $past_events = fsinf_get_past_events(5);
+          foreach ($past_events as $event) :
+?>
+            <tr>
+              <td><?= $event->title ?></td>
+              <td><?= $event->starts_at ?></td>
+              <td><?= $event->ends_at ?></td>
+              <td><?= $event->place ?></td>
+              <td><?= $event->description ?></td>
+              <td><?= $event->camping == 1 ? 'Zelten' : 'Hütte' ?></td>
+              <td>TODO max teilnehmer</td>
+              <td>TODO gebühr</td>
+            </tr>
+<?php
+          endforeach;
+?>
+          </tbody>
+        </table>
+      </div>
+    </div>
+<?php
 }
 
 
@@ -538,7 +691,7 @@ function fsinf_get_current_event()
     // Get current event
   global $wpdb;
   return $wpdb->get_row(sprintf(
-    "SELECT id, title, place, starts_at, ends_at, description, camping
+    "SELECT id, title, place, starts_at, ends_at, description, camping, max_participants, fee
      FROM %s
      WHERE starts_at > NOW()
      ORDER BY starts_at ASC
@@ -649,18 +802,86 @@ function fsinf_save_registration($fields)
           $fields,
           $types
     );
-  echo '<pre>'.print_r($fields, true).'</pre>';
-  return array();
+  #echo '<pre>'.print_r($fields, true).'</pre>';
+  send_registration_mail($fields);
+  return array(); #TODO ???
 }
 
 function fsinf_bank_account_information()
 {
-?>  <h4>Kontodaten</h4>
-    <dl>
+?>  <dl>
       <dt>Inhaber:</dt>
       <dd>hier ausgeben</dd>
     </dl>
 <?php
+}
+
+# TODO: probably fix b/c it's very late
+function send_registration_mail($fields){
+  $current_event = fsinf_get_current_event();
+  # Array form of headers can set CC (e.g. to event admin)
+  $headers = 'From: Fachschaft Informatik Uni Konstanz <fachschaft@inf.uni-konstanz.de>' . "\r\n";
+
+  $topic = 'Anmeldung zum Event: ' .htmlspecialchars($current_event->title);
+
+  $semester_string = htmlspecialchars($fields['semester']) <= 6 ? htmlspecialchars($fields['semester']).'.' : 'Höheres';
+  $semester_string .= ' Semester im ';
+  $semester_string .= htmlspecialchars($fields['bachelor']) == 1 ? 'Bachelor' : 'Master';
+
+  $message = array();
+  $message[] = "Yay! Du hast dich soeben erfolgreich zum Event ".htmlspecialchars($current_event->title)." angemeldet.";
+  $message[] = "";
+  $message[] = "Bitte überweise €€€ auf unten stehendes Konto.";
+  $message[] = "\n";
+  $message[] = "==== Konto";
+  $message[] = "Inhaber:";
+  $message[] = "Kontonummer:";
+  $message[] = "BLZ:";
+  $message[] = "Institut:";
+  $message[] = "=============";
+  $message[] = "\n";
+  $message[] = "Deine Daten";
+  $message[] = '------------';
+  $message[] = "Name: " . htmlspecialchars($fields['first_name']).' '. htmlspecialchars($fields['last_name']);
+  $message[] = "Handy-Nummer: " . htmlspecialchars($fields['mobile_phone']);
+  $message[] = "Semester: " . $semester_string;
+
+  if (array_key_exists('has_car', $fields)) :
+    if ($fields['has_car'] == 1) :
+      $car_string = 'Ein Auto mit ';
+      $car_string .= htmlspecialchars($fields['car_seats']);
+      $car_string .= htmlspecialchars($fields['car_seats']) == 1 ? ' Sitz' : ' Sitzen';
+      $message[] = $car_string;
+    endif;
+  else:
+    $message[] = 'Kein Auto';
+  endif;
+
+  if (array_key_exists('has_tent', $fields)) :
+    if ($fields['has_tent'] == 1) :
+      $tent_string = 'Ein Zelt mit ';
+      $tent_string .= htmlspecialchars($fields['tent_size']);
+      $tent_string .= htmlspecialchars($fields['tent_size']) == 1 ? ' Schlafplatz' : ' Schlafplätzen';
+      $message[] = $tent_string;
+    endif;
+  else:
+      $message[] = 'Kein Zelt';
+  endif;
+  if (array_key_exists('notes', $fields)) :
+    $notes = htmlspecialchars($fields['notes']);
+  else:
+    $notes = 'Keine Nachricht';
+  endif;
+  $message[] = 'Deine Nachricht an uns: ' . $notes;
+  $message[] = '---';
+  # TODO: Event Details mit verschicken...
+  $message[] = "\n\n";
+  $message[] = 'Wir freuen uns auf Dich';
+  $message[] = 'Deine Fachschaft Informatik';
+
+
+  wp_mail($fields['mail_address'], $topic, implode("\r\n",$message), $headers);
+  echo 'Sent registration?';
 }
 
 function fsinf_print_success_message(){
@@ -672,6 +893,7 @@ function fsinf_print_success_message(){
         <b><?=htmlspecialchars($current_event->title)?></b> angemeldet.</p>
         <p>Bitte Zahle die Teilnahmegebühr auf untenstehendes Konto ein.</p>
     </div>
+        <h4>Kontodaten</h4>
 <?php
         fsinf_bank_account_information();
 ?>
