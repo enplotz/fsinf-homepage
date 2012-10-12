@@ -1,5 +1,5 @@
 jQuery(document).ready( function() {
-	jQuery('#adminmenu li a.menu-icon-dashboard').prepend('<i class="icon-home"></i> ');
+	jQuery('#adminmenu li a.menu-icon-dashboard').prepend('<i class="icon-dashboard"></i> ');
 	jQuery('#adminmenu li a.menu-icon-post').prepend('<i class="icon-pencil"></i> ');
 	jQuery('#adminmenu li a.menu-icon-page').prepend('<i class="icon-file"></i> ');
 	jQuery('#adminmenu li a.menu-icon-media').prepend('<i class="icon-picture"></i> ');
@@ -28,7 +28,8 @@ jQuery(document).ready( function() {
 	jQuery('#adminmenu li a.toplevel_page_wpcf7').prepend('<i class="icon-envelope"></i> ');
 	jQuery('#adminmenu li a.toplevel_page_newsletter\\/intro').prepend('<i class="icon-inbox"></i> ');
 	jQuery('#adminmenu li a.toplevel_page_nrelate-main').prepend('<i class="icon-random"></i> ');
-	jQuery('#adminmenu li a.toplevel_page_wdfb').prepend('<i class="icon-share"></i> ');
+  jQuery('#adminmenu li a.toplevel_page_wdfb').prepend('<i class="icon-share"></i> ');
+  jQuery('#adminmenu li a.toplevel_page_sam-list').prepend('<i class="icon-money"></i> ');
 	
 	jQuery('tr.mp_order.status-order_received td.mp_orders_status a').append('<div class="progress"><div class="bar bar-danger" style="width: 33%;"></div></div>');
 	jQuery('tr.mp_order.status-order_paid td.mp_orders_status a').append('<div class="progress"><div class="bar bar-danger" style="width: 33%;"></div><div class="bar bar-warning" style="width: 34%;"></div></div>');

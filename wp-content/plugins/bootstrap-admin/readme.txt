@@ -4,7 +4,7 @@ Donate link: http://aristeides.com/bootstrap-admin
 Tags: administration, administration theme, admin theme, dashboard, bootstrap
 Requires at least: 3.4
 Tested up to: 3.4.2
-Stable tag: 0.3
+Stable tag: 0.5
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,14 +15,18 @@ A clean, minimalistic administration theme based on Twitter's Bootstrap
 A clean, minimalistic administration theme implementing Twitter's Bootstrap.
 If you want to learn more about bootstrap go ahead and take a look here: http://twitter.github.com/bootstrap
 
+
+#WP35: I Pledge to optimize this plugin fot WordPress 3.5 the day it is released.
+
+
 This project was built for the http://openstores.gr network of stores.
 This plugin will continue to be improved.
 
-So far these things have been done:
+This plugin includes:
 
 * General styling of the wordpress admin area
 * Admin menu sub-menus as bootstrap popovers (they're actually very beautiful!)
-* Bootstrap Icons for a lot of things
+* Bootstrap Icons for a lot of things (using a bootstrap icon font)
 * Default WordPress forms theming
 * Buttons theming
 * Postboxes theming
@@ -32,8 +36,7 @@ So far these things have been done:
 * Styling is done using LESS.
 * Implements [chosen js](http://harvesthq.github.com/chosen/ "chosen js")
 
-In case you are having problems with the dropdowns in the administration area, you can disable chosen js.
-To do so, open the 'includes/config.php' file and set
+Note: chosen.js is disabled by default. To enable it, open the 'includes/config.php' file and set
 `define('BOOTSTRAP_ADMIN_CHOSEN_JS', '1');'
 from '1' to '0'.
 
@@ -68,6 +71,12 @@ from '0' to '1'.
 
 
 == Changelog ==
+
+= 0.5 =
+* The left menu is now 150px wide, close to the original wordpress menu width (narrower than on the previous version)
+* Labels are now inline-blocks instead of blocks
+* Using the [Awesome Font](http://fortawesome.github.com/Font-Awesome/) for icons
+* Other minor bugfixes
 
 = 0.3 =
 * Minor bug fixes

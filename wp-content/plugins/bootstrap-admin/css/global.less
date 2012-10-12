@@ -1,4 +1,57 @@
-@import "../less/bootstrap.less";
+// CSS Reset
+@import "../less/reset.less";
+
+// Core variables and mixins
+@import "../less/variables.less"; // Modify this for custom colors, font-sizes, etc
+@import "../less/mixins.less";
+
+// Grid system and page structure
+@import "../less/scaffolding.less";
+@import "../less/grid.less";
+@import "../less/layouts.less";
+
+// Base CSS
+@import "../less/type.less";
+@import "../less/code.less";
+@import "../less/forms.less";
+@import "../less/tables.less";
+
+// Components: common
+// @import "../less/sprites.less";
+@import "../font/font-awesome.less";
+@import "../font/font-awesome-ie7.less";
+@import "../less/dropdowns.less";
+@import "../less/wells.less";
+@import "../less/component-animations.less";
+@import "../less/close.less";
+
+// Components: Buttons & Alerts
+@import "../less/buttons.less";
+@import "../less/button-groups.less";
+@import "../less/alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
+
+// Components: Nav
+@import "../less/navs.less";
+@import "../less/navbar.less";
+@import "../less/breadcrumbs.less";
+@import "../less/pagination.less";
+@import "../less/pager.less";
+
+// Components: Popovers
+@import "../less/modals.less";
+@import "../less/tooltip.less";
+@import "../less/popovers.less";
+
+// Components: Misc
+@import "../less/thumbnails.less";
+@import "../less/labels-badges.less";
+@import "../less/progress-bars.less";
+@import "../less/accordion.less";
+@import "../less/carousel.less";
+@import "../less/hero-unit.less";
+
+// Utility classes
+@import "../less/utilities.less"; // Has to be last to override when necessary
 
 #adminmenu a, 
 #the-comment-list p.comment-author strong a, 
@@ -128,9 +181,10 @@ li.wp-menu-separator{
 #adminmenuwrap, 
 #adminmenu, 
 #adminmenu .wp-submenu, 
-#adminmenu .wp-submenu-wrap, 
+#adminmenu .wp-submenu-wrap,
+li#collapse-menu
 .folded #adminmenu .wp-has-current-submenu .wp-submenu{
-  width: 200px;
+  width: 150px;
 }
 body.wpmu-dev_page_wpmudev-updates #wpcontent,
 body.wpmu-dev_page_wpmudev-settings div#wpcontent,
@@ -138,7 +192,7 @@ body.wpmu-dev_page_wpmudev-plugins div#wpcontent,
 body.wpmu-dev_page_wpmudev-themes div#wpcontent,
 .toplevel_page_wpmudev #wpcontent,
 #wpcontent, #footer{
-  margin-left: 210px !important;
+  margin-left: 160px !important;
 }
 #adminmenuback, #adminmenuwrap{
   background: none;
@@ -148,7 +202,7 @@ body.wpmu-dev_page_wpmudev-themes div#wpcontent,
   border-color: none;
 }
 #adminmenu li .wp-submenu, .folded #adminmenu .wp-has-current-submenu .wp-submenu{
-  left: 201px;
+  left: 151px;
   background: #fff;
 }
 #adminmenu{
@@ -161,14 +215,14 @@ body.wpmu-dev_page_wpmudev-themes div#wpcontent,
   box-shadow: 0 1px 4px rgba(0,0,0,.065);
     li{
       a.menu-top{
-        padding: 8px 14px;
+        // padding: 8px 14px;
         font-weight: normal;
       }
       &.wp-has-submenu.wp-menu-open{
         .wp-submenu{
           border-right: 1px solid #e5e5e5;
           border-left: 1px solid #e5e5e5;
-          width: 198px;
+          width: 150px;
           margin: 0 0 -1px;
         }
       }
@@ -362,8 +416,17 @@ body.folded .wp-menu-image{
 }
 
 [class^="icon-"]::before, [class*=" icon-"]::before {
-  display: none !important;
-  visibility: hidden;
+  color: #111;
+  height: 22px;
+  font-size: 15px;
+}
+
+a.current [class^="icon-"]::before, [class*=" icon-"]::before,
+.wp-menu-open [class^="icon-"]::before, [class*=" icon-"]::before,
+#adminmenu li.menu-top:hover [class^="icon-"]::before, [class*=" icon-"]::before {
+  color: #7df;
+  font-size: 20px;
+  text-shadow: none;
 }
 
 li#wp-admin-bar-psts-status a{
@@ -483,6 +546,7 @@ input[type="color"],
 .uneditable-input{
   height: auto;
   min-height: 20px;
+  width: auto;
 }
 
 #mp-target-countries br{
@@ -494,3 +558,4 @@ input[type="color"],
   }
 }
 
+label{display: inline-block;}
