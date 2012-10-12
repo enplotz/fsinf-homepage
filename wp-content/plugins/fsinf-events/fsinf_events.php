@@ -26,7 +26,7 @@ add_shortcode('fsinf_current_event_booking', 'fsfin_events_booking_form');
 add_shortcode('fsinf_current_event_details', 'fsfin_events_details');
 
 // Add JS to Admin head
-add_action('admin_head', 'fsinf_events_js');
+# add_action('admin_head', 'fsinf_events_js');
 
 // Send HTML Emails
 #add_filter('wp_mail_content_type',create_function('', 'return "text/html";'));
@@ -200,26 +200,26 @@ function fsinf_events_toplevel_page() {
                           <?php
                             if (!$participant->paid):
                           ?>
-                            <button type="submit" class="btn btn-small" title="Hat bezahlt" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_paid_by"><i class="icon-shopping-cart"></i></button>
+                            <button type="submit" class="btn btn-mini" title="Hat bezahlt" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_paid_by"><i class="icon-shopping-cart"></i></button>
                           <?php
                             else:
                           ?>
-                            <button type="submit" class="btn btn-small" title="Hat nicht bezahlt" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_not_paid_by"><i class="icon-remove-sign"></i></button>
+                            <button type="submit" class="btn btn-mini" title="Hat nicht bezahlt" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_not_paid_by"><i class="icon-remove-sign"></i></button>
                           <?php
                             endif;
                           ?>
                           <?php
                             if (!$participant->admitted):
                           ?>
-                            <button type="submit" class="btn btn-small" title="Zugelassen" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_admitted_for"><i class="icon-ok"></i></button>
+                            <button type="submit" class="btn btn-mini" title="Zugelassen" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_admitted_for"><i class="icon-ok"></i></button>
                           <?php
                             else:
                           ?>
-                            <button type="submit" class="btn btn-small" title="Nicht mehr zugelassen" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_not_admitted_for"><i class="icon-remove"></i></button>
+                            <button type="submit" class="btn btn-mini" title="Nicht mehr zugelassen" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_not_admitted_for"><i class="icon-remove"></i></button>
                           <?php
                             endif;
                           ?>
-                          <button type="submit" class="btn btn-danger btn-small" title="Entfernen" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_cancel_for"><i class="icon-trash icon-white"></i></button>
+                          <button type="submit" class="btn btn-danger btn-mini" title="Entfernen" value="<?= htmlspecialchars($participant->mail_address);?>" name="participation_cancel_for"><i class="icon-trash"></i></button>
                       </div>
                         </form>
                     </td>
@@ -497,7 +497,7 @@ function fsinf_all_events_page() {
             <tr>
               <td>
                 <form action="" method="post">
-                  <button type="submit" class="btn btn-danger btn-small" title="Entfernen" value="<?=$event->id?>" name="fsinf_remove_event"><i class="icon-trash icon-white"></i></button>
+                  <button type="submit" class="btn btn-danger btn-small" title="Entfernen" value="<?=$event->id?>" name="fsinf_remove_event"><i class="icon-trash"></i></button>
                 </form>
               </td>
               <td><?= $event->title ?></td>
