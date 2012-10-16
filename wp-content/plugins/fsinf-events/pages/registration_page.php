@@ -1,4 +1,6 @@
 <?php
+add_shortcode('fsinf_current_event_booking', 'fsfin_events_booking_form');
+
 function fsfin_events_booking_form()
 {
   $curr_event = fsinf_get_current_event();

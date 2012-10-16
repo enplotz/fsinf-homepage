@@ -1,4 +1,7 @@
 <?php
+
+add_shortcode('fsinf_current_event_details', 'fsfin_events_details');
+
 function fsfin_events_details()
 {
   $current_event = fsinf_get_current_event();

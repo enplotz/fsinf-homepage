@@ -15,9 +15,11 @@ global $wpdb;
 define('FSINF_EVENTS_TABLE', $wpdb->prefix . "fsinf_events");
 define('FSINF_PARTICIPANTS_TABLE', $wpdb->prefix . "fsinf_participants");
 
+// Hook for adding admin menus
+add_action('admin_menu', 'fsinf_events_add_pages');
 
-/* Call Wordpress Hooks */
-include 'fsinf_wordpress_calls.php';
+// Run install script on plugin activation
+register_activation_hook(__FILE__,'fsinf_events_install');
 
 /* Database */
 /* install relevant database tables */
