@@ -38,7 +38,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <img class="logo" src="/fachschaft/img/logo-white.png" />
+          <img class="logo" src="<?php echo home_url(); ?>/img/logo-white.png" />
           <a class="brand" href="<?php echo home_url(); ?>/">
             <?php bloginfo('name'); ?>
           </a>
