@@ -339,6 +339,22 @@ function stammtisch_booking_form()
         <button type="submit" class="btn btn-primary btn-small"><i class="icon-remove icon-white"></i> Ich komme doch nicht</button>
       </form>
 <?php
+      if (get_participation_for_current_user()->arrives_later){
+          // arrives later
+          ?>
+<form action="" method="post">
+  <input type="hidden" value="join" name="participation"/>
+  <button type="submit" class="btn btn-small"><i class="icon-ok icon-white"></i> Ich schaffe es doch rechtzeitig</button>
+</form>
+          <?php
+      } else {
+        // is on time
+        ?><form action="" method="post">
+  <input type="hidden" value="join_later" name="participation"/>
+  <button type="submit" class="btn btn-small"><i class="icon-time"></i> Ich komme doch später</button>
+</form>
+        <?php
+      }
     } else {
 ?>
 
@@ -360,7 +376,7 @@ function stammtisch_booking_form()
 <?php
   }
 ?>
-<p><small>Wendet euch für Rückfragen bitte an <a href="<?= site_url('/fachschaft/mitglieder/#'.STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON) ?>"><?= ucfirst(STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON) ?></a>.</small></p>
+<p><small>Wendet euch für Rückfragen bitte an <a href="<?= home_url();?>/mitglieder/#<?= STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON;?>"><?= ucfirst(STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON) ?></a>.</small></p>
 <?php
   $result = ob_get_contents();
   ob_end_clean();
@@ -429,11 +445,29 @@ function get_participants()
   return $results;
 }
 
-function add_participation_for($user_id, $later)
+function get_participation_for_current_user()
 {
   global $wpdb;
   $table_name = $wpdb->prefix . "stammtisch";
-  $wpdb->insert($table_name,
+  $results = $wpdb->get_row(
+    $wpdb->prepare(
+    "
+    SELECT user_id, arrives_later, date
+    FROM $table_name
+    WHERE user_id = %d
+    AND date = %s
+    ", get_current_user_id(), strftime('%Y-%m-%d', get_next_stammtisch_timestamp())
+    ));
+  return $results;
+}
+
+function add_participation_for($user_id, $later)
+{
+  global $wpdb;
+  $old = $wpdb->show_errors;
+  $wpdb->hide_errors();
+  $table_name = $wpdb->prefix . "stammtisch";
+  $inserted = $wpdb->insert($table_name,
           array(
                 'user_id' => $user_id,
                 'date' => strftime('%Y-%m-%d', get_next_stammtisch_timestamp()),
@@ -445,6 +479,27 @@ function add_participation_for($user_id, $later)
                 '%d'
          )
    );
+  if (!$inserted){
+    // row already there, try updating with new arrives_later value
+    $wpdb->update($table_name,
+      // DATA
+      array(
+          'arrives_later' => intval($later)
+      ),
+      // WHERE
+      array( 'user_id' => $user_id
+      ),
+      // DATA FORMAT
+      array(
+          '%d'
+      ),
+      // WHERE FORMAT
+      array( '%d' )
+      );
+  }
+  if ($old){
+    $wpdb->show_errors();
+  }
 }
 
 function join_regulars_table($later) {
