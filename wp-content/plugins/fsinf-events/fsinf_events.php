@@ -58,6 +58,8 @@ include 'fsinf_events_validators.php';
 // Validate Registration, Save to database, send mail and show message
 include 'fsinf_events_registration_controller.php';
 
+include 'fsinf_events_new_controller.php';
+
 /*
     FS Inf Events booking form.
     Embed with shortcode: [fsinf_current_event_booking]

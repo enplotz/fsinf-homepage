@@ -2,7 +2,46 @@
 function fsinf_events_config()
 {
   return array(
-    'events' => array(),
+    'events' => array(
+      'title' => array(
+        'type' => 'string',
+        'max_length' => 127,
+        'validation' => 'fsinf_validate_ne_string'
+      ),
+      'place' => array(
+        'type' => 'string',
+        'max_length' => 127,
+        'validation' => 'fsinf_validate_ne_string'
+      ),
+      'starts_at' => array(
+        'type' => 'string',
+        'max_length' => 16,
+        'validation' => 'fsinf_validate_date'
+      ),
+      'ends_at' => array(
+        'type' => 'string',
+        'max_length' => 16,
+        'validation' => 'fsinf_validate_date'
+      ),
+      'description' => array(
+        'type' => 'string'
+      ),
+      'camping' => array(
+        'type' => 'int',
+        'max_length' => 1,
+        'default' => 0,
+        'validation' => 'fsinf_validate_bool'
+      ),
+      'max_participants' => array(
+        'type' => 'int',
+        'max_value' => 127,
+        'default' => 0
+      ),
+      'fee' => array(
+        'type' => 'string',
+        'validation' => 'fsinf_validate_money'
+      )
+    ),
     'participants' => array(
       'mail_address' => array(
         'type' => 'string',
@@ -49,12 +88,12 @@ function fsinf_events_config()
       'car_seats' => array(
         'type' => 'int',
         'max_value' => 127,
-        'default' => 0,
+        'default' => 0
       ),
       'tent_size' => array(
         'type' => 'int',
         'max_value' => 127,
-        'default' => 0,
+        'default' => 0
       ),
       'notes' => array(
         'type' => 'string'

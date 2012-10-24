@@ -251,6 +251,39 @@ function fsinf_save_registration($fields)
           $types
     );
   #echo '<pre>'.print_r($fields, true).'</pre>';
-  send_registration_mail($fields);
-  return array(); #TODO ???
+
+  # Magic Number 1062 is for duplicate entry for key :/
+  if (mysql_errno() == 1062) {
+    throw new Exception("Eintrag existiert bereits", "1062");
+  }
+    send_registration_mail($fields);
+    return array(); #TODO ???
 }
+
+
+function fsinf_save_event($fields)
+{
+  global $wpdb;
+  $config = fsinf_events_config();
+  $cfg = $config['events'];
+  $types = array();
+  foreach (array_keys($fields) as $name) {
+    $types[$name] = $cfg[$name]['type'] === 'int' ? '%d' : '%s';
+  }
+
+  $fields['fee'] = $fields['fee'] * 100;
+
+  // from: 31-12-2012 10:30
+  // to:   2012-12-31 10:30:00
+  $fields['starts_at'] = date_format(date_create_from_format('d-m-Y H:i', $fields['starts_at']), 'Y-m-d H:i:s');
+  $fields['ends_at'] = date_format(date_create_from_format('d-m-Y H:i', $fields['ends_at']), 'Y-m-d H:i:s');
+
+  #echo '<pre>'.print_r($fields, true).'</pre>';
+  $result = $wpdb->insert(FSINF_EVENTS_TABLE,
+          $fields,
+          $types
+    );
+
+}
+
+

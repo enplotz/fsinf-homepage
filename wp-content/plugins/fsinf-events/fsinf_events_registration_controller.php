@@ -1,71 +1,19 @@
 <?php
 function fsinf_events_register()
 {
-  $validated = array();
-  $errors = array();
-
-  $config = fsinf_events_config();
-  foreach ($config['participants'] as $field => $spec) {
-    if ($spec['type'] == 'string') {
-      if (array_key_exists($field, $_POST) && is_string($_POST[$field])) {
-        $value = trim($_POST[$field]);
-        $ok = true;
-        if (array_key_exists('validation', $spec)) {
-          $valid = call_user_func($spec['validation'], $value);
-          if ($valid[0]) {
-            $value = $valid[1];
-          } else {
-            $ok = false;
-            $errors[$field] = $valid[1];
-          }
-        }
-
-        if ($ok && array_key_exists('max_length', $spec)
-            && strlen($value) > $spec['max_length']) {
-          $errors[$field] = "Eingabe darf nicht länger als {$spec['max_length']} Zeichen sein.";
-          $ok = false;
-        }
-
-        if ($ok) $validated[$field] = $value;
-      } else {
-        $errors[$field] = "Eingabe fehlt.";
-      }
-    } elseif ($spec['type'] == 'int') {
-      if (array_key_exists($field, $_POST) && is_string($_POST[$field]) && strlen(trim($_POST[$field])) !== 0) {
-        $value = trim($_POST[$field]);
-        if (!ctype_digit($value)) {
-          $errors[$field] = "Bitte nur Ganzzahlen eingeben.";
-        } else {
-          $value = intval($value);
-          if(array_key_exists('max_value', $spec) && $value > $spec['max_value']) {
-            $errors[$field] = "Der eingegebene Wert darf nicht größer als {$spec['max_value']} sein.";
-          } else {
-            $ok = true;
-            if(array_key_exists('validation', $spec)) {
-              $valid = call_user_func($spec['validation'], $value);
-              if($valid[0]) {
-                $value = $valid[1];
-              } else {
-                $ok = false;
-                $errors[$field] = $valid[1];
-              }
-            }
-
-            if ($ok) {
-              $validated[$field] = $value;
-            }
-          }
-        }
-      } elseif (array_key_exists('default', $spec)) {
-        $validated[$field] = $spec['default'];
-      } else {
-        $errors[$field] = "Eingabe fehlt.";
-      }
-    } else {
-      $errors[$field] = "WTF?";
+  $validation = fsinf_validate_model('participants');
+  $errors = $validation['errors'];
+  $validated = $validation['validated'];
+  if (empty($errors)) {
+    try {
+      fsinf_save_registration($validated);
+    } catch (Exception $exception) {
+      var_dump($exception);
+      return $exception;
     }
+  } else {
+    return $errors;
   }
-  return empty($errors) ? fsinf_save_registration($validated) : $errors;
 }
 
 # TODO: probably fix b/c it's very late
@@ -75,35 +23,35 @@ function send_registration_mail($fields){
   # Array form of headers can set CC (e.g. to event admin)
   $headers = 'From: Fachschaft Informatik Uni Konstanz <fachschaft@inf.uni-konstanz.de>' . "\r\n";
 
-  $topic = 'Anmeldung zum Event: ' .htmlspecialchars($current_event->title);
+  $topic = 'Anmeldung zum Event: ' .$current_event->title;
 
-  $semester_string = htmlspecialchars($fields['semester']) <= 6 ? htmlspecialchars($fields['semester']).'.' : 'Höheres';
+  $semester_string = $fields['semester'] <= 6 ? $fields['semester'].'.' : 'Höheres';
   $semester_string .= ' Semester im ';
-  $semester_string .= htmlspecialchars($fields['bachelor']) == 1 ? 'Bachelor' : 'Master';
+  $semester_string .= $fields['bachelor'] == 1 ? 'Bachelor' : 'Master';
 
   $message = array();
-  $message[] = "Yay! Du hast dich soeben erfolgreich zum Event ".htmlspecialchars($current_event->title)." angemeldet.";
+  $message[] = "Yay! Du hast dich soeben erfolgreich zum Event ". $current_event->title ." angemeldet.";
   $message[] = "";
   $message[] = "Bitte überweise $fee auf unten stehendes Konto.";
   $message[] = "\n";
   $message[] = "==== Konto";
-  $message[] = "Inhaber:";
-  $message[] = "Kontonummer:";
-  $message[] = "BLZ:";
-  $message[] = "Institut:";
+  $message[] = "Inhaber:\t" . get_option( "konto_inhaber" );
+  $message[] = "Kontonummer:\t". get_option( "konto_nummer" );
+  $message[] = "BLZ:\t". get_option( "konto_bankleitzahl" );
+  $message[] = "Institut:\t". get_option( "konto_institut" );
   $message[] = "=============";
   $message[] = "\n";
   $message[] = "Deine Daten";
   $message[] = '------------';
-  $message[] = "Name: " . htmlspecialchars($fields['first_name']).' '. htmlspecialchars($fields['last_name']);
-  $message[] = "Handy-Nummer: " . htmlspecialchars($fields['mobile_phone']);
+  $message[] = "Name: " . $fields['first_name'].' '. $fields['last_name'];
+  $message[] = "Handy-Nummer: " . $fields['mobile_phone'];
   $message[] = "Semester: " . $semester_string;
 
   if (array_key_exists('has_car', $fields)) :
     if ($fields['has_car'] == 1) :
       $car_string = 'Ein Auto mit ';
-      $car_string .= htmlspecialchars($fields['car_seats']);
-      $car_string .= htmlspecialchars($fields['car_seats']) == 1 ? ' Sitz' : ' Sitzen';
+      $car_string .= $fields['car_seats'];
+      $car_string .= $fields['car_seats'] == 1 ? ' Sitz' : ' Sitzen';
       $message[] = $car_string;
     endif;
   else:
@@ -113,15 +61,15 @@ function send_registration_mail($fields){
   if (array_key_exists('has_tent', $fields)) :
     if ($fields['has_tent'] == 1) :
       $tent_string = 'Ein Zelt mit ';
-      $tent_string .= htmlspecialchars($fields['tent_size']);
-      $tent_string .= htmlspecialchars($fields['tent_size']) == 1 ? ' Schlafplatz' : ' Schlafplätzen';
+      $tent_string .= $fields['tent_size'];
+      $tent_string .= $fields['tent_size'] == 1 ? ' Schlafplatz' : ' Schlafplätzen';
       $message[] = $tent_string;
     endif;
   else:
       $message[] = 'Kein Zelt';
   endif;
   if (array_key_exists('notes', $fields)) :
-    $notes = htmlspecialchars($fields['notes']);
+    $notes = $fields['notes'];
   else:
     $notes = 'Keine Nachricht';
   endif;
@@ -147,9 +95,10 @@ function fsinf_print_success_message(){
         <p>Bitte zahle die Teilnahmegebühr von <b><?=$fee?></b> auf untenstehendes Konto ein.</p>
     </div>
         <h4>Kontodaten</h4>
-<?php
-        fsinf_bank_account_information();
-?>
+        <dt>Inhaber</dt><dd> <?= get_option( "konto_inhaber" ); ?></dd>
+              <dt>Kontonummer</dt><dd><?= get_option( "konto_nummer" ); ?></dd>
+              <dt>BLZ</dt><dd><?= get_option( "konto_bankleitzahl" ); ?></dd>
+              <dt>Institut</dt><dd> <?= get_option( "konto_institut" ); ?></dd>
         <p>Folgende Informationen
         wurden dir auch an
         <b>

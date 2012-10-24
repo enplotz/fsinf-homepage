@@ -58,6 +58,14 @@ function fsinf_events_toplevel_page() {
 ?>            <p class="alert alert-error span3">Nicht genug Sitzplätze</p>
 <?php
             endif;
+?>
+            <dl class="span4">
+              <dt>Inhaber</dt><dd> <?= get_option( "konto_inhaber" ); ?></dd>
+              <dt>Kontonummer</dt><dd><?= get_option( "konto_nummer" ); ?></dd>
+              <dt>BLZ</dt><dd><?= get_option( "konto_bankleitzahl" ); ?></dd>
+              <dt>Institut</dt><dd> <?= get_option( "konto_institut" ); ?></dd>
+            </dl>
+<?php
             if ($number_registrations > 0) {
 ?>
             <table class="table table-bordered table-hover">
