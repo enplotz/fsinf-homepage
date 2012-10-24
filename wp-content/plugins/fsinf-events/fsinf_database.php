@@ -156,11 +156,11 @@ function fsinf_get_registrations()
       "SELECT  mail_address, event_id, first_name, last_name, mobile_phone, semester, bachelor, has_car, has_tent, car_seats, tent_size, notes, admitted, paid
        FROM  %s
        WHERE  event_id = %d
-       ORDER BY semester ASC
       ", FSINF_PARTICIPANTS_TABLE, $current_event->id
       )
     )
     );
+       #ORDER BY semester ASC
   return $results;
 }
 
