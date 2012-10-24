@@ -77,7 +77,13 @@ function fsinf_events_toplevel_page() {
                   <th>Handy</th>
                   <th>Semester</th>
                   <th>Auto</th>
+<?php
+  if ($current_event->camping):
+?>
                   <th>Zelt</th>
+<?php
+  endif;
+?>
                   <th>Zugelassen</th>
                   <th>Bezahlt</th>
                   <th>Anmerkungen</th>
@@ -142,6 +148,9 @@ function fsinf_events_toplevel_page() {
                     endif;
 ?>
                     </td>
+<?php
+  if ($current_event->camping):
+?>
                     <td>
 <?php
                     if ($participant->has_tent == 1) :
@@ -153,6 +162,9 @@ function fsinf_events_toplevel_page() {
                     endif;
 ?>
                     </td>
+<?php
+  endif;
+?>
                     <td>
                       <?= $participant->admitted == 1 ? 'Yep' : 'Nope'; ?>
                     </td>
