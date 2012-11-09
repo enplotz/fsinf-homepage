@@ -21,8 +21,7 @@ define ('STAMMTISCH_DEFAULT_URL', 'http://defne-kn.de');
 
 # TODO: make options
 define ('STAMMTISCH_DEFAULT_LOCK_HOURS', 3);
-# Responsible person must be user_login
-define ('STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON', 'max');
+define ('STAMMTISCH_DEFAULT_RESPONSIBLE_MAIL', 'fs@fachschaft.inf.uni-konstanz.de');
 
 
 function stammtisch_options()
@@ -32,7 +31,9 @@ function stammtisch_options()
     "stammtisch_time"     => STAMMTISCH_DEFAULT_TIME,
     "stammtisch_day"      => STAMMTISCH_DEFAULT_DAY,
     "stammtisch_location" => STAMMTISCH_DEFAULT_LOCATION,
-    "stammtisch_url"      => STAMMTISCH_DEFAULT_URL
+    "stammtisch_url"      => STAMMTISCH_DEFAULT_URL,
+    "stammtisch_lock"     => STAMMTISCH_DEFAULT_LOCK_HOURS,
+    "stammtisch_mail"     => STAMMTISCH_DEFAULT_RESPONSIBLE_MAIL
  );
 }
 
@@ -123,7 +124,7 @@ endfor;
           <div class="control-group">
             <label class="control-label" for="stammtischTime">Zeit</label>
             <div class="controls">
-              <input type="text" name="stammtisch_time" id="stammtischTime" value="<?= get_option('stammtisch_time', STAMMTISCH_DEFAULT_TIME);?>" />
+              <input type="text" name="stammtisch_time" id="stammtischTime" value="<?= get_option('stammtisch_time', STAMMTISCH_DEFAULT_TIME);?>" placeholder="z.B. 20:00:00" />
             </div>
           </div>
           <div class="control-group">
@@ -142,6 +143,20 @@ endfor;
             <label class="control-label" for="stammtischRequired">Mindestanzahl an Teilnehmern</label>
             <div class="controls">
               <input type="number" name="stammtisch_required" id="stammtischRequired"  value="<?= get_option('stammtisch_required', STAMMTISCH_DEFAULT_REQUIRED);?>" />
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="stammtischLock">Registrierungssperre vor dem Stammtisch</label>
+            <div class="controls">
+              <div class="input-append">
+                <input type="text" name="stammtisch_lock" id="stammtischLock"  value="<?= get_option('stammtisch_lock', STAMMTISCH_DEFAULT_LOCK_HOURS);?>" /><span class="add-on">Stunden</span>
+              </div>
+            </div>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="stammtischMail">Mail-Adresse</label>
+            <div class="controls">
+              <input type="text" name="stammtisch_mail" id="stammtischMail"  value="<?= get_option('stammtisch_mail', STAMMTISCH_DEFAULT_RESPONSIBLE_MAIL);?>" />
             </div>
           </div>
           <div class="control-group">
@@ -191,7 +206,7 @@ endfor;
                     <td>
                       <form action="" method="post">
                         <input type="hidden" value="<?= $participant->user_id ?>" name="participation_cancel_for"/>
-                        <button type="submit" class="btn btn-danger btn-small"><i class="icon-remove icon-white"></i> Nimmt doch nicht teil</button>
+                        <button type="submit" class="btn btn-danger btn-small"><i class="icon-remove"></i> Nimmt doch nicht teil</button>
                       </form>
                     </td>
                   </tr>
@@ -376,7 +391,7 @@ function stammtisch_booking_form()
 <?php
   }
 ?>
-<p><small>Wendet euch für Rückfragen bitte an <a href="<?= home_url();?>/mitglieder/#<?= STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON;?>"><?= ucfirst(STAMMTISCH_DEFAULT_RESPONSIBLE_PERSON) ?></a>.</small></p>
+<p><small>Wendet euch für Rückfragen bitte an <?php get_option('stammtisch_mail', STAMMTISCH_DEFAULT_RESPONSIBLE_MAIL) ?>.</small></p>
 <?php
   $result = ob_get_contents();
   ob_end_clean();
