@@ -58,7 +58,7 @@ function roots_register_sidebars() {
         'id'            => 'roots-' . sanitize_title($sidebar),
         'name'          => __($sidebar, 'roots'),
         'description'   => __($sidebar, 'roots'),
-        'before_widget' => '<article id="%1$s" class="widget %2$s"><div class="widget-inner">',
+        'before_widget' => '<article id="%1$s" class="widget %2$s"><div class="widget-inner well well-small">',
         'after_widget'  => '</div></article>',
         'before_title'  => '<h3>',
         'after_title'   => '</h3>'
