@@ -349,7 +349,7 @@ function stammtisch_booking_form()
     if (user_participates()) {
       /* Link to remove me */
 ?>
-      <form action="" method="post">
+      <form action="" method="post" style="display: inline;">
         <input type="hidden" value="cancel" name="participation"/>
         <button type="submit" class="btn btn-primary btn-small"><i class="icon-remove icon-white"></i> Ich komme doch nicht</button>
       </form>
@@ -357,14 +357,14 @@ function stammtisch_booking_form()
       if (get_participation_for_current_user()->arrives_later){
           // arrives later
           ?>
-<form action="" method="post">
+<form action="" method="post" style="display: inline;">
   <input type="hidden" value="join" name="participation"/>
   <button type="submit" class="btn btn-small"><i class="icon-ok icon-white"></i> Ich schaffe es doch rechtzeitig</button>
 </form>
           <?php
       } else {
         // is on time
-        ?><form action="" method="post">
+        ?><form action="" method="post" style="display: inline;">
   <input type="hidden" value="join_later" name="participation"/>
   <button type="submit" class="btn btn-small"><i class="icon-time"></i> Ich komme doch später</button>
 </form>
@@ -373,11 +373,11 @@ function stammtisch_booking_form()
     } else {
 ?>
 
-<form action="" method="post">
+<form action="" method="post" style="display: inline;">
   <input type="hidden" value="join" name="participation"/>
   <button type="submit" class="btn btn-primary btn-small"><i class="icon-ok icon-white"></i> Ich komme</button>
 </form>
-<form action="" method="post">
+<form action="" method="post" style="display: inline;">
   <input type="hidden" value="join_later" name="participation"/>
   <button type="submit" class="btn btn-small"><i class="icon-time"></i> Ich komme später</button>
 </form>
