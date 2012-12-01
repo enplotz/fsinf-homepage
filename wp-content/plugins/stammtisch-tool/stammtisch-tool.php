@@ -68,9 +68,9 @@ register_activation_hook(__FILE__,'stammtisch_install');
 /**********************************************************************/
 
 /*
- * ADMIN MENU
+ * STAMMTISCH ADMIN MENU
  */
-if (is_admin()) {
+if ( current_user_can( 'manage_stammtisch' ) ) {
 add_action('admin_menu', 'stammtisch_add_admin_page');
 
 function stammtisch_add_admin_page()

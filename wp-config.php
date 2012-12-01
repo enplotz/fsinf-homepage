@@ -16,6 +16,8 @@
 
 // ** MySQL settings - You can get this info from your web host ** //
 
+// Make sure pluggable is loaded before capabilities.php for stammtisch
+require_once(ABSPATH . 'wp-includes/pluggable.php');
 
 // ** Use Local Config File if present **
 if ( file_exists( dirname( __FILE__ ) . '/lconf/local-config.php')) {
