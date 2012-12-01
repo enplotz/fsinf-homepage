@@ -46,42 +46,40 @@
           <nav id="nav-main" class="nav-collapse" role="navigation">
             <?php wp_nav_menu(array('theme_location' => 'primary_navigation', 'walker' => new Roots_Navbar_Nav_Walker(), 'menu_class' => 'nav')); ?>
 
-            <ul class="nav pull-right">
-            <?php global $user_identity, $current_user;
+<?php global $user_identity, $current_user;
               get_currentuserinfo();
-              ?>
+              if (is_user_logged_in()) : ?>
+            <ul class="nav pull-right">
+
             <li class="dropdown">
               <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                 <i class="icon-user icon-white"></i>
-
-                  <?php
-                    if (is_user_logged_in()) {
+<?php
                       echo $user_identity;
-                    } else {
-                      echo "Hier nicht klicken!";
-                    }
-                  ?>
-
+?>
                 <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
-                <?php if ( is_user_logged_in() ) { ?>
                   <li>
-                    <a href="/fachschaft/user-profile/">Profil</a>
+                    <a href="/fachschaft/user-profile/"><i class="icon-cogs"></i> Profil</a>
                   </li>
-
-                <?php } else {   ?>
-
-                  <li><?php wp_register('', ''); ?></li>
-
-                <?php } ?>
                 <li class="divider"></li>
                 <li>
-                  <?php wp_loginout(); ?>
+                  <a href="<?php echo wp_logout_url( get_permalink() ); ?>" title="Logout"><i class="icon-off"></i> Logout</a>
                 </li>
               </ul>
             </li>
           </ul><!-- User-Menu -->
+<?php else : ?>
+          <ul class="nav pull-right">
+            <li>
+              <?php wp_register('', ''); ?>
+            </li>
+            <li>
+              <a href="<?php echo wp_login_url( get_permalink() ); ?>" title="Login">Login</a>
+            </li>
+          </ul>
+<?php  endif; ?>
           </nav>
 
         </div>
