@@ -17,15 +17,6 @@ class WordPressHTTPS_Module_Parser extends Mvied_Plugin_Module {
 	protected $_html;
 
 	/**
-	 * Extensions
-	 * 
-	 * Array of file extensions to be loaded securely.
-	 *
-	 * @var array
-	 */
-	protected $_extensions = array('jpg', 'jpeg', 'png', 'gif', 'css', 'js');
-
-	/**
 	 * Initialize
 	 *
 	 * @param none
@@ -267,7 +258,7 @@ class WordPressHTTPS_Module_Parser extends Mvied_Plugin_Module {
 			$filename = basename($url);
 			$scheme = $matches[2][$i];
 
-			foreach( $this->_extensions as $extension ) {
+			foreach( $this->getPlugin()->getFileExtensions() as $extension ) {
 				if ( $extension == 'js' ) {
 					$type = 'script';
 				} else if ( $extension == 'css' ) {
@@ -296,6 +287,7 @@ class WordPressHTTPS_Module_Parser extends Mvied_Plugin_Module {
 	 * @return void
 	 */
 	public function fixLinksAndForms() {
+		global $wpdb;
 		// Update anchor and form tags to appropriate URL's
 		preg_match_all('/\<(a|form)[^>]+[\'"]((http|https):\/\/[^\'"]+)[\'"][^>]*>/im', $this->_html, $matches);
 
@@ -305,12 +297,70 @@ class WordPressHTTPS_Module_Parser extends Mvied_Plugin_Module {
 			$url = $matches[2][$i];
 			$scheme = $matches[3][$i];
 			$updated = false;
+			$post_id = null;
 
 			if ( !$this->getPlugin()->isUrlLocal($url) ) {
 				continue;
 			}
 
-			$force_ssl = apply_filters('force_ssl', null, 0, $url );
+			if ( $url != '' && ($url_parts = parse_url($url)) && isset($url_parts['path']) ) {
+				if ( $this->getPlugin()->getHttpsUrl()->getPath() != '/' ) {
+					if ( $this->getPlugin()->getSetting('ssl_host_diff') ) {
+						$url_parts['path'] = str_replace($this->getPlugin()->getHttpsUrl()->getPath(), '', $url_parts['path']);
+					}
+					if ( $this->getPlugin()->getHttpUrl()->getPath() != '/' ) {
+						$url_parts['path'] = str_replace($this->getPlugin()->getHttpUrl()->getPath(), '', $url_parts['path']);
+					}
+				}
+
+				// qTranslate integration - strips language from beginning of url path
+				if ( defined('QTRANS_INIT') && constant('QTRANS_INIT') == true ) {
+					global $q_config;
+					if ( isset($q_config['enabled_languages']) ) {
+						foreach($q_config['enabled_languages'] as $language) {
+							$url_parts['path'] = preg_replace('/^\/' . $language . '\//', '/', $url_parts['path']);
+						}
+					}
+				}
+
+				if ( preg_match("/page_id=([\d]+)/", parse_url($url, PHP_URL_QUERY), $postID) ) {
+					$post_id = $postID[1];
+				} else if ( isset($url_parts['path']) && ( $url_parts['path'] == '' || $url_parts['path'] == '/' ) ) {
+					if ( get_option('show_on_front') == 'page' ) {
+						$post_id = get_option('page_on_front');
+					}
+				} else if ( isset($url_parts['path']) && ($post = get_page_by_path($url_parts['path'])) ) {
+					$post_id = $post->ID;
+				}
+
+				if ( is_multisite() && isset($url_parts['host']) ) {
+					$blog_id = false;
+					$url_path = '/';
+					$url_path_segments = explode('/', $url_parts['path']);
+					if ( sizeof($url_path_segments) > 1 ) {
+						foreach( $url_path_segments as $url_path_segment ) {
+							if ( !$blog_id && $url_path_segment != '' ) {
+								$url_path .= '/' . $url_path_segment . '/';
+								if ( $blog_id = get_blog_id_from_url( $url_parts['host'], $url_path) ) {
+									break;
+								}
+							}
+						}
+					}
+					if ( !$blog_id ) {
+						$blog_id = get_blog_id_from_url( $url_parts['host'], '/');
+					}
+					if ( $blog_id && $blog_id != $wpdb->blogid ) {
+						if ( $this->getPlugin()->getSetting('ssl_admin', $blog_id) && ( ! $this->getPlugin()->getSetting('ssl_host_diff', $blog_id) || ( $this->getPlugin()->getSetting('ssl_host_diff', $blog_id) && function_exists('is_user_logged_in') && is_user_logged_in() ) ) ) {
+							$force_ssl = true;
+						} else {
+							$force_ssl = false;
+						}
+					}
+				}
+			}
+
+			$force_ssl = apply_filters('force_ssl', null, ( isset($post_id) ? $post_id : 0 ), $url );
 
 			if ( $force_ssl == true ) {
 				$updated = $this->getPlugin()->makeUrlHttps($url);

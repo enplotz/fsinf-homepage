@@ -117,7 +117,7 @@ class Mvied_Plugin {
 		$modules = array();
 		if ( is_dir($this->getModuleDirectory()) && $module_directory = opendir($this->getModuleDirectory()) ) {
 			while ( false !== ($entry = readdir($module_directory)) ) {
-				if ( strpos($entry, '.') !== 0 ) {
+				if ( strpos($entry, '.') !== 0 && strpos($entry, '.php') !== false ) {
 					$module = str_replace('.php', '', $entry);
 					if ( $module != 'Interface' ) {
 						$modules[] = $module;
@@ -243,7 +243,7 @@ class Mvied_Plugin {
 		}
 
 		// Load default option
-		if ( $value === false ) {
+		if ( $value === false && array_key_exists($setting, $this->_settings) ) {
 			$value = $this->_settings[$setting];
 		}
 		// Convert 1's and 0's to boolean
