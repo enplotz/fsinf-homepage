@@ -2,9 +2,9 @@
 Contributors: aristath
 Donate link: http://aristeides.com/bootstrap-admin
 Tags: administration, administration theme, admin theme, dashboard, bootstrap
-Requires at least: 3.4
-Tested up to: 3.4.2
-Stable tag: 0.5
+Requires at least: 3.5
+Tested up to: 3.5
+Stable tag: 1.02
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,12 +15,8 @@ A clean, minimalistic administration theme based on Twitter's Bootstrap
 A clean, minimalistic administration theme implementing Twitter's Bootstrap.
 If you want to learn more about bootstrap go ahead and take a look here: http://twitter.github.com/bootstrap
 
-
-#WP35: I Pledge to optimize this plugin fot WordPress 3.5 the day it is released.
-
-
-This project was built for the http://openstores.gr network of stores.
-This plugin will continue to be improved.
+This project was built by http://shoestrap.org
+You can contribute by helping out in github: https://github.com/aristath/bootstrap-admin
 
 This plugin includes:
 
@@ -57,7 +53,7 @@ from '0' to '1'.
 This will tell the less preprocessor to re-compile the stylesheet 
 every time a change is detected on our less file.
 When you're done theming, please change it back to '0' to speed-up your admin section.
-(though it's not resources-heavy, phpless is still one more script that runs). 
+(though it's not resources-heavy, phpless is still one more script that runs).
 If you are not theming using less, keep this option to '0'.
 
 To enable chosen js, you can change
@@ -71,6 +67,21 @@ from '0' to '1'.
 
 
 == Changelog ==
+
+= 1.02 =
+* Widgets screen css fix
+
+= 1.01 =
+* CSS Bugfixes
+* De-activating chosen.js
+
+= 1.0 =
+* CAUTION: ONLY UPDATE TO 1.0 IF YOU ARE USING WORDPRESS 3.5 AND ABOVE
+* Bugfixes
+* Compatibility with WordPress 3.5
+* Moved icons from jquery to css implementation
+* The width of the admin menu is now identical to the one in WordPress core
+* Less obstrusive
 
 = 0.5 =
 * The left menu is now 150px wide, close to the original wordpress menu width (narrower than on the previous version)
