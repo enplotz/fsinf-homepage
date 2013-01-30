@@ -1,10 +1,10 @@
 === Bootstrap Admin ===
-Contributors: aristath
+Contributors: aristath, fovoc
 Donate link: http://aristeides.com/bootstrap-admin
 Tags: administration, administration theme, admin theme, dashboard, bootstrap
 Requires at least: 3.5
 Tested up to: 3.5
-Stable tag: 1.02
+Stable tag: 1.13
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,31 +13,14 @@ A clean, minimalistic administration theme based on Twitter's Bootstrap
 == Description ==
 
 A clean, minimalistic administration theme implementing Twitter's Bootstrap.
-If you want to learn more about bootstrap go ahead and take a look here: http://twitter.github.com/bootstrap
+Project was built by [shoestrap.org](http://shoestrap.org) and uses our very own [Elusive-Icons](http://aristath.github.com/elusive-iconfont/) webfont.
 
-This project was built by http://shoestrap.org
 You can contribute by helping out in github: https://github.com/aristath/bootstrap-admin
 
-This plugin includes:
+This plugin will completely re-style your WordPress admin area, offering a cleaner experience.
+Coming soon: Complete rebranding for your WordPress Administration!
 
-* General styling of the wordpress admin area
-* Admin menu sub-menus as bootstrap popovers (they're actually very beautiful!)
-* Bootstrap Icons for a lot of things (using a bootstrap icon font)
-* Default WordPress forms theming
-* Buttons theming
-* Postboxes theming
-* Includes WPMUdev Pro-Sites optimizations
-* Includes WPMUdev MarketPress optimizations
-* Even more, and a lot more on the way!
-* Styling is done using LESS.
-* Implements [chosen js](http://harvesthq.github.com/chosen/ "chosen js")
-
-Note: chosen.js is disabled by default. To enable it, open the 'includes/config.php' file and set
-`define('BOOTSTRAP_ADMIN_CHOSEN_JS', '1');'
-from '1' to '0'.
-
-
-If you like it and use it on your projects, please consider donating @ http://aristeides.com 
+If you like this plugin and use it on your projects, please consider donating @ http://aristeides.com 
 
 == Installation ==
 
@@ -62,18 +45,45 @@ from '0' to '1'.
 
 == Screenshots ==
 
-1. Fresh wordpress installation with the bootstrap admin enabled
-2. The submenu popovers
+1. The Dashboard with the submenu popovers visible
+2. New Post screenshot
 
 
 == Changelog ==
 
-= 1.02 =
-* Widgets screen css fix
+= 1.13 =
+* Fixed issue with Jetpack's "Feedback" icon
+* Added icon for Yoast SEO
+* Added icon for Advanced Custom Fields
+* Added icon for WordFence
+* Fixing labels issue on Advanced Custom Fields
 
-= 1.01 =
-* CSS Bugfixes
-* De-activating chosen.js
+= 1.12 =
+* Updated the [Elusive-Icons](http://aristath.github.com/elusive-iconfont/) webfont
+* Bugfixes
+
+= 1.11 =
+* Fixes the remove tags symbol on the posts editing page
+
+= 1.10 =
+* Replacing [Font-Awesome](http://fortawesome.github.com/Font-Awesome/) with [Elusive-Icons](http://aristath.github.com/elusive-iconfont/) due to [licencing issues](http://make.wordpress.org/plugins/2012/12/20/gpl-and-the-repository/)
+* Added menu icon for [easy-digital-downloads](http://wordpress.org/extend/plugins/easy-digital-downloads/)
+* Fixed conflict with the [WPMU DEV Dashboard](http://premium.wpmudev.org/project/wpmu-dev-dashboard/) plugin
+
+= 1.05 =
+* Better styling for buttons
+* override WordPress's wp_default_styles function
+* tags as labels
+* set featured image link as large button
+* the "add new category" link is now a button
+* fixes thumbnails in media browser
+
+= 1.03 =
+* Supports collapsed mode
+* Added icons for bbpress
+
+= 1.02 =
+* Bugfixes
 
 = 1.0 =
 * CAUTION: ONLY UPDATE TO 1.0 IF YOU ARE USING WORDPRESS 3.5 AND ABOVE
