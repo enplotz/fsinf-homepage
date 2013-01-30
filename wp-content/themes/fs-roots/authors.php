@@ -15,29 +15,38 @@ get_header(); ?>
 
         <!-- Authors Details here -->
         <ul class="unstyled">
-        <?php
+<?php
 
-			// Get the authors from the database ordered by user nicename
-			global $wpdb;
-			$query = "SELECT ID, user_nicename from $wpdb->users ORDER BY user_nicename";
-			$author_ids = $wpdb->get_results($query);
+  // Get the authors from the database ordered by user nicename
+  global $wpdb;
+  $query = "SELECT ID, user_nicename from $wpdb->users ORDER BY user_nicename";
+  $author_ids = $wpdb->get_results($query);
 
-			// Loop through each author
-			foreach($author_ids as $author) :
+  // Loop through each author
+  foreach($author_ids as $author) :
 
-			// Get user data
-			$curauth = get_userdata($author->ID);
+    // Get user data
+    $curauth = get_userdata($author->ID);
+    $cur_capabilities = $curauth->wp_capabilities;
 
-			// If user level is above 0 or login name is "admin", display profile
-      // All above Contributor (excl.)
-			if($curauth->user_level > 1 && !($curauth->user_login == 'admin')) :
+    $is_fs_member = (
+      array_key_exists('fs_manager', $cur_capabilities)
+      ||
+      array_key_exists('administrator', $cur_capabilities)
+      ||
+      array_key_exists('fs_mitglied', $cur_capabilities)
+      ||
+      array_key_exists('editor', $cur_capabilities)
+      );
 
-			// Get link to author page
-			$user_link = get_author_posts_url($curauth->ID);
+    // display only above defined user roles
+		if($is_fs_member && !($curauth->user_login == 'admin')) :
 
-			// Set default avatar (values = default, wavatar, identicon, monsterid)
-			$avatar = 'wavatar';
-		?>
+		// Get link to author page
+		$user_link = get_author_posts_url($curauth->ID);
+		// Set default avatar (values = default, wavatar, identicon, monsterid)
+		$avatar = 'wavatar';
+?>
 
 		<li class="authors-page" id="<?= $curauth->user_login ?>">
 			<header>
