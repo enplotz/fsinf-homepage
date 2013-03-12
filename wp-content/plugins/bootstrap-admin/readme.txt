@@ -3,8 +3,8 @@ Contributors: aristath, fovoc
 Donate link: http://aristeides.com/bootstrap-admin
 Tags: administration, administration theme, admin theme, dashboard, bootstrap
 Requires at least: 3.5
-Tested up to: 3.5
-Stable tag: 1.13
+Tested up to: 3.5.1
+Stable tag: 1.16.2
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,17 @@ from '0' to '1'.
 
 
 == Changelog ==
+
+= 1.16.2 =
+* Downgraded Bootstrap js. Bootstrap v2.3.0 has a few bugs that caused the popups in our 2 last updates to really get messed-up. They now work the way they were working on versions prior to 1.15
+
+= 1.16 =
+* Fixed bug introduced in 1.15
+* Simplified Popovers (Now CSS instead of jQuery)
+
+= 1.15 =
+* Updated Bootstrap to 2.3.0
+* Tweaked the popover title css
 
 = 1.13 =
 * Fixed issue with Jetpack's "Feedback" icon

@@ -5,7 +5,7 @@ Plugin Name: Bootstrap Admin
 Plugin URI: http://shoestrap.org
 Description: Bootstrap Admin Theme
 Author: Aristeides Stathopoulos
-Version: 1.13
+Version: 1.16.2
 Author URI: http://aristeides.com
 */
 

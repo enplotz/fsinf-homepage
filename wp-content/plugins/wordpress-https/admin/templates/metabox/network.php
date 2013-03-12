@@ -1,5 +1,6 @@
-<form name="<?php echo $this->getPlugin()->getSlug(); ?>_settings_form" id="<?php echo $this->getPlugin()->getSlug(); ?>_settings_form" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
-<?php settings_fields($this->getPlugin()->getSlug()); ?>
+<form name="<?php echo $this->getPlugin()->getSlug(); ?>_network_settings_form" id="<?php echo $this->getPlugin()->getSlug(); ?>_network_settings_form" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
+<?php wp_nonce_field($this->getPlugin()->getSlug()); ?>
+<input type="hidden" name="action" id="action" value="" />
 
 <table id="blog-table">
 	<thead>
@@ -26,7 +27,7 @@
 	<tr>
 		<td class="blog-blog"><strong><?php echo preg_replace('/http[s]?:\/\//', '', get_site_url($blog_id)); ?></strong></td>
 		<td class="blog-host"><input name="blog[<?php echo $blog_id; ?>][ssl_host]" type="text" class="regular-text code" value="<?php echo $ssl_host; ?>" /></td>
-		<td class="blog-ssl_admin"><input type="hidden" name="blog[<?php echo $blog_id; ?>][ssl_admin]" value="0" /><input name="blog[<?php echo $blog_id; ?>][ssl_admin]" type="checkbox" value="1"<?php echo ((force_ssl_admin()) ? ' disabled="disabled" title="FORCE_SSL_ADMIN is true in wp-config.php"' : (($this->getPlugin()->getSetting('ssl_admin', $blog_id)) ? ' checked="checked"' : '') ); ?> /></td>
+		<td class="blog-ssl_admin"><input type="hidden" name="blog[<?php echo $blog_id; ?>][ssl_admin]" value="<?php echo ((force_ssl_admin() && $this->getPlugin()->getSetting('ssl_admin', $blog_id) == 1) ? 1 : 0); ?>" /><input name="blog[<?php echo $blog_id; ?>][ssl_admin]" type="checkbox" value="1"<?php echo ((force_ssl_admin()) ? ' disabled="disabled" title="FORCE_SSL_ADMIN is true in wp-config.php"' : '') . ($this->getPlugin()->getSetting('ssl_admin', $blog_id) ? ' checked="checked"' : ''); ?> /></td>
 		<td class="blog-exclusive_https"><input type="hidden" name="blog[<?php echo $blog_id; ?>][exclusive_https]" value="0" /><input name="blog[<?php echo $blog_id; ?>][exclusive_https]" type="checkbox" value="1"<?php echo (($this->getPlugin()->getSetting('exclusive_https', $blog_id)) ? ' checked="checked"' : ''); ?> /></td>
 		<td class="blog-remove_unsecure"><input type="hidden" name="blog[<?php echo $blog_id; ?>][remove_unsecure]" value="0" /><input name="blog[<?php echo $blog_id; ?>][remove_unsecure]" type="checkbox" value="1"<?php echo (($this->getPlugin()->getSetting('remove_unsecure', $blog_id)) ? ' checked="checked"' : ''); ?> /></td>
 		<td class="blog-debug"><input type="hidden" name="blog[<?php echo $blog_id; ?>][debug]" value="0" /><input name="blog[<?php echo $blog_id; ?>][debug]" type="checkbox" value="1"<?php echo (($this->getPlugin()->getSetting('debug', $blog_id)) ? ' checked="checked"' : ''); ?> /></td>
@@ -80,8 +81,6 @@
 
 </table>
 
-<input type="hidden" name="action" value="wphttps-network" />
-
 <p class="button-controls">
 	<input type="submit" name="network-settings-save" value="<?php _e('Save Changes','wordpress-https'); ?>" class="button-primary" id="network-settings-save" />
 	<img alt="<?php _e('Waiting...','wordpress-https'); ?>" src="<?php echo admin_url('/images/wpspin_light.gif'); ?>" class="waiting submit-waiting" />
@@ -89,14 +88,17 @@
 </form>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	$('#<?php echo $this->getPlugin()->getSlug(); ?>_settings_form').submit(function() {
-		$('#<?php echo $this->getPlugin()->getSlug(); ?>_settings_form .submit-waiting').show();
-	}).ajaxForm({
-		data: { ajax: '1'},
-		success: function(responseText, textStatus, XMLHttpRequest) {
-			$('#<?php echo $this->getPlugin()->getSlug(); ?>_settings_form .submit-waiting').hide();
-			$('#message-body').html(responseText).fadeOut(0).fadeIn().delay(5000).fadeOut();
-		}
+	var form = $('#<?php echo $this->getPlugin()->getSlug(); ?>_network_settings_form').first();
+	$('#network-settings-save').click(function() {
+		$(form).find('input[name="action"]').val('<?php echo $this->getPlugin()->getSlug(); ?>_network_settings_save');
+	});
+	$(form).submit(function(e) {
+		e.preventDefault();
+		$(form).find('.submit-waiting').show();
+		$.post(ajaxurl, $(form).serialize(), function(response) {
+			$(form).find('.submit-waiting').hide();
+			$('#message-body').html(response).fadeOut(0).fadeIn().delay(5000).fadeOut();
+		});
 	});
 });
 </script>

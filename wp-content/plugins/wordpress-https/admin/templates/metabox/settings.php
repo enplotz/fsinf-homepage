@@ -8,7 +8,8 @@
 	$ssl_host = rtrim($ssl_host, '/');
 ?>
 <form name="<?php echo $this->getPlugin()->getSlug(); ?>_settings_form" id="<?php echo $this->getPlugin()->getSlug(); ?>_settings_form" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
-<?php settings_fields($this->getPlugin()->getSlug()); ?>
+<?php wp_nonce_field($this->getPlugin()->getSlug()); ?>
+<input type="hidden" name="action" id="action" value="" />
 
 <table class="form-table">
 	<tr valign="top" id="ssl_host_row">
@@ -29,7 +30,7 @@
 		<td>
 			<fieldset>
 				<label for="ssl_admin">
-					<input type="hidden" name="ssl_admin" value="0" />
+					<input type="hidden" name="ssl_admin" value="<?php echo ((force_ssl_admin() && $this->getPlugin()->getSetting('ssl_admin') == 1) ? 1 : 0); ?>" />
 					<input name="ssl_admin" type="checkbox" id="ssl_admin" value="1"<?php echo ((force_ssl_admin()) ? ' checked="checked" disabled="disabled" title="FORCE_SSL_ADMIN is true in wp-config.php"' : (($this->getPlugin()->getSetting('ssl_admin')) ? ' checked="checked"' : '') ); ?> />
 					<p class="description"><?php printf( __('Always use HTTPS while in the admin panel. This setting is identical to %s FORCE_SSL_ADMIN','wordpress-https'),'<a href="http://codex.wordpress.org/Administration_Over_SSL#Example_2" target="_blank">'); ?></a>.</p>
 				</label>
@@ -43,7 +44,7 @@
 				<label for="exclusive_https">
 					<input type="hidden" name="exclusive_https" value="0" />
 					<input name="exclusive_https" type="checkbox" id="exclusive_https" value="1"<?php echo (($this->getPlugin()->getSetting('exclusive_https')) ? ' checked="checked"' : ''); ?> />
-                                        <p class="description"><?php printf( __('Any page that is not secured via %s Force SSL %s or URL Filters will be redirected to HTTP.','wordpress-https'),'<a href="' . parse_url($this->getPlugin()->getPluginUrl(), PHP_URL_PATH) . '/screenshot-2.png" class="thickbox">', '</a> '); ?></a>.</p>
+					<p class="description"><?php printf( __('Any page that is not secured via %s Force SSL %s or URL Filters will be redirected to HTTP.','wordpress-https'),'<a href="' . parse_url($this->getPlugin()->getPluginUrl(), PHP_URL_PATH) . '/screenshot-2.png" class="thickbox">', '</a> '); ?></a></p>
 				</label>
 			</fieldset>
 		</td>
@@ -100,7 +101,6 @@
 	</tr>
 </table>
 
-<input type="hidden" name="action" value="wphttps-settings" />
 <input type="hidden" name="ssl_host_subdomain" value="<?php echo (($this->getPlugin()->getSetting('ssl_host_subdomain') != 1) ? 0 : 1); ?>" />
 <input type="hidden" name="ssl_host_diff" value="<?php echo (($this->getPlugin()->getSetting('ssl_host_diff') != 1) ? 0 : 1); ?>" />
 
@@ -112,15 +112,28 @@
 </form>
 <script type="text/javascript">
 jQuery(document).ready(function($) {
-	$('#<?php echo $this->getPlugin()->getSlug(); ?>_settings_form').submit(function() {
-		$('#<?php echo $this->getPlugin()->getSlug(); ?>_settings_form .submit-waiting').show();
-	}).ajaxForm({
-		data: { ajax: '1'},
+	var form = $('#<?php echo $this->getPlugin()->getSlug(); ?>_settings_form').first();
+	$('#settings-save').click(function() {
+		$(form).find('input[name="action"]').val('<?php echo $this->getPlugin()->getSlug(); ?>_settings_save');
+	});
+	$('#settings-reset').click(function() {
+		$(form).find('input[name="action"]').val('<?php echo $this->getPlugin()->getSlug(); ?>_settings_reset');
+	});
+	$(form).submit(function(e) {
+		e.preventDefault();
+		$(form).find('.submit-waiting').show();
+		$.post(ajaxurl, $(form).serialize(), function(response) {
+			$(form).find('.submit-waiting').hide();
+			$('#message-body').html(response).fadeOut(0).fadeIn().delay(5000).fadeOut();
+		});
+	});
+
+	/*.ajaxForm({
 		success: function(responseText, textStatus, XMLHttpRequest) {
 			$('#<?php echo $this->getPlugin()->getSlug(); ?>_settings_form .submit-waiting').hide();
 			$('#message-body').html(responseText).fadeOut(0).fadeIn().delay(5000).fadeOut();
 		}
-	});
+	});*/
 
 	$('#settings-reset').click(function(e, el) {
 	   if ( ! confirm('<?php _e('Are you sure you want to reset all WordPress HTTPS settings?','wordpress-https'); ?>') ) {

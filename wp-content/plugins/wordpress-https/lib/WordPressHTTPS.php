@@ -95,19 +95,22 @@ class WordPressHTTPS extends Mvied_Plugin {
 	 */
 	public function getHttpsUrl() {
 		if ( !isset($this->_https_url) ) {
-			$this->_https_url = WordPressHTTPS_Url::fromString('https://' . parse_url(get_bloginfo('template_url'), PHP_URL_HOST) . parse_url(home_url('/'), PHP_URL_PATH));
+			$this->_https_url = clone $this->getHttpUrl();
+			$this->_https_url->setScheme('https');
 
-			// If using a different host for SSL
-			if ( is_string($this->getSetting('ssl_host')) && $this->getSetting('ssl_host') != '' && $this->getSetting('ssl_host') != $this->_https_url->toString() ) {
-				// Assign HTTPS URL to SSL Host
-				$this->setSetting('ssl_host_diff', 1);
+			if ( is_string($this->getSetting('ssl_host')) && $this->getSetting('ssl_host') != '' ) {
 				$ssl_host = rtrim($this->getSetting('ssl_host'), '/') . '/';
-				if ( strpos($ssl_host, 'http://') === false && strpos($ssl_host, 'https://') === false ) {
-					$ssl_host = 'https://' . $ssl_host;
+				// If using a different host for SSL
+				if ( $ssl_host != $this->_https_url->toString() ) {
+					// Assign HTTPS URL to SSL Host
+					$this->setSetting('ssl_host_diff', 1);
+					if ( strpos($ssl_host, 'http://') === false && strpos($ssl_host, 'https://') === false ) {
+						$ssl_host = 'https://' . $ssl_host;
+					}
+					$this->_https_url = WordPressHTTPS_Url::fromString( $ssl_host );
+				} else {
+					$this->setSetting('ssl_host_diff', 0);
 				}
-				$this->_https_url = WordPressHTTPS_Url::fromString( $ssl_host );
-			} else {
-				$this->setSetting('ssl_host_diff', 0);
 			}
 
 			// Prepend SSL Host path
@@ -121,7 +124,27 @@ class WordPressHTTPS extends Mvied_Plugin {
 
 		return $this->_https_url;
 	}
-	
+
+	/**
+	 * Get domains local to the WordPress installation.
+	 * 
+	 * @param none
+	 * @return array $hosts Array of domains local to the WordPress installation.
+	 */
+	public function getLocalDomains() {
+		global $wpdb;
+		$hosts = array(
+			$this->getHttpUrl()->getHost(),
+			$this->getHttpsUrl()->getHost()
+		);
+
+		if ( is_multisite() && is_subdomain_install() ) {
+			$multisite_hosts = $wpdb->get_col($wpdb->prepare("SELECT domain FROM " . $wpdb->blogs, NULL));
+			$hosts = array_merge($hosts, $multisite_hosts);
+		}
+		return $hosts;
+	}
+
 	/**
 	 * Initialize
 	 *
@@ -163,7 +186,11 @@ class WordPressHTTPS extends Mvied_Plugin {
 			foreach ( $this->getSettings() as $option => $value ) {
 				if ( is_multisite() ) {
 					if ( add_blog_option($blog_id, $option, $value) && isset($defaults[$option]) ) {
-						$value = $defaults[$option];
+						if ( $option == 'ssl_host' && strpos($value, 'https://') !== 0 ) {
+							$value = 'https://' . rtrim($defaults[$option], '/') . '/';
+						} else {
+							$value = $defaults[$option];
+						}
 						$this->setSetting($option, $value, $blog_id);
 					}
 				} else {
@@ -195,17 +222,9 @@ class WordPressHTTPS extends Mvied_Plugin {
 			}
 		}
 
-		// Checks to see if the SSL Host is a subdomain
-		$http_domain = $this->getHttpUrl()->getBaseHost();
-		$https_domain = $this->getHttpsUrl()->getBaseHost();
-
-		if ( $this->getHttpsUrl()->setScheme('http')->toString() != $this->getHttpUrl()->toString() && $http_domain == $https_domain ) {
-			$subdomain = true;
-		} else {
-			$subdomain = false;
-		}
+		$is_subdomain = $this->getHttpsUrl()->isSubdomain($this->getHttpUrl());
 		foreach ( $blogs as $blog_id ) {
-			$this->setSetting('ssl_host_subdomain', $subdomain, $blog_id);
+			$this->setSetting('ssl_host_subdomain', $is_subdomain, $blog_id);
 		}
 	}
 
@@ -218,7 +237,8 @@ class WordPressHTTPS extends Mvied_Plugin {
 	 * @return boolean
 	 */
 	public function isUrlLocal($url) {
-		if ( ($url_parts = parse_url($url)) && isset($url_parts['host']) && $this->getHttpUrl()->getHost() != $url_parts['host'] && $this->getHttpsUrl()->getHost() != $url_parts['host'] ) {
+		$hosts = $this->getLocalDomains();
+		if ( ($url_parts = parse_url($url)) && isset($url_parts['host']) && !in_array($url_parts['host'], $hosts) ) {
 			return false;
 		}
 		return true;
