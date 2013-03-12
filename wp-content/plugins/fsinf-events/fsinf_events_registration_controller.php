@@ -31,14 +31,19 @@ function send_registration_mail($fields){
 
   $message = array();
   $message[] = "Yay! Du hast dich soeben erfolgreich zum Event ". $current_event->title . " am ".strftime('%d.%m.%Y',strtotime($current_event->starts_at))." angemeldet.";
-  $message[] = "";
-  $message[] = "Bitte überweise $fee auf unten stehendes Konto.";
+  if($fields['semester'] <= 2):
+    $message[] = "Bitte überweise $fee auf unten stehendes Konto.";
+  else :
+    $message[] = "Da Erstis bevorzugt werden, bist du noch nicht freigeschaltet. Wir setzen uns mit dir in Verbindung, wenn am Ende noch genug Plätze frei sein sollten.";
+    $message[] = "Deshalb warte bitte noch mit dem Überweisen bis wir dich für die Teilnahme freigeschaltet haben.";
+  endif;
   $message[] = "\n";
   $message[] = "==== Konto";
   $message[] = "Inhaber:\t" . get_option( "konto_inhaber" );
   $message[] = "Kontonummer:\t". get_option( "konto_nummer" );
-  $message[] = "BLZ:\t". get_option( "konto_bankleitzahl" );
+  $message[] = "BLZ:\t\t". get_option( "konto_bankleitzahl" );
   $message[] = "Institut:\t". get_option( "konto_institut" );
+  $message[] = "Betrag:\t\t". $fee;
   $message[] = "=============";
   $message[] = "\n";
   $message[] = "Deine Daten";
@@ -86,27 +91,33 @@ function send_registration_mail($fields){
 
 function fsinf_print_success_message(){
   $current_event = fsinf_get_current_event();
+  $registration_data = fsinf_get_registration_params();
   $fee = formatted_fee_for($current_event);
 ?>  <div class="alert alert-success alert-block">
       <a href="#" class="close" data-dismiss="alert">×</a>
       <h4>Erfolgreich angemeldet!</h4>
       <p>Du hast dich soeben erfolgreich für das Event
         <b><?=htmlspecialchars($current_event->title)?></b> am <?= strftime('%d.%m.%Y',strtotime($current_event->starts_at)) ?> angemeldet.</p>
+<?php if($registration_data['semester'] <= 2): ?>
         <p>Bitte zahle die Teilnahmegebühr von <b><?=$fee?></b> auf untenstehendes Konto ein.</p>
+<?php else : ?>
+    <p>Da Erstis bevorzugt werden, bist du noch nicht freigeschaltet. Wir setzen uns mit dir in Verbindung, wenn am Ende noch genug Plätze frei sein sollten.
+       Deshalb warte bitte noch mit dem Überweisen bis wir dich für die Teilnahme freigeschaltet haben.
+    </p>
+<?php endif; ?>
     </div>
         <h4>Kontodaten</h4>
-        <dt>Inhaber</dt><dd> <?= get_option( "konto_inhaber" ); ?></dd>
+              <dt>Inhaber</dt><dd> <?= get_option( "konto_inhaber" ); ?></dd>
               <dt>Kontonummer</dt><dd><?= get_option( "konto_nummer" ); ?></dd>
               <dt>BLZ</dt><dd><?= get_option( "konto_bankleitzahl" ); ?></dd>
               <dt>Institut</dt><dd> <?= get_option( "konto_institut" ); ?></dd>
+              <dt>Betrag</dt><dd><?=$fee?></dd>
+        <h4>Deine Registrierungsinformationen</h4>
         <p>Folgende Informationen
         wurden dir auch an
         <b>
           <?= array_key_exists('mail_address',$_POST) ? htmlspecialchars($_POST['mail_address']) : 'keine E-Mail-Adresse angegeben?' ?>
         </b> gesendet:
- <?php
-        $registration_data = fsinf_get_registration_params();
-?>
         <dl>
           <dt>Name</dt>
           <dd><?= htmlspecialchars($registration_data['first_name'])?> <?= htmlspecialchars($registration_data['last_name'])?></dd>

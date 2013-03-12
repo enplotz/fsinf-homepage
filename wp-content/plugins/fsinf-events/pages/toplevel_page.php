@@ -52,7 +52,17 @@ function fsinf_events_toplevel_page() {
             foreach ($admitted_registrations as $registrant) {
               $number_seats_admitted += $registrant->car_seats;
             }
-?>          <ul>
+?>          <div class="row">
+            <div class="span4">
+<?php
+            if ($number_seats_admitted >= $number_admitted_registrations):
+?>            <p class="alert alert-success">Genug Sitzplätze</p>
+<?php       else:
+?>            <p class="alert alert-error">Nicht genug Sitzplätze</p>
+<?php
+            endif;
+?>
+            <ul>
               <li>Teilnahmegebühr: <?= formatted_fee_for($current_event); ?></li>
               <li>Maximale Teilnehmerzahl: <?= $current_event->max_participants ?></li>
               <li>Anzahl Teilnahmen insgesamt: <?= $number_registrations ?></li>
@@ -60,20 +70,14 @@ function fsinf_events_toplevel_page() {
               <li>Anzahl Sitzplätze insgesamt: <?= $number_seats ?></li>
               <li>Anzahl Sitzplätze zugelassen: <?= $number_seats_admitted ?></li>
             </ul>
-<?php
-            if ($number_seats_admitted >= $number_admitted_registrations):
-?>            <p class="alert alert-success span3">Genug Sitzplätze</p>
-<?php       else:
-?>            <p class="alert alert-error span3">Nicht genug Sitzplätze</p>
-<?php
-            endif;
-?>
+          </div>
             <dl class="span4">
               <dt>Inhaber</dt><dd> <?= get_option( "konto_inhaber" ); ?></dd>
               <dt>Kontonummer</dt><dd><?= get_option( "konto_nummer" ); ?></dd>
               <dt>BLZ</dt><dd><?= get_option( "konto_bankleitzahl" ); ?></dd>
               <dt>Institut</dt><dd> <?= get_option( "konto_institut" ); ?></dd>
             </dl>
+          </div> <!-- END row -->
 <?php
             if ($number_registrations > 0) {
 ?>
