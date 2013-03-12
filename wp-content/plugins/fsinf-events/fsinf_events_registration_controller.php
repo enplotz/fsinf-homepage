@@ -30,7 +30,7 @@ function send_registration_mail($fields){
   $semester_string .= $fields['bachelor'] == 1 ? 'Bachelor' : 'Master';
 
   $message = array();
-  $message[] = "Yay! Du hast dich soeben erfolgreich zum Event ". $current_event->title ." angemeldet.";
+  $message[] = "Yay! Du hast dich soeben erfolgreich zum Event ". $current_event->title . " am ".strftime('%d.%m.%Y',strtotime($current_event->starts_at))." angemeldet.";
   $message[] = "";
   $message[] = "Bitte überweise $fee auf unten stehendes Konto.";
   $message[] = "\n";
@@ -91,7 +91,7 @@ function fsinf_print_success_message(){
       <a href="#" class="close" data-dismiss="alert">×</a>
       <h4>Erfolgreich angemeldet!</h4>
       <p>Du hast dich soeben erfolgreich für das Event
-        <b><?=htmlspecialchars($current_event->title)?></b> angemeldet.</p>
+        <b><?=htmlspecialchars($current_event->title)?></b> am <?= strftime('%d.%m.%Y',strtotime($current_event->starts_at)) ?> angemeldet.</p>
         <p>Bitte zahle die Teilnahmegebühr von <b><?=$fee?></b> auf untenstehendes Konto ein.</p>
     </div>
         <h4>Kontodaten</h4>

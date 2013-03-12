@@ -1,21 +1,37 @@
 <?php
 function fsinf_all_events_page() {
 
+  // Process requests
+  if (array_key_exists('fsinf_remove_event', $_POST)){
+    fsinf_remove_event();
+  }
     $current_event = fsinf_get_current_event();
     ?>
     <h2>Alle Events</h2>
     <div class="row">
       <div class="span12">
+<?php if(is_null($current_event)) { ?>
+        <div class="alert alert-info">
+          <a class="close" data-dismiss="alert">×</a>
+          <p>Aktuell ist kein Event eingetragen.</p>
+        </div>
+<?php } else { ?>
         <h3>Aktuelles Event: <?= $current_event->title ?> <small>am <?php setlocale(LC_TIME, "de_DE"); echo strftime("%d. %b %G",strtotime(htmlspecialchars($current_event->starts_at)))?></h3>
       </div>
+<?php } ?>
       <div class="span12">
 <?php
-      // Process requests
-      if (array_key_exists('fsinf_remove_event', $_POST)){
-        fsinf_remove_event();
-      }
 ?>
+<?php $coming_events = fsinf_get_coming_events(5); ?>
         <h3>Kommende 5 Events</h3>
+
+<?php
+if(sizeOf($coming_events) == 0) : ?>
+          <div class="alert alert-info">
+            <a class="close" data-dismiss="alert">×</a>
+            <p>Aktuell gibt es keine kommenden Events.</p>
+          </div>
+<?php else : ?>
         <table class="table table-hover">
           <thead>
             <tr>
@@ -32,7 +48,6 @@ function fsinf_all_events_page() {
           </thead>
           <tbody>
 <?php
-          $coming_events = fsinf_get_coming_events(5);
           foreach ($coming_events as $event) :
 ?>
             <tr>
@@ -55,6 +70,7 @@ function fsinf_all_events_page() {
 ?>
           </tbody>
         </table>
+<?php endif; ?>
       </div>
       <div class="span12">
         <h3>Vergangene 5 Events</h3>

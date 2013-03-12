@@ -151,13 +151,13 @@ function fsinf_get_registrations()
 {
   global $wpdb;
   $current_event = fsinf_get_current_event();
+
   $results = $wpdb->get_results(
-    $wpdb->prepare(sprintf(
+    $wpdb->prepare(
       "SELECT  mail_address, event_id, first_name, last_name, mobile_phone, semester, bachelor, has_car, has_tent, car_seats, tent_size, notes, admitted, paid
-       FROM  %s
+       FROM  ".FSINF_PARTICIPANTS_TABLE."
        WHERE  event_id = %d
-      ", FSINF_PARTICIPANTS_TABLE, $current_event->id
-      )
+      ", $current_event->id
     )
     );
        #ORDER BY semester ASC
@@ -167,26 +167,25 @@ function fsinf_get_registrations()
 function fsinf_get_coming_events($count)
 {
   global $wpdb;
-  return $wpdb->get_results($wpdb->prepare(sprintf(
+  return $wpdb->get_results($wpdb->prepare(
     "SELECT id, title, place, starts_at, ends_at, description, camping, max_participants, fee
-     FROM %s
+     FROM ".FSINF_EVENTS_TABLE."
      WHERE starts_at > NOW()
      ORDER BY starts_at ASC
      LIMIT %d",
-    FSINF_EVENTS_TABLE, $count
-  )));
+     $count
+  ));
 }
 function fsinf_get_past_events($count)
 {
   global $wpdb;
-  return $wpdb->get_results($wpdb->prepare(sprintf(
+  return $wpdb->get_results($wpdb->prepare(
     "SELECT id, title, place, starts_at, ends_at, description, camping, max_participants, fee
-     FROM %s
+     FROM ".FSINF_EVENTS_TABLE."
      WHERE starts_at < NOW()
      ORDER BY ends_at DESC
-     LIMIT %d",
-    FSINF_EVENTS_TABLE, $count
-  )));
+     LIMIT %d", $count
+  ));
 }
 
 function fsinf_remove_event()
@@ -194,11 +193,11 @@ function fsinf_remove_event()
   if (is_admin()){
     if (array_key_exists('fsinf_remove_event', $_POST)){
       global $wpdb;
-      $ok = $wpdb->query($wpdb->prepare(sprintf(
-        "DELETE FROM %s
+      $ok = $wpdb->query($wpdb->prepare(
+        "DELETE FROM ".FSINF_EVENTS_TABLE."
          WHERE id = %d
-        ", FSINF_EVENTS_TABLE, $_POST['fsinf_remove_event']
-        )));
+        ", $_POST['fsinf_remove_event']
+        ));
       if($ok):
 ?>
       <div class="alert alert-success">

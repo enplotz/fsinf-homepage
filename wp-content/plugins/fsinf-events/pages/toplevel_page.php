@@ -22,9 +22,18 @@ function fsinf_events_toplevel_page() {
 </div>
 <div class="row">
     <div id="fsinf-events-list" class="span8">
-      <?php
-          $current_event = fsinf_get_current_event();
-      ?>
+<?php
+  $current_event = fsinf_get_current_event();
+
+  if(is_null($current_event)) {
+?>  <div class="alert alert-info">
+      <a class="close" data-dismiss="alert">×</a>
+      <p>Aktuell ist kein Event eingetragen.</p>
+    </div>
+<?php
+  return;
+  }
+?>
             <h3>Aktuelles Event: <?= htmlspecialchars($current_event->title)?> <small>am <?php setlocale(LC_TIME, "de_DE"); echo strftime("%d. %b %G",strtotime(htmlspecialchars($current_event->starts_at)))?></small></h3>
 <?php
 

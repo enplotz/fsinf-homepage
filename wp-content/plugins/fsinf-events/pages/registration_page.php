@@ -123,7 +123,7 @@ $selected = !empty($errors) && array_key_exists($field_name, $_POST);
 <?php
 $field_name = 'car_seats';
 ?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
-          <label class="control-label" for="<?=$field_name?>">Wie viele Plätze im Auto? Inkl. Fahrer</label>
+          <label class="control-label" for="<?=$field_name?>">Wie viele Plätze im Auto? Inkl. Fahrer.</label>
           <div class="controls">
             <input type="number" name="<?=$field_name?>" id="<?=$field_name?>" value="<?= fsinf_field_contents($field_name, $errors) ?>" placeholder="z.B. 5" min="1" max="127"/>
             <span class="help-inline"><?= @$errors[$field_name] ?></span>
@@ -145,7 +145,7 @@ $selected = !empty($errors) && array_key_exists($field_name, $_POST);
 <?php
 $field_name = 'tent_size';
 ?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
-          <label class="control-label" for="<?=$field_name?>">Wie viele Plätze im Zelt? Inkl. Fahrer</label>
+          <label class="control-label" for="<?=$field_name?>">Wie viele Plätze im Zelt? Inkl. Besitzer.</label>
           <div class="controls">
             <input type="number" name="<?=$field_name?>" id="<?=$field_name?>" value="<?= fsinf_field_contents($field_name, $errors) ?>" placeholder="z.B. 4" min="1" max="127"/>
             <span class="help-inline"><?= @$errors[$field_name] ?></span>
