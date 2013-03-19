@@ -20,7 +20,7 @@ function fsinf_events_install() {
                             description TEXT NOT NULL ,
                             camping TINYINT( 1 ) NOT NULL,
                             max_participants MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
-                            fee MEDIUMINT UNSIGNED NOT NULL DEFAULT 0,
+                            fee MEDIUMINT UNSIGNED NOT NULL DEFAULT 0
                             ) ENGINE = INNODB CHARACTER SET utf8 COLLATE utf8_unicode_ci;
   ";
   dbDelta($sql_fsinf_events_table);
