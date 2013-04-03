@@ -11,16 +11,25 @@ global $userMeta;
         <div class="metabox-holder">
             <div id="um_admin_content">
                 <?php $userMeta->renderPro( "activationForm", null, "settings" ); ?>
-                <?php //echo __( 'User Meta Test' ); ?>
+                <?php
+                $isPro = $userMeta->isPro();
+                $title = array(
+                    'general'       => __( 'General', $userMeta->name ),
+                    'login'         => $isPro ? __( 'Login', $userMeta->name ) : '<span class="pf_blure">'.__( 'Login', $userMeta->name ).'</span>',
+                    'registration'  => $isPro ? __( 'Registration', $userMeta->name ) : '<span class="pf_blure">'.__( 'Registration', $userMeta->name ).'</span>',
+                    'redirection'   => $isPro ? __( 'Redirection', $userMeta->name ) : '<span class="pf_blure">'.__( 'Redirection', $userMeta->name ).'</span>',
+                    'profile'       => $isPro ? __( 'Backend Profile', $userMeta->name ) : '<span class="pf_blure">'.__( 'Backend Profile', $userMeta->name ).'</span>',
+                );
+                ?>
             
                 <form id="um_settings_form" action="" method="post" onsubmit="umUpdateSettings(this); return false;" >
                 <div id="um_settings_tab">
                 	<ul>
-                		<li><a href="#um_settings_general"><?php _e( 'General', $userMeta->name ); ?></a></li>     
-                		<li><a href="#um_settings_login"><?php _e( 'Login', $userMeta->name ); ?></a></li>
-                        <li><a href="#um_settings_registration"><?php _e( 'Registration', $userMeta->name ); ?></a></li>
-                        <li><a href="#um_settings_redirection"><?php _e( 'Redirection', $userMeta->name ); ?></a></li>
-                        <li><a href="#um_settings_backend_profile"><?php _e( 'Backend Profile', $userMeta->name ); ?></a></li>
+                        <li><a href="#um_settings_general"><?php echo $title['general']; ?></a></li>     
+                        <li><a href="#um_settings_login"><?php echo $title['login']; ?></a></li>
+                        <li><a href="#um_settings_registration"><?php echo $title['registration']; ?></a></li>
+                        <li><a href="#um_settings_redirection"><?php echo $title['redirection']; ?></a></li>
+                        <li><a href="#um_settings_backend_profile"><?php echo $title['profile']; ?></a></li>
                         <!--<li><a href="#um_settings_misc"><?php //_e( 'Misc', $userMeta->name ); ?></a></li>-->
                 	</ul>  
                                                                
@@ -74,13 +83,15 @@ global $userMeta;
                         <?php
                         /*echo $userMeta->renderPro( "miscSettings", array(
                             'misc'   => isset( $settings[ 'misc' ] ) ? $settings[ 'misc' ] : $default[ 'misc' ],
-                        ), "settings" );  */                          
+                        ), "settings" ); */                        
                         ?>
-                    </div>-->                      
+                    </div>-->                    
                                                                                                           
                 </div>
                 
                 <?php
+                echo $userMeta->nonceField();
+                
                 echo $userMeta->createInput( "save_field", "submit", array(
                     "value" => __( "Save Changes", $userMeta->name ),
                     "id"    => "update_settings",
@@ -90,41 +101,7 @@ global $userMeta;
                 ?>                
                 
                 </form>
- 
-           
-            
-        
-            
-            
-                
-                
-                <?php                
-                /*$userMeta->renderPro( "settings", $settings, "settings" );
-                
-                $userMeta->renderPro( "loginSettings", array(
-                    'login' => isset( $settings[ 'login' ] ) ? $settings[ 'login' ] : $default[ 'login' ],
-                ), "settings" );
-                
-                $userMeta->renderPro( "redirection", array(
-                    'redirection' => isset( $settings[ 'redirection' ] ) ? $settings[ 'redirection' ] : $default[ 'redirection' ],
-                ), "settings" );                
-                
-                $userMeta->renderPro( "backendProfile", array(
-                    'settings'  => $settings,
-                    'forms'     => $forms,
-                    'fields'    => $fields
-                ), "settings" ); 
-                                
 
-                echo $userMeta->createInput( "save_field", "submit", array(
-                    "value" => "Save Changes",
-                    "id"    => "update_settings",
-                    "class" => "button-primary",
-                    "enclose"   => "p",
-                ) );   */                            
-                ?>
-                
-                </form>
             </div>
             
             <div id="um_admin_sidebar">                            
@@ -147,10 +124,10 @@ jQuery(function() {
         cursor: 'pointer'
     }).droppable({
         accept: '.button',
-        activeClass: 'um_highlight',
+        activeClass: 'um_highlight'
     });   
     //jQuery( "#accordion" ).accordion();  
     jQuery( "#um_settings_tab" ).tabs();
     
 });
-</script>   
+</script>

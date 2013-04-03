@@ -6,34 +6,48 @@ class PluginFrameworkWPSupport {
      * Generate nonce field
      */
     function nonceField(){
-        global $pluginFramework;
-        return wp_nonce_field( $pluginFramework->settingsArray('nonce'), 'pf_nonce', true, false );
+        global $pfInstance;
+        return $pfInstance->wp_nonce_field( $pfInstance->settingsArray('nonce'), 'pf_nonce', true, false );
     }        
             
-    function verifyNonce( $adminOnly=true ){
-        global $pluginFramework;
-        $nonce      = @$_REQUEST['pf_nonce'];
-        $nonceText  = $pluginFramework->settingsArray('nonce');
-        if( !wp_verify_nonce( $nonce, $nonceText ) ) die( __( 'Security check', $pluginFramework->name ) );     
+    function verifyNonce( $adminOnly=false ){
+        global $pfInstance;
+        
+        if( empty( $_REQUEST['pf_nonce'] ) ) die( 'Security check: empty nonce' );
+        
+        $nonce      = $_REQUEST['pf_nonce'];
+        $nonceText  = $pfInstance->settingsArray('nonce');
+        if( !wp_verify_nonce( $nonce, $nonceText ) ) die( 'Security check: nonce missmatch' );     
         
         if( $adminOnly ){
-            if( !( $this->isAdmin() ) )
-                die( __( 'Security check', $pluginFramework->name ) );
+            if( !( self::isAdmin() ) )
+                die( __( 'Security check: admin only', $pfInstance->name ) );
         }  
                                
         return true;      
     }
     
-    function actionName( $actionName ){
-        return "<input type=\"hidden\" name=\"method_name\" value=\"$actionName\">";
+    function methodName( $methodName ){
+        $html = null;
+        $html .= "<input type=\"hidden\" name=\"method_name\" value=\"$methodName\">";
+        return $html;
     }
     
-    function isAdmin($userID=null){          
+   /**
+    * Retrieve the current user_id
+    *
+    * @since 1.1.3rc3
+    * @return user_id | 0
+    */
+    function userID(){
+        return get_current_user_id();
+    }
+    
+    function isAdmin($userID=null){
         if( $userID )
             return user_can( $userID, 'administrator' );
-            
-        global $user_ID; 
-        return user_can( $user_ID, 'administrator' );               
+        
+        return current_user_can( 'administrator' );                   
     }
     
     function isAdminSection(){
@@ -45,9 +59,12 @@ class PluginFrameworkWPSupport {
         return ( $pos === false ) ? true : false;
     }
     
-    function getRoleList(){
-        global $wp_roles;
-        return $wp_roles->role_names;
+    function getRoleList( $includeNoRole=false ){
+        global $wp_roles, $pfInstance;
+        $roles = $wp_roles->role_names;
+        if( $includeNoRole ) 
+            $roles['none'] = __( "No role for this site", $pfInstance->name );
+        return $roles;
     }
     
     function getUserRole( $userID ) {
@@ -61,6 +78,23 @@ class PluginFrameworkWPSupport {
     	return false;
     }        
   
+    
+    /**
+    * Retrieve the current user object if user logged in, false if not logged in.
+    *
+    * @since 1.1.3rc2
+    *
+    * @return WP_User Current user WP_User object | bool false if not logged in.
+    */
+    function getCurrentUser() {
+            $user = wp_get_current_user();
+
+            if( empty( $user->ID ) )
+                return false;
+
+            return $user;
+    }
+
 
     /**
      * Check value is unique for given field.
@@ -122,7 +156,7 @@ class PluginFrameworkWPSupport {
      * @param int $userID: if not set, user will registered else user update
      */
     function insertUser( $data, $userID=null ){
-        global $pluginFramework, $wpdb;
+        global $pluginFramework, $pfInstance, $wpdb;
         $errors = new WP_Error();
         
         // Determine Fields
@@ -156,7 +190,7 @@ class PluginFrameworkWPSupport {
             }elseif( @$userdata['user_login'] && !@$userdata['user_email'] ){
                 $userdata['user_email'] = $userdata['user_login'] .'@noreply.com'; 
             }elseif( !@$userdata['user_login'] && !@$userdata['user_email'] ){ 
-                $errors->add( 'empty_login_email', __( 'Cannot create a user with an empty login name and empty email', $pluginFramework->name ) );  
+                $errors->add( 'empty_login_email', __( 'Cannot create a user with an empty login name and empty email', $pfInstance->name ) );  
             }
             
             if( !@$userdata[ 'user_pass' ] ){
@@ -168,8 +202,10 @@ class PluginFrameworkWPSupport {
         	do_action( 'register_post', @$userdata[ 'user_login' ], @$userdata[ 'user_email' ], $errors );        
         	$errors = apply_filters( 'registration_errors', $errors, @$userdata[ 'user_login' ], @$userdata[ 'user_email' ] );
             
-        	if ( $errors->get_error_code() )
-        		return $errors;            
+            if( is_wp_error( $errors ) ){
+                if ( $errors->get_error_code() )
+                    return $errors;
+            }
                            
             $user_id = wp_insert_user( $userdata );
         	if ( is_wp_error( $user_id ) ) 
@@ -177,7 +213,8 @@ class PluginFrameworkWPSupport {
              
             if( @$passwordNag )
                 update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.     
-                                     
+        
+        // Profile Update          
         }else{
             $userdata['ID'] = $userID;
             $user_id = wp_update_user( $userdata );
@@ -187,7 +224,7 @@ class PluginFrameworkWPSupport {
                         
         // Update metadata   
         if( $metadata ){
-			foreach ($metadata as $key => $value) {
+            foreach ($metadata as $key => $value) {
                 if( $userID )
                     update_user_meta( $user_id, $key, $value );
                 else
@@ -210,27 +247,27 @@ class PluginFrameworkWPSupport {
      * @return WP_Error|string 
      */
     function fileUpload( $fieldName, $extensions=array('jpg','png','gif'), $maxSize=1048576, $replaceOldFile=false ){    
-        global $pluginFramework;
+        global $pfInstance;
                
         $uploads        = wp_upload_dir();
         $uploadPath     = $uploads['path'] . '/';
         $uploadUrl      = $uploads['url']  . '/';       
         
         if( !isset( $_FILES[ $fieldName ][ 'name' ] ) )
-            return new WP_Error( 'no_field', __( 'No file upload field found!', $pluginFramework->name ) );
+            return new WP_Error( 'no_field', __( 'No file upload field found!', $pfInstance->name ) );
         
         $file = $_FILES[ $fieldName ];
               
         $size = $file[ 'size' ];
         
         if($size == 0)
-            return new WP_Error( 'no_file', __( 'File is empty.', $pluginFramework->name ) );
+            return new WP_Error( 'no_file', __( 'File is empty.', $pfInstance->name ) );
         
         if( !is_writable( $uploadPath ) )
-            return new WP_Error( 'not_writable', __( 'Server error. Upload directory is not writable.', $pluginFramework->name ) );        
+            return new WP_Error( 'not_writable', __( 'Server error. Upload directory is not writable.', $pfInstance->name ) );        
              
         if( $size > $maxSize )
-            return new WP_Error( 'max_size', sprintf( __( 'File %s is too large.', $pluginFramework->name ), $file['name'] ) );
+            return new WP_Error( 'max_size', sprintf( __( 'File %s is too large.', $pfInstance->name ), $file['name'] ) );
                    
         $pathInfo   = pathinfo( $file[ 'name' ] );
         $fileName   = $pathInfo[ 'filename' ];
@@ -247,7 +284,7 @@ class PluginFrameworkWPSupport {
         
         if( $extensions && !in_array( strtolower( $ext ), $extensions ) ){
             $these = implode(', ', $extensions );
-            return new WP_Error( 'invalid_extension', sprintf( __( 'File %1$s has an invalid extension, it should be one of %2$s.', $pluginFramework->name ),$file['name'], $these ) );
+            return new WP_Error( 'invalid_extension', sprintf( __( 'File %1$s has an invalid extension, it should be one of %2$s.', $pfInstance->name ), $file['name'], $these ) );
         }        
       
         /// don't overwrite previous files that were uploaded
@@ -259,38 +296,15 @@ class PluginFrameworkWPSupport {
         $fileName = $fileName . '.' . $ext;
          
         if( !move_uploaded_file( $file[ 'tmp_name' ], $uploadPath . $fileName ) ){
-            return new WP_Error( 'error', __( 'Could not save uploaded file.', $pluginFramework->name ) .
-                __( 'The upload was cancelled, or server error encountered', $pluginFramework->name ) );
+            return new WP_Error( 'error', __( 'Could not save uploaded file.', $pfInstance->name ) .
+                __( 'The upload was cancelled, or server error encountered', $pfInstance->name ) );
         }
         
         $filepath = $uploads['subdir'] . "/" . $fileName;
         
         return $filepath;             
     }        
-    
-
-    //sleep
-    function donation(){
-        //return 'Donate Now';
-        return "
-        <p>If you find this plugins useful, please consider making a donation to keep the coffee brewing.</p>    
-        <p><a href='http://khaledsaikat.com/donate-now/'>Donate</a></p>
-        <p>Thanks for your support, <a href='http://khaledsaikat.com'>Khaled Saikat</a></p>
-        ";
-                
-    }         
-    
-    //sleep
-    function runTest(){
-        global $pluginFramework;
-        echo "Framework Version: " .    $pluginFramework->frameworVersion   ."<br />";
-        echo "Framework Url: " .        $pluginFramework->frameworkUrl           ."<br />";
-        echo "Framework Path: " .       $pluginFramework->frameworkPath           ."<br />";
-        echo "Framework Model Path: " . $pluginFramework->modelsPath ."<br />";
-        echo "Framework Assets URL: " . $pluginFramework->assetsUrl ."<br />";
-    }
-         
-    
+                        
     
     /**
      * Create meta box 
@@ -307,6 +321,7 @@ class PluginFrameworkWPSupport {
         return $html;
     } 
     
+    
     /**
      * Print the output to browser if it is ajax request. and run die() immediately.
      */
@@ -317,6 +332,7 @@ class PluginFrameworkWPSupport {
         }else
             return $html;        
     }
+    
     
     /**
      * Showing error. 
@@ -337,22 +353,14 @@ class PluginFrameworkWPSupport {
         return $this->printAjaxOutput( $html );
     }
     
+    
     function showMessage( $message, $type='success' ){
         $class = 'pf_' . $type;
         if( $this->isAdminSection() && ( $type == 'success' ) )
             return "<div class='updated'><p>$message</p></div>";
         return "<div class='$class'>$message</div>";
     }        
-    
-    function userLogin( $user_login=null, $user_pass=null, $remember=false ){
-        $creds = array();
-        $creds['user_login']    = $user_login ? $user_login : @$_REQUEST['user_login'];
-        $creds['user_password'] = $user_pass ? $user_pass : @$_REQUEST['user_pass'];
-        $creds['remember']      = isset($remember) ? $remember : @$_REQUEST['remember'];
-        
-        if( !$creds['user_password'] ) return;           
-        return wp_signon( $creds, false );           
-    }        
+           
     
     /**
      * Apply filter 'login_redirect' to get login redirection url
@@ -360,7 +368,7 @@ class PluginFrameworkWPSupport {
      * @param $user: WP_User object
      * @return string $redirect_to
      */
-    function applyFiltersLoginRedirection( $user ){
+    /*function applyFiltersLoginRedirection( $user ){
         if ( isset( $_REQUEST['redirect_to'] ) ) {
         	$redirect_to = $_REQUEST['redirect_to'];
         	// Redirect to https if user wants ssl
@@ -371,31 +379,42 @@ class PluginFrameworkWPSupport {
         }        
         
         return apply_filters('login_redirect', $redirect_to, isset( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : '', $user);        
-    }  
+    } */ 
     
-    function applyFiltersLogoutRedirection( $redirect_to = null ){
+    
+    /*function applyFiltersLogoutRedirection( $redirect_to = null ){
         $redirect_to = $redirect_to ? $redirect_to : @$_REQUEST['redirect_to'];
         $redirect_to = $redirect_to ? $redirect_to : 'wp-login.php?loggedout=true';
         return apply_filters( 'logout_redirect', $redirect_to );
-    }   
+    }  */ 
     
-    function applyFiltersRegistrationRedirection( $user_id ){
+    
+    /*function applyFiltersRegistrationRedirection( $user_id ){
         return apply_filters( 'registration_redirect', !empty( $_REQUEST['redirect_to'] ) ? $_REQUEST['redirect_to'] : '', $user_id );
-    }          
+    }  */     
     
-    function jsRedirect( $redirect_to ){
+    
+    function jsRedirect( $redirect_to, $timeout=0 ){
+        global $pfInstance;
         if( ! $redirect_to ) return;
 
         //if ( 0 === strpos( $redirect_to, 'http') )
             //$redirect_to = site_url( $redirect_to );
         //return $redirect_to;
+        $timeout = ($timeout * 1000)/2;
+        $msg = $pfInstance->showMessage( __( 'Redirecting...', $pfInstance->name ), 'info' );
                 
         $html = null;
+        $html .= "<div class=\"pf_redirect\" style=\"display:none;\">$msg</div>";
         $html .= "<script type=\"text/javascript\">";
-        $html .= "window.location.href = \"$redirect_to\";";
+        if( $timeout ){
+            $html .= "jQuery(document).ready(function(){jQuery('.pf_redirect').fadeIn($timeout).fadeOut($timeout,function(){window.location.href = \"$redirect_to\";});});";
+        }else
+            $html .= "window.location.href = \"$redirect_to\";";
         $html .= "</script>";
         return $html;
     }   
+    
     
     function jQueryRolesTab( $tabID, $tabs=array(), $tabsData=array(), $default=null ){       
         $html = "<ul>";
@@ -419,6 +438,7 @@ class PluginFrameworkWPSupport {
         
         return  $html . $js;
     }
+    
     
     /**
      * Send email
@@ -450,6 +470,60 @@ class PluginFrameworkWPSupport {
             //add_filter( 'wp_mail_content_type', create_function( '', 'return "text/html";' ), 40 );
                       
         wp_mail( $data[ 'email' ], $data[ 'subject' ], @$data[ 'body' ] );
+    }
+    
+    
+    function generateCsvFile( $fileName, $data=array(), $delimiter=',', $enclosure='"' ){
+        header( 'Content-Description: File Transfer' );
+        header( 'Content-Disposition: attachment; filename=' . $fileName );
+        header( 'Content-Type: text/csv; charset=' . get_option( 'blog_charset' ), true );        
+
+        // create a file pointer connected to the output stream
+        $output = fopen('php://output', 'w');
+               
+        foreach( $data as $rowArr )
+            fputcsv( $output, $rowArr, $delimiter, $enclosure );   
+    }
+    
+    
+    function generateTextFile( $fileName, $data=null ){
+        header( 'Content-Description: File Transfer' );
+        header( 'Content-Disposition: attachment; filename=' . $fileName );
+        header( 'Content-Type: text/plain; charset=' . get_option( 'blog_charset' ), true );        
+
+        // create a file pointer connected to the output stream
+        $output = fopen('php://output', 'w');       
+        echo $data;
+    }    
+    
+    function postIDbyPostName( $postName ){
+        global $wpdb;  
+      
+        $id = $wpdb->get_var( $wpdb->prepare("SELECT ID FROM $wpdb->posts WHERE post_name = %s", $postName ) );
+        return $id;
+    }    
+    
+    function convertErrorArray( $data ){
+        if( !is_array( @$data['errors'] ) )
+            return $data;
+
+        $errors = new WP_Error();
+        foreach( $data['errors'] as $code => $error ){
+            if( is_array($error) ){
+                foreach( $error as $message  )
+                    $errors->add( $code, $message );
+            }elseif( is_string( $error ) )
+                $errors->add( $code, $error );
+        }
+        
+        if( isset( $data['error_data'] ) ){
+            if( is_array( $data['error_data'] ) ){
+                foreach( $data['error_data'] as $code => $errData )
+                    $errors->add_data( $errData, $code );
+            }
+        }
+        
+        return $errors;
     }
                 
 }

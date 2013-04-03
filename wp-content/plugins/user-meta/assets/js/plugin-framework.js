@@ -18,20 +18,28 @@ function pfAjaxCall( element, action, arg, handle){
     if(action) data = "action=" + action;
     if(arg)    data = arg + "&action=" + action;
     if(arg && !action) data = arg;
-    data = data + "&pf_nonce=" + pf_nonce + "&is_ajax=true";
+    
+    var n = data.search("pf_nonce");
+    if(n<0){
+        data = data + "&pf_nonce=" + pf_nonce;
+    }
+        
+    
+    //data = data + "&pf_nonce=" + pf_nonce + "&is_ajax=true";    
+    data = data + "&is_ajax=true";
     
     //if( typeof(ajaxurl) == 'undefined' ) ajaxurl = front.ajaxurl;
 
-	umAjaxRequest = jQuery.ajax({
-		type: "post",
-        url: ajaxurl,
-        data: data,
-		beforeSend: function() { jQuery("<span class='pf_loading'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>").insertAfter(element); },
-		success: function( data ){
+    umAjaxRequest = jQuery.ajax({
+    type: "post",
+    url: ajaxurl,
+    data: data,
+        beforeSend: function() { jQuery("<span class='pf_loading'>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>").insertAfter(element); },
+        success: function( data ){
             jQuery(".pf_loading").remove();
             handle(data);
-		}
-	});    
+        }
+    });    
 }
 
 function pfAjaxRequest( element ){  

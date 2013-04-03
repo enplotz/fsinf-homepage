@@ -1,4 +1,3 @@
-
 <?php global $userMeta; ?>
 
 <div class="wrap">
@@ -31,6 +30,8 @@
                         ?>                                     
                     </div>
                     <?php 
+                    echo $userMeta->nonceField();
+                    
                     echo $userMeta->createInput( 'save_field', 'submit', array(
                         'value' => __( 'Save Changes', $userMeta->name ),
                         'class' => 'button-primary pf_save_button' 
@@ -53,7 +54,7 @@
                 echo $userMeta->metaBox( __( 'Extra Fields', $userMeta->name ),              $fieldSelection['standard'] );
                 echo $userMeta->metaBox( __( 'Formatting Fields', $userMeta->name ),          $fieldSelection['formatting'] );
                 if( !@$userMeta->isPro )
-                echo $userMeta->metaBox( __('User Meta Pro', $userMeta->name ),   $userMeta->boxGetPro());
+                    echo $userMeta->metaBox( __('User Meta Pro', $userMeta->name ),   $userMeta->boxGetPro());
                 echo $userMeta->metaBox( __( '3 steps to getting started', $userMeta->name ),  $userMeta->boxHowToUse());
                 echo $userMeta->metaBox( __( 'Shortcode', $userMeta->name ),   $userMeta->boxShortcodesDocs(), false, false);
                 ?>
@@ -80,4 +81,4 @@ jQuery(function() {
    
     jQuery( "#um_admin_sidebar" ).sortable();
 });
-</script>   
+</script>

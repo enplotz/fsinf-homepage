@@ -58,7 +58,6 @@ class pluginFramework {
     }
     
     function pfAjaxRequest(){  
-        $this->verifyNonce( false );
         $methodName = @$_REQUEST[ 'method_name' ];
         if( $methodName ){                        
             $methodName = 'ajax' . ucwords( $methodName );
@@ -91,7 +90,7 @@ class pluginFramework {
         global $$cacheName;        
         
         $$cacheName->$key   = $data;
-        update_option( $this->prefixLong . $key, $data );
+        return update_option( $this->prefixLong . $key, $data );
     }      
 
     /**
@@ -114,7 +113,7 @@ class pluginFramework {
      */
     function addScript( $scriptName, $type=null, $depends=null, $subdir=null ){    
         $scriptData = $this->fileinfo( $scriptName );
-        $handle     = $this->prefix . $scriptData->name;      
+        $handle     = $scriptData->name;      
         $scriptType = $scriptData->ext;
         $subdir     = $subdir ? "$subdir/" : null;
         $url        = $this->assetsUrl . $scriptType. '/' . $subdir . $scriptName;  
@@ -227,7 +226,11 @@ class pluginFramework {
      * by pluginFramework instance
      */
     function __call( $name, $args ){
-        if( !is_array($this->objects) ) return;
+        if( !is_array(@$this->objects) ) return;
+        
+        global $pfInstance;
+        $pfInstance = $this;
+        
         foreach($this->objects as $object){
             if(method_exists($object, $name)){
                 $count = count($args);
@@ -247,6 +250,7 @@ class pluginFramework {
                     return $object->$name($args[0], $args[1], $args[2], $args[3], $args[4], $args[5]);                                                                                             
             }
         }
+        return false;
     }                 
     
 }

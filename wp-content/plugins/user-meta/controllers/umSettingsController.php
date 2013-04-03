@@ -4,7 +4,7 @@ if( !class_exists( 'umSettingsController' ) ) :
 class umSettingsController {
     
     function __construct() {
-        add_action('admin_menu',                    array( $this, 'admin_menu' )); 
+        //add_action('admin_menu',                    array( $this, 'admin_menu' )); 
         add_action( 'wp_ajax_um_update_settings',   array($this, 'ajaxUpdateSettings' ) );
     }
 
@@ -12,6 +12,7 @@ class umSettingsController {
         global $userMeta;
         
         $page = add_submenu_page( 'usermeta', __( 'User Meta Settings', $userMeta->name ), __( 'Settings', $userMeta->name ), 'manage_options', 'user-meta-settings', array( $this, 'init' ));            
+        
         $userMeta->addScript( 'jquery-ui-core',     'admin', $page );
         $userMeta->addScript( 'jquery-ui-widget',   'admin', $page );
         $userMeta->addScript( 'jquery-ui-mouse',    'admin', $page );
@@ -30,7 +31,34 @@ class umSettingsController {
                    
         $userMeta->addScript( 'validationEngine-en.js', 'admin', $page, 'jquery' ); 
         $userMeta->addScript( 'validationEngine.js',    'admin', $page, 'jquery' );    
-        $userMeta->addScript( 'validationEngine.css',   'admin', $page, 'jquery' );             
+        $userMeta->addScript( 'validationEngine.css',   'admin', $page, 'jquery' );
+        
+        
+         /*$userMeta->enqueueScripts( array( 
+            'plugin-framework', 
+            'user-meta',           
+            'jquery-ui-all',
+             
+            'jquery-ui-core',
+            'jquery-ui-widget',
+            'jquery-ui-mouse',
+            'jquery-ui-sortable',
+            'jquery-ui-draggable',
+            'jquery-ui-droppable',
+            'jquery-ui-accordion',
+            'jquery-ui-tabs',
+             
+            //'fileuploader',
+            //'wysiwyg',
+            //'jquery-ui-datepicker',
+            //'jquery-ui-slider',
+            //'timepicker',
+            'validationEngine',
+            //'password_strength',
+        ) );                      
+        $userMeta->runLocalization();    */ 
+        
+        
     }  
     
     function init(){
@@ -74,6 +102,8 @@ class umSettingsController {
         unset( $settings['is_ajax'] );
         unset( $settings['backend_profile']['field_count'] );
          
+        $settings = apply_filters( 'user_meta_pre_configuration_update', $settings, 'settings' );
+        
         $userMeta->updateData( 'settings', $settings );
         
         echo $userMeta->showMessage( __( 'Settings Successfully Saved.', $userMeta->name ) );

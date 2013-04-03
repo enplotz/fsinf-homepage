@@ -2,35 +2,13 @@
 
 if( !class_exists( 'umSupportHtml' ) ) :
 class umSupportHtml {
-
-    function adminPageUrl( $page, $html_link=true ){
-        global $userMeta;
-        
-        if( $page == 'fields_editor' ) :
-            $link   = 'usermeta';
-            $label  = __( 'Fields Editor', $userMeta->name );
-        elseif( $page == 'forms_editor' ) :
-            $link   = 'user-meta-form-editor';
-            $label  = __( 'Forms Editor', $userMeta->name );
-        elseif( $page == 'settings' ) :    
-            $link = 'user-meta-settings';
-            $label  = __( 'Settings', $userMeta->name );
-        endif;
-        if( !@$link ) return;
-        
-        $url = admin_url( "admin.php?page=$link" );        
-        if( $html_link )
-            return "<a href='$url'>$label</a>";
-        
-        return $url;    
-    }
     
     function boxHowToUse(){
         global $userMeta;
         
         $html = null;
-        $html .= sprintf( __( '<p><strong>Step 1.</strong> Create Field from User Meta %s page.</p>', $userMeta->name ), $this->adminPageUrl('fields_editor') );
-        $html .= sprintf( __( '<p><strong>Step 2.</strong> Go to User Meta %s page. Choose a Form Name, drag and drop fields from right to left and save the form.</p>', $userMeta->name ), $this->adminPageUrl('forms_editor') );
+        $html .= sprintf( __( '<p><strong>Step 1.</strong> Create Field from User Meta %s page.</p>', $userMeta->name ), $userMeta->adminPageUrl('fields_editor') );
+        $html .= sprintf( __( '<p><strong>Step 2.</strong> Go to User Meta %s page. Choose a Form Name, drag and drop fields from right to left and save the form.</p>', $userMeta->name ), $userMeta->adminPageUrl('forms_editor') );
         $html .= __( '<p><strong>Step 3.</strong> Write shortcode to your page or post. Shortcode (e.g.): &#91;user-meta type="profile" form="your_form_name"&#93;</p>', $userMeta->name);
         $html .= "<div><center><a class=\"button-primary\" href=\"" . $userMeta->website .  "\">". __( 'Visit Plugin Site', $userMeta->name ) ."</a></center></div>";
         return $html;
@@ -70,10 +48,10 @@ class umSupportHtml {
         $html = null;
         $html .= "<div style='padding-left: 10px'>";
         $html .= __( '<p><strong>&#91;user-meta type="type_name" form="your_form_name"&#93;</strong></p>', $userMeta->name );
-        $html .= __( '<li><strong>type="profile"</strong> for showing profile page.</li>', $userMeta->name );
-        $html .= __( '<li><strong>type="none"</strong> for hiding update button.</li>', $userMeta->name );
-        $html .= __( '<li><strong>type="registration"</strong> for showing registration page.</li>', $userMeta->name );
-        $html .= __( '<li><strong>type="both"</strong> for showing profile page if user logged in, or showing registration page, if not user logged in.</li>', $userMeta->name );
+        $html .= __( '<li><strong>type="profile"</strong> for showing profile form.</li>', $userMeta->name );        
+        $html .= __( '<li><strong>type="registration"</strong> for showing registration form.</li>', $userMeta->name );
+        $html .= __( '<li><strong>type="profile-registration"</strong> for showing profile form if user logged in, or showing registration form, if not user logged in.</li>', $userMeta->name );
+        $html .= __( '<li><strong>type="public"</strong> for showing public profile if user_id parameter provided as GET reguest.</li>', $userMeta->name );
         $html .= __( '<li><strong>type="login"</strong> for showing login page.</li>', $userMeta->name );
         $html .= "<p></p>";
         $html .= __( '<p>N.B. "registration", "both" and "login" is only supported in pro version.</p>', $userMeta->name );

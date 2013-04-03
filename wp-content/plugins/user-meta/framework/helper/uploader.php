@@ -27,10 +27,11 @@ while( ( !$found ) && ( $i < 10 ) ){
 /**
  * Validating nonce field for security check.
  */
-global $pluginFramework;
-if( !($pluginFramework instanceof pluginFramework ) )
+global $pfInstance;
+//if( !($pfInstance instanceof pluginFramework ) )
+if( !is_object($pfInstance) )
     die( 'Plugin is not activated' );
-$pluginFramework->verifyNonce(false);
+$pfInstance->verifyNonce();
 
 
 do_action( 'pf_file_upload_init' );
@@ -142,28 +143,28 @@ class qqFileUploader {
      * Returns array('success'=>true) or array('error'=>'error message')
      */
     function handleUpload($replaceOldFile = FALSE){
-        global $pluginFramework;
+        global $pfInstance;
         
         $uploads        = wp_upload_dir();
         $uploadPath     = $uploads['path'] . '/';
         $uploadUrl      = $uploads['url']  . '/';
         
         if (!is_writable($uploadPath)){
-            return array('error' => __( 'Server error. Upload directory is not writable.', $pluginFramework->name ) );
+            return array('error' => __( 'Server error. Upload directory is not writable.', $pfInstance->name ) );
         }
         
         if (!$this->file){
-            return array('error' => __( 'No files were uploaded.', $pluginFramework->name ) );
+            return array('error' => __( 'No files were uploaded.', $pfInstance->name ) );
         }
         
         $size = $this->file->getSize();
         
         if ($size == 0) {
-            return array('error' => __( 'File is empty', $pluginFramework->name ) );
+            return array('error' => __( 'File is empty', $pfInstance->name ) );
         }
         
         if ($size > $this->sizeLimit) {
-            return array('error' => __( 'File is too large', $pluginFramework->name ) );
+            return array('error' => __( 'File is too large', $pfInstance->name ) );
         }
         
         $pathinfo = pathinfo($this->file->getName());
@@ -175,7 +176,7 @@ class qqFileUploader {
 
         if($this->allowedExtensions && !in_array(strtolower($ext), $this->allowedExtensions)){
             $these = implode(', ', $this->allowedExtensions);
-            return array('error' => sprintf( __( 'File %1$s has an invalid extension, it should be one of %2$s.', $pluginFramework->name ), $pathinfo['filename'], $these ) );
+            return array('error' => sprintf( __( 'File %1$s has an invalid extension, it should be one of %2$s.', $pfInstance->name ), $pathinfo['filename'], $these ) );
         }
         
         if(!$replaceOldFile){
@@ -192,8 +193,8 @@ class qqFileUploader {
         if ($this->file->save($uploadPath . $filename . '.' . $ext)){
             return array('success'=>true, 'field_name'=>$field_name, 'filepath'=>$filepath);
         } else {
-            return array('error'=> __( 'Could not save uploaded file.', $pluginFramework->name ) .
-                __( 'The upload was cancelled, or server error encountered', $pluginFramework->name ) );
+            return array('error'=> __( 'Could not save uploaded file.', $pfInstance->name ) .
+                __( 'The upload was cancelled, or server error encountered', $pfInstance->name ) );
         }
         
     }    

@@ -2,9 +2,9 @@
 Contributors: khaledsaikat
 Donate link: http://user-meta.com/donation
 Tags: user, profile, registration, login, frontend, users, usermeta, import, csv, upload, AJAX, admin, plugin, page, image, images, photo, picture, file, email, shortcode, captcha, avatar, redirect, register, password, custom, csv, import, user import, widget
-Requires at least: 3.0.0
-Tested up to: 3.4.1
-Stable tag: 1.1.2
+Requires at least: 3.3.0
+Tested up to: 3.5.1
+Stable tag: 1.1.3
 Copyright: Khaled Saikat, user-meta.com.
 License: GNU General Public License
 
@@ -114,6 +114,56 @@ WordPress doesn't allow to register new user by default settings. To allow user 
 
 == Changelog ==
 
+= 1.1.3 =
+* Assign form to login widget.
+* Allow role based profile as widget.
+* Add all other feature of RC version.
+
+= 1.1.3rc3 =
+* Replace type=both into type=profile-registration
+* Replace type=none into type=public
+* type=public allow user_id as $_GET for showing public user profile.
+* Add type=login to form widget.
+* Change date format and filter hook.
+* Default role selection.
+* Shortcode generator popup.
+* Clickable checkbox and radio.
+* Added filter: user_meta_pre_configuration_update for fields_editor, forms_editor and settings.
+* Action: user_meta_load_admin_pages
+* Filter: user_meta_execution_page_config
+* Filter: user_meta_default_login_form
+* Aded filter support to lost password form and deafult login form.
+* Theme for reCaptcha.
+* Check user access by “add_users” capability.
+* Clickable users listing for Active | Inactive | Pending | Pending Approval
+* Change email verification and reset password process.
+
+= 1.1.3rc2 =
+* WordPress-3.5 compatibility.
+* UMP Export-Import fields, forms, settings.
+* Role based profile showing.
+* Allow role selection on registration/profile (admin can choose which roles user can select).
+* Field title position: Top, Left, Right, Inline, Hidden.
+* Added “Auto login after user registration” feature.
+* Fixes: Password changing from frontend.
+* Image crop for avatar or file upload.
+* Single pot file.
+* Enable SSL admin.
+* Assign custom form with login widget/login form that allow to use custom field, class name, changing button text/class.
+* Integrate plugin-framework.pot with user-meta.pot (single pot file instead of two).
+* Provide more action/filter hook in every steps.
+* Allow to use placeholder under html field.
+* MU: New blog registration.
+* MU: Add user to blog.
+* MU: added option for prevent login for non-member for current blog.
+
+= 1.1.3rc1 =
+* Registration/Profile widget.
+* Registration/Profile Template Tag.
+* Extended users export.
+* Allow to change button’s text and css class of form.
+* Custom email notification for profile update(both user and admin).
+
 = 1.1.2 =
 * One click upgrade to Pro version.
 * Add default email sender support.
@@ -126,9 +176,6 @@ WordPress doesn't allow to register new user by default settings. To allow user 
 * Pro: User email verification on registration.
 * Pro: User activation and deactivation.
 * pro: Role based user redirection on registration, login and logout.
-
-= 1.1.1.1 =
-* Security update.
 
 = 1.1.1 =
 * Added Support while fail AJAX call

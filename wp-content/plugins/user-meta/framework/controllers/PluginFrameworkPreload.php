@@ -15,10 +15,7 @@ class PluginFrameworkPreload {
         add_action( 'wp_print_scripts',     array( $this, 'setVariable' ) );
         
         //enque conditional script/style for shortcode
-        add_filter( 'the_posts', array( $this, 'enqueShortcodeScripts' ));
-        
-        //$pluginFramework->addScript( 'plugin-framework.js' );
-        //$pluginFramework->addScript( 'plugin-framework.css' );                                                           
+        //add_filter( 'the_posts', array( $this, 'enqueShortcodeScripts' ));                                                                 
     }                    
     
        

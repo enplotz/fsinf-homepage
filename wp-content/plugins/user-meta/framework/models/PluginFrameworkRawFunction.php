@@ -18,54 +18,68 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
             $name   = $name ? "name=\"$name\"" : '';      
             
             if( isset($attr['value']) ){
-                if( is_string( $attr['value'] ) ) $attr['value'] = esc_attr( trim( $attr['value'] ) );
+                if( is_string( $attr['value'] ) )
+                    $attr['value'] = esc_attr( trim( $attr['value'] ) );
+                elseif( is_array( $attr['value'] ) ){
+                    $attr['value'] = array_map( 'esc_attr', $attr['value'] );
+                }
             }                             
             $value  = isset( $attr['value'] ) ? $attr['value'] : null;         
             
             //filter attr for add
             $excludeAttr = array( 'before', 'after', 'enclose', 'label', 'by_key', 'label_class', 'combind', 'option_before', 'option_after' );      
-            $excludeType = array( 'select', 'radio', 'label', 'checkbox' );  //exclude adding value                          
+            $excludeType = array( 'select', 'radio', 'label', 'checkbox', 'textarea', 'a' );  //exclude adding value                          
             if(in_array( $type, $excludeType )) $excludeAttr[] = 'value';   
             $include = null;                  
-            if($attr){
+            if(is_array(@$attr)){
                 foreach( $attr as $key => $val){
                     if( !in_array( $key, $excludeAttr ) ){
-                        $include .= $val ? "$key='$val' " : "";
+                        $include .= $val ? "$key=\"$val\" " : "";
                     }                        
                 }
             }
             
             $option_before  = isset( $attr['option_before'] )  ? $attr['option_before'] : null;
             $option_after   = isset( $attr['option_after'] )   ? $attr['option_after']  : null;    
-            $by_key         = isset( $attr['by_key'] )         ? $attr['by_key']        : null;    
-            $label_class    = isset( $attr['label_class'] )    ? $attr['label_class']   : null;  
+            $by_key         = isset( $attr['by_key'] )         ? $attr['by_key']        : null;     
+            
+            $label_id       = ! empty( $attr['label_id'] )      ? "id=\"{$attr['label_id']}\"" : null;
+            $label_class    = ! empty( $attr['label_class'] )   ? "class=\"{$attr['label_class']}\"" : null;
             
             $html = '';         
              
             if( $type == 'select' ){
                 $html .= "<select $name $include>";
-                if(isset($options)){                    
+                if(is_array(@$options)){                    
                     foreach($options as $key => $val){
                         if( !$by_key ) $key = $val;         
                         $key = is_string($key) ? trim($key) : $key;                                                                    
-                        $selected = ($key == $value) ? "selected='selected'" : ""; 
-                        $html .= "<option value='$key' $selected>$val</option>";
+                        $selected = ($key == $value) ? "selected=\"selected\"" : ""; 
+                        $html .= "<option value=\"$key\" $selected>$val</option>";
                     }                    
                 }
                 $html .= "</select>";
                 
                 
             }elseif($type == 'radio'){
-                if(isset($options)){
+                if(is_array(@$options)){
+                    $i = 0;
                     foreach($options as $key => $val){
                         if( !$by_key ) $key = $val; 
                         $key = is_string($key) ? trim($key) : $key;
-                        $checked = ($key == $value) ? "checked='checked'" : "";
+                        $checked = ($key == $value) ? "checked=\"checked\"" : "";
                         
                         // Changing id for each option 
-                        $includeModify = empty( $attr[ 'id' ] ) ? $include : str_replace( "id='{$attr['id']}'",  "id='{$attr['id']}_$key'", $include);
+                        if( ! empty( $attr[ 'id' ] ) ){
+                            $includeModify  = str_replace( "id=\"{$attr['id']}\"",  "id=\"{$attr['id']}_$i\"", $include);
+                            $label = "<label for=\"{$attr['id']}_$i\">$val</label>";
+                        }else{
+                            $includeModify = $include;
+                            $label = "<label>$val</label>";
+                        }
                         
-                        $html .= "$option_before<input type='$type' $name $includeModify value='$key' $checked /> $val $option_after";
+                        $html .= "$option_before<input type=\"$type\" $name $includeModify value=\"$key\" $checked /> $label $option_after";
+                        $i++;
                     }                    
                 }   
                 
@@ -74,24 +88,32 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
                 $attr['combind'] = isset($attr['combind']) ? $attr['combind'] : false;
                 if( $attr['combind'] ){
                     $name = rtrim( $name, "\"") . "[]\"";
-                    if(isset($options)){
-                        foreach($options as $key => $val){
+                    if(is_array(@$options)){
+                        $i = 0;
+                        foreach($options as $key => $val){                         
                             if( !$by_key ) $key = $val; 
                             $key = is_string($key) ? trim($key) : $key;
                             if( is_array($value) )
-                                $checked = in_array( $key, $value ) ? "checked='checked'" : "";
+                                $checked = in_array( $key, $value ) ? "checked=\"checked\"" : "";
                             else
-                                $checked = ($key == $value) ? "checked='checked'" : "";
+                                $checked = ($key == $value) ? "checked=\"checked\"" : "";
                                
                             // Changing id for each option 
-                            $includeModify = empty( $attr[ 'id' ] ) ? $include : str_replace( "id='{$attr['id']}'",  "id='{$attr['id']}_$key'", $include);
+                            if( ! empty( $attr[ 'id' ] ) ){
+                                $includeModify  = str_replace( "id=\"{$attr['id']}\"",  "id=\"{$attr['id']}_$i\"", $include);
+                                $label = "<label for=\"{$attr['id']}_$i\">$val</label>";
+                            }else{
+                                $includeModify = $include;
+                                $label = "<label>$val</label>";
+                            }
                             
-                            $html .= "$option_before<input type='$type' {$name} $includeModify value='$key' $checked /> $val $option_after";
+                            $html .= "$option_before<input type=\"$type\" {$name} $includeModify value=\"$key\" $checked /> $label $option_after";
+                            $i++;
                         }     
                     }          
                 }else{             
-                    $checked = $value ? "checked='checked'" : "";                
-                    $html .= "<input type='$type' $name $include $checked />";
+                    $checked = $value ? "checked=\"checked\"" : "";                
+                    $html .= "<input type=\"$type\" $name $include $checked />";
                 }
                 
                 
@@ -99,25 +121,29 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
                 $html .= "<textarea $name $include>$value</textarea>";
                 
                 
+            }elseif($type == 'a'){
+                $html .= "<a $name $include>$value</a>";
+                
+                
             }elseif($type == 'file'){
-                $html .= "<input type='$type' $name $include />";
+                $html .= "<input type=\"$type\" $name $include />";
                 $form_id = @$attr[ 'form_id' ];      
                 if( $form_id ){
                     ?><script type="text/javascript">
                             var form = document.getElementById($form_id);
-                            form.encoding = 'multipart/form-data';
-                            form.setAttribute('enctype', 'multipart/form-data');
+                            form.encoding = "multipart/form-data";
+                            form.setAttribute('enctype', "multipart/form-data");
                     </script><?php  
                 }
                 
                  
-            }elseif( $type == 'label' ){        
-                $for   = isset($attr['for']) ? "for='{$attr['for']}'" : '';
+            }elseif( $type == 'label' ){
+                $for   = isset($attr['for']) ? "for=\"{$attr['for']}\"" : '';
                 $html .= "<label $for $include>$value</label>";
                 
                 
             }else{
-                $html .= "<input type='$type' $name $include />";
+                $html .= "<input type=\"$type\" $name $include />";
             }
             
             
@@ -125,11 +151,10 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
             $after   = isset( $attr['after'] )   ? $attr['after']  : null;            
             $html = $before . $html . $after;
             
-            //Add lebel if required
-            //$label_class =  $label_class ? $label_class : 'pf_label';            
+            //Add lebel if required        
             if( isset($attr['label']) ){
-                $for   = isset($attr['id']) ? "for='{$attr['id']}'" : '';
-                $htmlLabel = "<label class='$label_class' $for>{$attr['label']}</label>";
+                $for   = isset($attr['id']) ? "for=\"{$attr['id']}\"" : '';
+                $htmlLabel = "<label $label_id $label_class $for>{$attr['label']}</label>";
                 if( $type == 'checkbox' && ! @$attr['combind'] )
                     $html = $html . ' ' . $htmlLabel;
                 else
@@ -213,6 +238,9 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
          */
         function arrayRemoveEmptyValue( $array, $keepEmptyArray=false ){
             $result = array();
+            
+            if( !is_array( $array ) ) return $result;
+            
             foreach ( $array as $key=>$val ){
                 if(is_array($val)){
                     $child = self::arrayRemoveEmptyValue($val);       
@@ -224,7 +252,8 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
                     if($val)
                         $result[$key] = $val;             
                 }
-                if( @$result[$key] and is_string( @$result[$key] ) )
+                
+                if( @$result[$key] && is_string( @$result[$key] ) )
                     $result[$key] = stripslashes( $result[$key] );
             }
             return $result;
@@ -279,15 +308,23 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
          * @param $separator : default:','
          * @return array
          */        
-        function toArray( $data, $separator=',' ){
+        function toArray( $data, $fieldSeparator=',', $keySeparator='=' ){
             $result = array();
-            if( !$data ) return $result;            
-            if( is_string($data) )
-                $result = explode( $separator, $data );
-            else
-                $result = $data;
-            return (array) $result;
+            
+            if( !$data ) return $result;                               
+            if( ! is_string($data) ) return (array) $data;
+                           
+            $fields = explode( $fieldSeparator, $data );
+            foreach( $fields as $val ){
+                $field     = explode( $keySeparator, $val );
+                $fieldKey  = trim($field[0]);
+                $fieldVal  = isset($field[1]) ? trim($field[1]) : $fieldKey;
+                $result[ $fieldKey ] = $fieldVal;
+            }            
+            
+            return $result;
         }
+        
         
         function dump( $data, $dump=false ){
             echo "<pre>";

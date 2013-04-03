@@ -1,101 +1,141 @@
 <?php
 global $userMeta;
-//get veriable by render: $actionType, $fields, $form, $userData
+/**
+ * Expected: $form
+ * $form['fields']          : array containing field's id
+ * $form['disable_ajax']    : bool (default false)
+ * $form['onsubmit']        : full js code for onsubmit
+ * $form['form_id']         : Name of the form id
+ * $form['form_class']      : Name of the form class
+ * $form['form_action']     : Action name for form
+ * $form['form_start']      : Just after form starting tag
+ * $form['form_end']        : Just before form ending tag
+ */
+//get veriable by render: $actionType, $fields, $form, $fieldValues
 
-
-// Counting page
-$pageCount = 0;
-
-if( !$form )
+if( empty($form) )
     return $html = $userMeta->ShowError( __( 'Form not found.', $userMeta->name ) );
 
-if( !$form['fields'] )
+if( empty( $form['fields'] ) )
     return $html = $userMeta->ShowError( __( 'Fields not found.', $userMeta->name ) );
 
-foreach( $form['fields'] as $fieldID ){
-    if( isset($fields[$fieldID]) ){
-        if( $fields[$fieldID]['field_type'] == 'page_heading' )
-            $pageCount++;
-    }
+if( !is_array( $form['fields'] ) )
+    return $html = $userMeta->ShowError( __( 'Fields were saved incorrectly.', $userMeta->name ) );
+
+$fields = $form['fields'];
+if( empty( $userID ) )
+    $userID = null;
+
+
+$pageCount = 0;
+foreach( $fields as $id => $field ){
+    
+    // Counting page
+    if( $field['field_type'] == 'page_heading' )
+        $pageCount++;
+    
+    /// Determine Field Group
+    $field_type_data   = $userMeta->getFields( 'key', $field['field_type'] ); 
+    $fieldGroup        = $field_type_data['field_group'];
+
+    /// Determine Field Name
+    $fieldName = null;
+    if( $fieldGroup == 'wp_default' ){
+        $fieldName = $field['field_type'];
+    }else{
+        if( isset($field['meta_key']) )
+            $fieldName = $field['meta_key'];
+    }  
+    
+    /// Determine Field Value
+    $fieldValue = null;
+    if( isset( $field['default_value'] ) ){
+        $fieldValue = $userMeta->convertUserContent( new WP_User($userID), $field['default_value']  );
+    }            
+
+    if( isset( $fieldValues->$fieldName ) )
+        $fieldValue = $fieldValues->$fieldName;
+      
+    if( ! @$userMeta->showDataFromDB ){
+        if( isset( $_REQUEST[$fieldName] ) )  
+            $fieldValue = $_REQUEST[$fieldName];                    
+    }  
+    
+    $fields[ $id ]['field_name']  = $fieldName;
+    $fields[ $id ]['field_value'] = $fieldValue;    
+    
 }
 
- 
+/**
+ * Applying filter hook. Accept two arg: $form, $formName
+ * return $form 
+ */
+$form = apply_filters( 'user_meta_form_config', $form, $form['form_key'] );
+
+$uniqueID   = sanitize_key( $form['form_key'] );
+
+$formID     = !empty( $form['form_id'] ) ? $form['form_id'] : "um_form_$uniqueID";
+$formClass  = !empty( $form['form_class'] ) ? $form['form_class'] : null;
+$formAction = !empty( $form['form_action'] ) ? "action=\"" . $form['form_action'] . "\"": null;
+$onsubmit   = !empty( $form['onsubmit'] ) ? "onsubmit=\"" . $form['onsubmit'] . "return false;\"": null;
+
 $html = null;
 
-$onsubmit = @$form['disable_ajax'] ? null : "onsubmit=\"umInsertUser(this); return false;\"";
-$html .= "<form method=\"post\" action=\"\" id=\"um_user_form\" $onsubmit enctype=\"multipart/form-data\">";
-    if( $form['fields'] ):
+if( @$_REQUEST['form_key'] == $form['form_key'] && @$_REQUEST['action_type'] == $actionType ){
+    if( isset( $userMeta->um_post_method_status->$methodName ) )
+        $html .= $userMeta->um_post_method_status->$methodName;
+}
+
+do_action( 'user_meta_before_form', $form['form_key'] );
+$html .= "<form method=\"post\" $formAction id=\"$formID\" class=\"$formClass\" $onsubmit enctype=\"multipart/form-data\" > ";
+    if( !empty( $form['form_start'] ) )
+        $html .= $form['form_start'];
+
+    if( is_array( $fields ) ):
         
         $inPage     = false;
         $inSection  = false;
         $isNext     = false;
         $isPrevious = false;
         $currentPage= 0;
-        foreach( $form['fields'] as $fieldID ){
-            if( isset($fields[$fieldID]) ){
-               
-                /// Determine Field Group
-                $field_type_data   = $userMeta->getFields( 'key', $fields[$fieldID]['field_type'] ); 
-                $fieldGroup        = $field_type_data['field_group'];
-                
-                /// Determine Field Name
-                $fieldName = null;
-                if( $fieldGroup == 'wp_default' ){
-                    $fieldName = $fields[$fieldID]['field_type'];
-                }else{
-                   if( isset($fields[$fieldID]['meta_key']) )
-                        $fieldName = $fields[$fieldID]['meta_key'];
-                }                
-                               
-                /// Determine Field Value
-                $fieldValue = null;
-                if( isset( $fields[$fieldID]['default_value'] ) )
-                    $fieldValue = $fields[$fieldID]['default_value'];    
-                if( $actionType == 'profile' OR $actionType == 'none' ){
-                    if( isset( $userData->$fieldName ) )
-                        $fieldValue = $userData->$fieldName;
-                }    
-                
-                if( ! @$userMeta->showDataFromDB ){
-                    if( isset( $_REQUEST[$fieldName] ) )  
-                        $fieldValue = $_REQUEST[$fieldName];                    
-                }
-                
-                   
-                //IF page is started then set true to $inPage or continue
-                //$inPage  = ( $fields[$fieldID]['field_type'] == 'page_heading' )  ? true : $inPage;
-                // = ( $fields[$fieldID]['field_type'] == 'group_heading' ) ? true : $inGroup;      
-                if( $fields[$fieldID]['field_type'] == 'page_heading' ){
-                    $currentPage++;
-                    $isNext     = $currentPage >= 2 ? true : false;
-                    $isPrevious = $currentPage >  2 ? true : false;      
-                }                
-                                         
-                $fields[$fieldID]['field_id']    = $fieldID;
-                $fields[$fieldID]['field_name']  = $fieldName;
-                $fields[$fieldID]['field_value'] = $fieldValue;
-                $html .= $userMeta->renderPro( 'generateField', array( 
-                    'field'         => $fields[$fieldID],
-                    'actionType'    => $actionType,
-                    'userID'        => $userID,
-                    'inPage'        => $inPage,
-                    'inSection'     => $inSection,
-                    'isNext'        => $isNext,
-                    'isPrevious'    => $isPrevious,
-                    'currentPage'   => $currentPage,
-                ) );
-                
-                if( $fields[$fieldID]['field_type'] == 'page_heading' ){
-                    $inPage    = true;
-                    $inSection = false;
-                }
-                    
-                if( $fields[$fieldID]['field_type'] == 'section_heading' )
-                    $inSection = true;                    
-                //$inPage  = ( $fields[$fieldID]['field_type'] == 'page_heading' )  ? true : $inPage;
-                //$inGroup = ( $fields[$fieldID]['field_type'] == 'group_heading' ) ? false : $inGroup;                 
-                
-            }               
+        foreach( $fields as $fieldID => $field ){
+   
+            if( $field['field_type'] == 'page_heading' ){
+                $currentPage++;
+                $isNext     = $currentPage >= 2 ? true : false;
+                $isPrevious = $currentPage >  2 ? true : false;      
+            }                
+
+            /**
+             * Filter hook to field config. 
+             * Accpt 3 arg: $field, $fieldID, $formName.
+             * return: $field
+             */
+            $field = apply_filters( 'user_meta_field_config', $field, $fieldID, $form['form_key'] );
+
+            $fieldDisplay = $userMeta->renderPro( 'generateField', array( 
+                'field'         => $field,
+                'form'          => $form,
+                'actionType'    => $actionType,
+                'userID'        => $userID,
+                'inPage'        => $inPage,
+                'inSection'     => $inSection,
+                'isNext'        => $isNext,
+                'isPrevious'    => $isPrevious,
+                'currentPage'   => $currentPage,
+                'uniqueID'      => $uniqueID,
+            ) );
+            
+            $html .= apply_filters( 'user_meta_field_display', $fieldDisplay, $fieldID, $form['form_key'], $field );
+
+            if( $field['field_type'] == 'page_heading' ){
+                $inPage    = true;
+                $inSection = false;
+            }
+
+            if( $field['field_type'] == 'section_heading' )
+                $inSection = true;                    
+                                   
         }
         
         // Similar to generateField: field_type==page_heading
@@ -103,35 +143,54 @@ $html .= "<form method=\"post\" action=\"\" id=\"um_user_form\" $onsubmit enctyp
             $html .= "</div>";             
         if( $pageCount >= 2){
             $previousPage = $currentPage - 1 ;
-            $html .= "<input type='button' onclick='umPageNavi($previousPage)' value='" . __( 'Previous', $userMeta->name ) . "'>";
-            //$html .= "<div id='um_page_heading_$previousPage' onclick='umPageNavi($previousPage)' class='button'>Previuos</div>"; 
+            $html .= $userMeta->createInput( "", "button", array(
+                "value"     =>  __( 'Previous', $userMeta->name ),
+                "onclick"   => "umPageNavi($previousPage, false, this)",
+                "class"     => "previous_button " . !empty( $form['button_class'] ) ? $form['button_class'] : "",
+            ) );                        
+            //$html .= "<input type='button' onclick='umPageNavi($previousPage)' value='" . __( 'Previous', $userMeta->name ) . "'>";
         }                           
 
         // End
                        
         $html .= $userMeta->createInput( "form_key", "hidden", array(
             "value"     => $form['form_key'],
-        ) );      
-   
-       
-        if( $actionType == 'profile' )
-            $buttonValue = __( 'Update', $userMeta->name );
-        elseif( $actionType == 'registration' )
-            $buttonValue = __( 'Register', $userMeta->name );
-                      
+        ) );                           
         $html .= $userMeta->createInput( "action_type", "hidden", array(
             "value"     => $actionType,
         ) ); 
         $html .= $userMeta->createInput( "user_id", "hidden", array(
             "value"     => $userID,
-        ) );     
-        $html .= "<script>user_id=$userID</script>";        
+        ) ); 
+   
+        
+        /*$html .= $userMeta->nonceField();
+        $html .= $userMeta->methodName( $methodName );
+        $html .= $userMeta->wp_nonce_field( $methodName, 'um_post_method_nonce', false, false );  */
+        
+        $html .= $userMeta->methodPack( $methodName );
+        
+
+        if( $actionType == 'profile' )
+            $buttonValue = __( 'Update', $userMeta->name );
+        elseif( $actionType == 'registration' )
+            $buttonValue = __( 'Register', $userMeta->name );
+        elseif( $actionType == 'login' )
+            $buttonValue = __( 'Login', $userMeta->name );        
+        
+        if( !empty( $form['button_title'] ) )
+            $buttonValue = $form['button_title'];        
+        
+        
+        //$html .= "<script>user_id=$userID</script>";        
         
         if( isset( $buttonValue ) ){
+            $html .= "<div class=\"um_clear\"></div>";
             $html .= $userMeta->createInput( "um_sibmit_button", "submit", array(
                 "value"     => $buttonValue,
                 "id"        => "insert_user",
-                'enclose'   => 'p',
+                "class"     => !empty( $form['button_class'] ) ? $form['button_class'] : "",
+                'enclose'   => 'div',
             ) );
         }
         
@@ -141,31 +200,31 @@ $html .= "<form method=\"post\" action=\"\" id=\"um_user_form\" $onsubmit enctyp
             
     endif;
     
-    $html .= wp_nonce_field( $userMeta->settingsArray('nonce'), 'pf_nonce' );
+    if( !empty( $form['form_end'] ) )
+        $html .= $form['form_end'];    
+    
 $html .= "</form>";    
 
+do_action( 'user_meta_after_form', $form['form_key'] );
+
+
+$uploaderPath = $userMeta->pluginUrl . '/framework/helper/uploader.php';
+
+
+$html .= "\n\r<script type=\"text/javascript\">";
+    $html .= "jQuery(document).ready(function(){";
+        $html .= "jQuery(\".um_user_form\").validationEngine();";
+        $html .= "umPageNavi( 1, false, '$formID' );";
+        $html .= "jQuery(\".um_rich_text\").wysiwyg({initialContent:' '});";
+        //$html .= "jQuery(\".um_datetime\").datetimepicker({ dateFormat: \"yy-mm-dd\", timeFormat: \"hh:mm:ss\", changeYear: true });";
+        //$html .= "jQuery(\".um_date\").datepicker({ dateFormat: \"yy-mm-dd\", changeYear: true });";
+        //$html .= "jQuery(\".um_time\").timepicker({timeFormat: \"hh:mm:ss\"});";
+        //jQuery('.pass_strength').password_strength();    
+        $html .= "umFileUploader( \"$uploaderPath\" );";  
+    $html .= "});";
+$html .= "</script>\n\r";
+
+
+$html = apply_filters( 'user_meta_form_display', $html, $form['form_key'], $form );
     
 ?>
-
-
-<script type="text/javascript">
-    (function($){
-        $(document).ready(function(){
-            
-            jQuery("#um_user_form").validationEngine();
-            
-            umPageNavi( 1, false );
-            
-            $(".um_rich_text").wysiwyg({initialContent:" "});  
-            
-            $(".um_datetime").datetimepicker({ dateFormat: 'yy-mm-dd', timeFormat: 'hh:mm:ss' });
-            $(".um_date").datepicker({ dateFormat: 'yy-mm-dd' });   
-            $(".um_time").timepicker({timeFormat: 'hh:mm:ss'});  
-            
-            $(".pass_strength").password_strength();    
-            
-            umFileUploader( '<?php  echo $userMeta->pluginUrl . '/framework/helper/uploader.php' ?>' );    
-                      
-        });      
-    })(jQuery)
-</script>

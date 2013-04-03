@@ -64,17 +64,12 @@ class umLocalizeScript {
        
         );
         
-        foreach( $localizeText as $scriptName => $data )
-            self::localize( $scriptName, $data );      
+        foreach( $localizeText as $scriptName => $data ){
+            $objectName = str_replace( array( '.', '-' ), '_', $scriptName );
+            wp_localize_script( $scriptName, $objectName, $data );
+        }
+     
     }
-    
-    function localize( $scriptName, $data ){
-        global $userMeta;      
-                
-        $objectName = str_replace( array( '.', '-' ), '_', $scriptName );
-        
-        wp_localize_script( $userMeta->prefix . $scriptName, $objectName, $data );  
-    }
-               
+              
 }
 endif;

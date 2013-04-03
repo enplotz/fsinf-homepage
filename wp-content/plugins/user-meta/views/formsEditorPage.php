@@ -30,10 +30,14 @@
                         ?>                                     
                     </div>
                     <?php 
+                    echo $userMeta->nonceField();
+                    
                     echo $userMeta->createInput( 'save_field', 'submit', array(
                         'value'=> __( 'Save Changes', $userMeta->name ), 
                         'class'=>'pf_save_button  button-primary' 
                     ) );
+                    
+                    echo "&nbsp;&nbsp;&nbsp;";
                     
                     echo $userMeta->createInput( 'new_form', 'button', array( 
                         'value'     =>__( 'New Form', $userMeta->name ), 
@@ -74,6 +78,8 @@ jQuery(function() {
     jQuery( "#um_admin_sidebar" ).sortable();
     jQuery( "#fields_form").validationEngine();*/
     
+    
+//jQuery(".form_tabs").tabs();  
     
 jQuery( "#um_admin_sidebar" ).sortable();    
 

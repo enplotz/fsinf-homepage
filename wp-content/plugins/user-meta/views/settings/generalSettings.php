@@ -14,16 +14,18 @@ $html .= wp_dropdown_pages(array(
 ));
 $html .= $userMeta->createInput( "general[profile_in_admin]", "checkbox", array(
     'value' => isset( $general[ 'profile_in_admin' ] )? $general[ 'profile_in_admin' ] : null,
-    'label' => sprintf( __( 'Show profile link to <a href="%s">Users<a> administration page.' ), admin_url( 'users.php' ) ),
+    'id'    => 'um_general_profile_in_admin',
+    'label' => sprintf( __( 'Show profile link to <a href="%s">Users<a> administration page.', $userMeta->name ), admin_url( 'users.php' ) ),
 ) );             
-$html .= "<p>" . __( "Profile page should contain shortcode like:", $userMeta->name ) . "[user-meta type=\"profile\" form=\"your_form_name\"]</p>";    
+$html .= "<p>" . sprintf( __( "Profile page should contain shortcode like: %s", $userMeta->name ), "[user-meta type=\"profile\" form=\"your_form_name\"]") . "</p>";    
 // End Profile Page Selection
 
 $html .= "<div class='pf_divider'></div>";  
 
-$emaiFormat = array(  
-    'text/plain'       => __( 'Plain Text', $userMeta->name ), 
-    'text/html'        => __( 'HTML', $userMeta->name ),
+$emailFormat = array(  
+    ''              => null, 
+    'text/plain'    => __( 'Plain Text', $userMeta->name ), 
+    'text/html'     => __( 'HTML', $userMeta->name ),
 );
 
 $html .= "<h4>". __( 'E-mail Sender Setting', $userMeta->name ) ."</h4>"; 
@@ -48,10 +50,10 @@ $html .= $userMeta->createInput("general[mail_from_email]", "text", array(
     
 $html .= $userMeta->createInput("general[mail_content_type]", "select", array(
     'label'     => __('Email Format:', $userMeta->name ),
-    'value'     => !empty( $general[ 'mail_content_type' ] ) ? $general[ 'mail_content_type' ] : apply_filters( 'wp_mail_content_type', 'text/plain' ),
+    'value'     => @$general[ 'mail_content_type' ], //!empty( $general[ 'mail_content_type' ] ) ? $general[ 'mail_content_type' ] : apply_filters( 'wp_mail_content_type', 'text/plain' ),
     'enclose'   => 'p',
     'by_key'    => true,
-), $emaiFormat );
+), $emailFormat );
 
 
 //echo $userMeta->metaBox( "General Settings", $html );

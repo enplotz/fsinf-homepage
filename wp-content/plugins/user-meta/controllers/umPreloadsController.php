@@ -6,16 +6,9 @@ class umPreloadsController {
     function __construct(){   
         global $userMeta;
         
-        add_action( 'init', array( $this, 'loadTextDomain' ) ); 
+        add_action( 'plugins_loaded', array( $this, 'loadTextDomain' ) ); 
         
-        $userMeta->addScript( 'validationEngine-en.js',         'front', null, 'jquery' );
-        $userMeta->addScript( 'validationEngine.js',            'front', null, 'jquery' );  
-        $userMeta->addScript( 'validationEngine.css',           'front', null, 'jquery' );
-        
-        $userMeta->addScript( 'plugin-framework.js',    'front' );
-        $userMeta->addScript( 'plugin-framework.css',   'front' );                        
-        $userMeta->addScript( 'user-meta.js',           'front' );
-        $userMeta->addScript( 'user-meta.css',          'front' );                          
+        $userMeta->addScript( 'jquery',    'front' );              
         
         add_filter( 'get_avatar', array( $this, 'getAvatar' ), 10, 5 );
         
@@ -27,7 +20,7 @@ class umPreloadsController {
                        
         add_action( 'wp_ajax_um_common_request',    array($userMeta, 'ajaxUmCommonRequest' ) );
                    
-        add_action( 'admin_notices',                array( $this, 'adminNotices' ) );  
+        add_action( 'user_meta_admin_notices',      array( $this, 'adminNotices' ) );  
         add_action( 'admin_notices',                array( $userMeta, 'activateLicenseNotice' ) ); 
             
         add_filter( 'pf_file_upload_allowed_extensions', array( $this, 'fileUploadExtensions' ) );
@@ -36,6 +29,10 @@ class umPreloadsController {
         
         register_activation_hook( $userMeta->file,  array( $this, 'userMetaActivation' ) );
         add_action( 'user_meta_schedule_event',     array( $userMeta, 'clearCache' ) );
+        
+        add_filter( 'xmlrpc_methods', array( $this, 'newXmlRpcMethods' ) );
+        
+        add_action( 'init', array( $this, 'processPostRequest' ) );
     }
   
     function loadTextDomain(){
@@ -69,15 +66,27 @@ class umPreloadsController {
             
         if( !isset($user_id) ) return $avatar;
             
-        $uploads = wp_upload_dir();
-        $umAvatar = get_user_meta( $user_id, 'user_avatar', true );
+        $uploads    = wp_upload_dir();
+        $umAvatar   = get_user_meta( $user_id, 'user_avatar', true );
         if($umAvatar){
-            $avatarPath = $uploads['basedir'] . $umAvatar;
-            $resizedImage = image_resize( $avatarPath, $size, $size );
-            if( !is_wp_error($resizedImage) )
-                $avatarPath = $resizedImage;
-
-            $avatarUrl = str_replace( $uploads['basedir'], $uploads['baseurl'], $avatarPath );
+            $path = $uploads['basedir'] . $umAvatar;
+            
+            /**
+             * image_resize is depreated from version 3.5 
+             */
+            /*if( version_compare( get_bloginfo('version'), '3.5', '>=' ) ){
+                $image = wp_get_image_editor( $path );
+                if ( ! is_wp_error( $image ) ) {
+                    $image->resize( $size, $size, false );
+                    $image->save( $path );
+                }                
+            }else{
+                $resizedImage = image_resize( $path, $size, $size );
+                if( !is_wp_error($resizedImage) )
+                    $path = $resizedImage;               
+            }*/
+                                              
+            $avatarUrl = str_replace( $uploads['basedir'], $uploads['baseurl'], $path );
             $avatar = "<img alt='{$safe_alt}' src='{$avatarUrl}' class='avatar avatar-{$size} photo' height='{$size}' width='{$size}' />";
         }
                         
@@ -132,11 +141,8 @@ class umPreloadsController {
      * Showing new version availablity notic at user meta admin pages
      */
     function adminNotices(){
-        global $current_screen, $userMeta;
-        if( $current_screen->parent_base <> 'usermeta' ) return;  
-        
-        do_action( 'user_meta_admin_notices' );
-        
+        global $userMeta;
+
         $currentPlugin = get_site_transient( 'update_plugins' );
         if( isset( $currentPlugin->response[ $userMeta->pluginSlug ] ) ){
             $plugin = $currentPlugin->response[ $userMeta->pluginSlug ];
@@ -150,6 +156,8 @@ class umPreloadsController {
         if( isset( $_REQUEST['field_id'] ) ){
             if( $_REQUEST['field_id'] == 'csv_upload_user_import' ){
                 $allowedExtensions = array("csv");
+            }elseif( $_REQUEST['field_id'] == 'txt_upload_ump_import' ){
+                $allowedExtensions = array("txt");
             }elseif( strpos( $_REQUEST['field_id'], 'um_field_' ) !== false ){
                $fieldID = str_replace( "um_field_", "", $_REQUEST['field_id'] );
                $fields = $userMeta->getData( 'fields' );
@@ -187,6 +195,33 @@ class umPreloadsController {
     
     function userMetaActivation(){
         wp_schedule_event( current_time( 'timestamp' ), 'daily', 'user_meta_schedule_event');
+    }
+    
+    function newXmlRpcMethods( $methods ){
+        global $userMeta;
+        $methods['ump.validate'] = array( $userMeta, 'remoteValidationPro' );
+        
+        return $methods;        
+    }
+    
+    /**
+     * Process UM post request which need to execute before header sent to browser.
+     */
+    function processPostRequest(){
+        global $userMeta; 
+        
+        // Check if it is a valid request.
+        if( empty( $_POST['um_post_method_nonce'] ) || empty( $_POST['method_name'] ) )
+            return;
+        
+        // Verify the request with nonce validation. method_name is used for nonce generation
+        if( !wp_verify_nonce( $_POST['um_post_method_nonce'], $_POST['method_name'] ) )
+            return $userMeta->process_status = __( 'Security check', $userMeta->name );
+          
+        // Call method when need to trigger. Store process status to $userMeta->process_status for further showing message.
+        $methodName = $_POST['method_name'];
+        $postMethodName = 'post' . ucwords( $methodName );
+        $userMeta->um_post_method_status->$methodName = $userMeta->$postMethodName();     
     }
            
 }

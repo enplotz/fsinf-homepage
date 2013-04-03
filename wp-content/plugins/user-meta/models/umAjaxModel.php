@@ -2,17 +2,18 @@
 
 if( !class_exists( 'umAjaxModel' ) ) :
 class umAjaxModel {
-    
-    function ajaxInsertUser(){
+        
+    function postInsertUser(){
         global $userMeta, $user_ID;
-        $userMeta->verifyNonce( false );
+        $userMeta->verifyNonce();
         $errors = new WP_Error();     
         
         /// Determine $userID        
         $userID = $user_ID;
         if( isset( $_REQUEST['user_id']) ){
-            if( $userMeta->isAdmin() && $_REQUEST['user_id'] )
-                $userID = $_REQUEST['user_id'];
+            $user   = new WP_User( $user_ID );
+            if( $user->has_cap( 'add_users' ) && $_REQUEST['user_id'] )
+                $userID =  esc_attr( $_REQUEST['user_id'] );
         }
         
         /// $_REQUEST Validation
@@ -22,18 +23,14 @@ class umAjaxModel {
         if( !isset( $_REQUEST['form_key'] ) )
             $errors->add( 'empty_form_name', __( 'Form name not set', $userMeta->name ) );
 
-        /// Determine $actionType        
-        if( $actionType == 'both' ){
+        /// Determine $actionType  
+        $actionType = strtolower( $actionType );
+        if( $actionType == 'profile-registration' ){
             if( $user_ID )
                 $actionType = 'profile';
             else
                 $actionType = 'registration';
-        }             
-                            
-        /// Captcha validation                         
-        $captchaValidation = $userMeta->isInvalidateCaptcha();
-        if( $captchaValidation )
-            $errors->add( 'invalid_captcha', $captchaValidation );
+        }                                        
         
         /// filter valid key for update
         $validFields = $userMeta->formValidInputField( @$_REQUEST['form_key'] );
@@ -42,10 +39,7 @@ class umAjaxModel {
 
         /// Showing error
         if( $errors->get_error_code() )
-            return $userMeta->ShowError( $errors ); 
-        
-        //$userMeta->dump($validFields);
-        //$userMeta->dump($_FILES);
+            return $userMeta->ShowError( $errors );  
         
         // Free version limitation
         //if( ( $actionType <> 'profile' ) && ! ( $userMeta->isPro ) ) 
@@ -97,27 +91,67 @@ class umAjaxModel {
                 }                        
             }
             if( $fieldData[ 'unique' ] ){
-                if( !$userMeta->isUserFieldAvailable( $fieldName, $userData[ $fieldName ], $userID ) ){
-                    $errors->add( 'taken', sprintf( __( '%1$s: "%2$s" already taken', $userMeta->name ), $fieldData[ 'field_title' ], $userData[ $fieldName ] ) );
-                }
+                $available = $userMeta->isUserFieldAvailable( $fieldName, $userData[ $fieldName ], $userID );
+                if( ! $available ){
+                    $errors->add( 'existing_' . $fieldName, sprintf( __( '%1$s: "%2$s" already taken', $userMeta->name ), $fieldData[ 'field_title' ], $userData[ $fieldName ] ) );					
+                }								
             }
-        }            
-        
+        }       
+
+		// If add_user_to_blog set true in UserMeta settings panel
+		if( is_multisite() && ($actionType == 'registration') ){
+			$registrationSettings = $userMeta->getSettings('registration');
+			if( !empty( $registrationSettings['add_user_to_blog'] ) ){
+				if( in_array( 'existing_user_login', $errors->get_error_codes() )  )
+					unset( $errors->errors['existing_user_login'] );
+				if( in_array( 'existing_user_email', $errors->get_error_codes() )  )
+					unset( $errors->errors['existing_user_email'] );				
+			}				
+		}
+			
         if( empty( $userData ) )
-            return $userMeta->ShowError( __( 'No data to update', $userMeta->name ) );
+            return $userMeta->ShowError( __( 'No data to update', $userMeta->name ) );         
         
         // Showing error
         if( $errors->get_error_code() )
             return $userMeta->ShowError( $errors ); 
         
+        /// Run Captcha validation after completed all other validation     
+        $captchaValidation = $userMeta->isInvalidateCaptcha();
+        if( $captchaValidation ){
+            $errors->add( 'invalid_captcha', $captchaValidation );  
+            return $userMeta->ShowError( $errors );
+        }
+        
+        
+        /**
+         * Check allowed role for security purpose
+         */
+        if( isset( $userData['role'] ) ){
+            $ignoreRole = true;
+
+            $fieldData = $userMeta->getFieldData( @$_REQUEST['role_field_id'] );
+            if( is_array( @$fieldData['allowed_roles'] ) ){
+                if( in_array( $userData['role'], $fieldData['allowed_roles'] ) )
+                        $ignoreRole = false;
+            }
+           
+            if( $ignoreRole )
+                unset( $userData['role'] );
+        }
+
+        
         if( $actionType == 'registration' )
             return $userMeta->registerUser( $userData, @$imageCache );
-            
+         
+        $html = null;
         if( $actionType == 'profile' ){
             if( !$user_ID )
                 return $userMeta->showError( __( 'User must be logged in to update profile', $userMeta->name ) );           
 
-            $userData = apply_filters( 'user_meta_pre_profile_update', $userData );
+            $userData = apply_filters( 'user_meta_pre_user_update', $userData );
+            if( is_wp_error( $userData ) )
+                return $userMeta->showError( $userData );            
             
             $response = $userMeta->insertUser( $userData, $userID );
             if( is_wp_error( $response ) )
@@ -130,15 +164,14 @@ class umAjaxModel {
             if( isset( $imageCache ) )
                 $userMeta->removeCache( 'image_cache', $imageCache, false );  
                               
-            do_action( 'user_meta_after_profile_update', (object) $response );
-            
-            $message = __( 'Profile successfully updated.', $userMeta->name );          
-            $html = "<div action_type='$actionType'>" . $userMeta->showMessage( $message ) . "</div>";                            
+            do_action( 'user_meta_after_user_update', (object) $response );
+              
+            $message    = $userMeta->getMsg( 'profile_updated' );
+            $html = "<div action_type='$actionType'>" . $userMeta->showMessage( $message ) . "</div>";  
         }
         
-        return $userMeta->printAjaxOutput( @$html );
+        return $userMeta->printAjaxOutput( $html );
     }  
-    
     
     function ajaxValidateUniqueField(){
         global $userMeta;
@@ -174,7 +207,7 @@ class umAjaxModel {
     
     function ajaxShowUploadedFile(){
         global $userMeta;     
-        $userMeta->verifyNonce( false );     
+        $userMeta->verifyNonce();     
         
         if( isset($_REQUEST['showimage']) ){
             if( isset($_REQUEST['imageurl']) )
@@ -200,21 +233,44 @@ class umAjaxModel {
         $fields     = $userMeta->getData( 'fields' );
         $field      = @$fields[@$fieldID];          
         if( @$field['field_type'] == 'user_avatar' ){
-            $field['image_width'] = 96;
-            $field['image_height'] = 96;
-        }                           
-        if( @$field ){
+            if( ! empty( $field['image_size'] ) ){
+                $field['image_width']   = $field['image_size'];
+                $field['image_height']  = $field['image_size'];
+            }else{
+                $field['image_width']   = 96;
+                $field['image_height']  = 96;
+            }          
+        }  
+        
+        if( ! empty( $field ) ){
             echo $userMeta->renderPro( 'showFile', array(
                 'filepath'      => @$_REQUEST['filepath'],
                 'field_name'    => @$_REQUEST['field_name'],
                 'width'         => @$field['image_width'],
                 'height'        => @$field['image_height'],
+                'crop'          => !empty( $field['crop_image'] ) ? true : false,
                 //'readonly'  => @$fieldReadOnly,   // implementation of read-only is not needed.
             ) );                 
         }
                 
         die();
-    }     
+    }    
+    
+    function ajaxWithdrawLicense(){
+        global $userMeta;
+        $userMeta->verifyNonce();
+        
+        $status = $userMeta->withdrawLicense();
+        if( is_wp_error( $status ) )
+            echo $userMeta->showError( $status );
+        elseif( $status === true ){
+            echo $userMeta->showMessage( __( 'License has been withdrawn', $userMeta->name ) );
+            echo $userMeta->jsRedirect( $userMeta->adminPageUrl( 'settings', false ) );            
+        }else
+            echo $userMeta->showError( __('Something went wrong!', $userMeta->name) );
+        
+        die();
+    }
       
     
 }

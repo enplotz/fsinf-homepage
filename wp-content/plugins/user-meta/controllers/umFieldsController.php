@@ -4,7 +4,7 @@ if( !class_exists( 'umFieldsController' ) ) :
 class umFieldsController {
     
     function __construct(){      
-        add_action('admin_menu',                array( $this, 'menuItem' ) );    
+        //add_action('admin_menu',                array( $this, 'menuItem' ) );    
         
         add_action( 'wp_ajax_um_add_field',     array($this, 'ajaxAddField' ) ); 
         add_action( 'wp_ajax_um_change_field',  array($this, 'akaxChangeField' ) ); 
@@ -14,7 +14,7 @@ class umFieldsController {
     function menuItem(){
         global $userMeta;
 
-        $page = add_utility_page( 'User Meta', 'User Meta', 'manage_options', 'usermeta', array( $this, 'init' ), $userMeta->assetsUrl . 'images/user-icon.png' ); 
+        $page = add_utility_page( 'User Meta', 'User Meta', 'manage_options', 'usermeta', array( $this, 'init' ), $userMeta->assetsUrl . 'images/ump-icon.png' ); 
         $page = add_submenu_page( 'usermeta', __( 'User Meta Fields Editor', $userMeta->name ), __( 'Fields Editor', $userMeta->name ), 'manage_options', 'usermeta', array( $this, 'init' ));     
                
         $userMeta->addScript( 'jquery-ui-core',     'admin', $page );
@@ -82,6 +82,8 @@ class umFieldsController {
         if( isset( $_POST['fields'] ) )
             $data = $userMeta->arrayRemoveEmptyValue( $_POST['fields'] );
  
+        $data = apply_filters( 'user_meta_pre_configuration_update', $data, 'fields_editor' );
+        
         $userMeta->updateData( 'fields', $data );
         
         echo $userMeta->showMessage( __( 'Fields Successfully Saved.', $userMeta->name ) );

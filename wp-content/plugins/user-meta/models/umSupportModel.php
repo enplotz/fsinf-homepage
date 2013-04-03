@@ -1,7 +1,71 @@
 <?php
 
 if( !class_exists( 'umSupportModel' ) ) :
-class umSupportModel {    
+class umSupportModel {  
+    
+    function methodPack( $methodName ){
+        global $userMeta;
+        $html = null;
+        $html .= $userMeta->nonceField();
+        $html .= $userMeta->methodName( $methodName );
+        $html .= $userMeta->wp_nonce_field( $methodName, 'um_post_method_nonce', false, false );   
+        if( !empty( $_SERVER['HTTP_REFERER'] ) ){
+            $ref    = !empty( $_REQUEST['pf_http_referer'] ) ? esc_attr( $_REQUEST['pf_http_referer'] ) : esc_attr( $_SERVER['HTTP_REFERER'] );
+            $html  .= "<input type=\"hidden\" name=\"pf_http_referer\" value=\"" . $ref . "\">";        
+        }
+        return $html;
+    }
+    
+    /**
+     * get name of forms
+     */
+    function getFormsName(){
+        global $userMeta;
+        
+        $formsList = array();
+        $forms = $userMeta->getData( 'forms' );  
+        if( is_array( $forms ) ){
+            foreach( $forms as $key => $val )
+                $formsList[] = $key;
+        }  
+        return $formsList;
+    }
+    
+    /**
+     * Get Form Data with fields data within $form['fields']
+     * 
+     * @param type $formName
+     * @return false if form not found || full form array including fields.
+     */
+    function getFormData( $formName ){
+        global $userMeta;
+               
+        $forms  = $userMeta->getData('forms'); 
+        if( empty( $forms[$formName] ) )
+            return new WP_Error( 'no_form', sprintf( __( 'Form "%s" is not found.', $userMeta->name ), $formName ) );
+        
+        $form = $forms[$formName];
+        if( empty( $form['fields'] ) )       
+            return $form;              
+        
+        if( is_array( $form['fields'] ) ){
+            $fields = array();
+            $allFields = $userMeta->getData( 'fields' );
+            foreach( $form['fields'] as $key => $fieldID ){
+                if( isset( $allFields[ $fieldID ] ) ){
+                    $field  = array();
+                    $field[ 'field_id' ]    = $fieldID;
+                    if( is_array( $allFields[ $fieldID ] ) )
+                        $field  = $field + $allFields[ $fieldID ];
+                    
+                    $fields[ $fieldID ] = $field;
+                }                   
+            }
+            $form['fields'] = $fields;           
+        }
+        
+        return $form;
+    }
                        
     /**
      * Get um fields by 
@@ -147,6 +211,8 @@ class umSupportModel {
         $forms  = $userMeta->getData( 'forms' );      
         if( !isset( $forms[ $form_key ][ 'fields' ] ) ) return;
         
+        if( ! is_array( $forms[ $form_key ][ 'fields' ] ) ) return;
+        
         foreach( $forms[ $form_key ][ 'fields' ] as $fieldID ){
             $fieldData  = $this->getFieldData( $fieldID );
             if( $fieldData['field_group'] == 'wp_default' OR $fieldData['field_group'] == 'standard' ){
@@ -193,11 +259,15 @@ class umSupportModel {
         unset( $cache[ 'image_cache' ] );
         
         $csv_files = $cache[ 'csv_files' ];
-        foreach( $csv_files as $key => $val ){
-            $time = time() - ( 3600 * 6 );
-            if( $key < $time )
-                unset( $cache[ 'csv_files' ][ $key ] );
+        
+        if( is_array( $csv_files ) ){
+            foreach( $csv_files as $key => $val ){
+                $time = time() - ( 3600 * 6 );
+                if( $key < $time )
+                    unset( $cache[ 'csv_files' ][ $key ] );
+            }            
         }
+        
         $userMeta->updateData( 'cache', $cache );
     }
     
@@ -277,24 +347,140 @@ class umSupportModel {
         $data       = $userMeta->getData( 'emails' );
         $emails     = @$data[ $key ];
         
-        if( empty( $emails ) ){
+        //if( empty( $emails ) ){
             $default    = $userMeta->defaultEmailsArray( $key );  
-            $roles      = $userMeta->getRoleList();           
+            $roles      = $userMeta->getRoleList();   
+            
+            if(  empty( $emails[ 'user_email' ] ) )
+                $emails[ 'user_email' ][ 'um_disable' ] = @$default[ 'user_email' ][ 'um_disable' ];    
+             if(  empty( $emails[ 'admin_email' ] ) )
+                $emails[ 'admin_email' ][ 'um_disable' ] = @$default[ 'admin_email' ][ 'um_disable' ];             
+            
             foreach( $roles as $key => $val ){
-                if( empty( $email[ 'user_email' ][ $key ][ 'subject' ] ) )
+                if( empty( $emails[ 'user_email' ][ $key ][ 'subject' ] ) )
                     $emails[ 'user_email' ][ $key ][ 'subject' ]    = @$default[ 'user_email' ][ 'subject' ];
-                if( empty( $email[ 'user_email' ][ $key ][ 'body' ] ) )
-                    $emails[ 'user_email' ][ $key ][ 'body' ]       = @$default[ 'user_email' ][ 'body' ]; 
+                if( empty( $emails[ 'user_email' ][ $key ][ 'body' ] ) )
+                    $emails[ 'user_email' ][ $key ][ 'body' ]       = @$default[ 'user_email' ][ 'body' ];                 
                       
-                if( empty( $email[ 'admin_email' ][ $key ][ 'subject' ] ) )
+                if( empty( $emails[ 'admin_email' ][ $key ][ 'subject' ] ) )
                     $emails[ 'admin_email' ][ $key ][ 'subject' ]    = @$default[ 'admin_email' ][ 'subject' ];
-                if( empty( $email[ 'user_email' ][ $key ][ 'body' ] ) )
+                if( empty( $emails[ 'admin_email' ][ $key ][ 'body' ] ) )
                     $emails[ 'admin_email' ][ $key ][ 'body' ]       = @$default[ 'admin_email' ][ 'body' ];                              
-            }                       
-        }
+            }                
+        //}
                               
         return $emails;     
     }
+    
+    /**
+     * Filter role based on given role. In givn role, role key should be use as array value.
+     * 
+     * @param type (array) $roles
+     */
+    function allowedRoles( $allowedRoles ){
+        global $userMeta;
+        $roles = $userMeta->getRoleList(true);
+        
+        if( !is_array($roles) || empty($roles) ) return false;
+        if( !is_array($allowedRoles) || empty($allowedRoles) ) return false;
+        
+        foreach($roles as $key=>$val){
+            if( ! in_array( $key, $allowedRoles ) )
+                 unset( $roles[$key] );   
+        }    
+        
+        return $roles;
+    }
+    
+    function adminPageUrl( $page, $html_link=true ){
+        global $userMeta;
+        
+        if( $page == 'fields_editor' ) :
+            $link   = 'usermeta';
+            $label  = __( 'Fields Editor', $userMeta->name );
+        elseif( $page == 'forms_editor' ) :
+            $link   = 'user-meta-form-editor';
+            $label  = __( 'Forms Editor', $userMeta->name );
+        elseif( $page == 'settings' ) :    
+            $link = 'user-meta-settings';
+            $label  = __( 'Settings', $userMeta->name );
+        endif;
+        if( !@$link ) return;
+        
+        $url = admin_url( "admin.php?page=$link" );        
+        if( $html_link )
+            return "<a href='$url'>$label</a>";
+        
+        return $url;    
+    }    
+    
+    
+    /**
+     * Convert content for user provided by %field_name%
+     * Supported Extra filter: blog_title, blog_url, avatar, logout_link, admin_link
+     * @param $user: WP_User object
+     * @param $data: (string) string for convertion
+     * @return (string) converted string
+     */
+    function convertUserContent( $user, $data, $extra=array() ){
+        global $userMeta;
+        
+        preg_match_all( '/\%[a-zA-Z0-9_-]+\%/i', $data, $matches); 
+        if( is_array( @$matches[0] ) ){
+            $patterns = $matches[0];
+            $replacements = array();
+            foreach( $patterns as $key => $pattern ){
+                $fieldName = strtolower( trim( $pattern, '%' ) );
+                if( $fieldName == 'site_title' )
+                    $replacements[ $key ] = get_bloginfo( 'name' );
+                elseif( $fieldName == 'site_url' )
+                    $replacements[ $key ] = site_url();
+                elseif( $fieldName == 'avatar' )
+                    $replacements[ $key ] = get_avatar( $user->ID );
+                elseif( $fieldName == 'login_url' )
+                    $replacements[ $key ] = wp_login_url();                    
+                elseif( $fieldName == 'logout_url' )
+                    $replacements[ $key ] = wp_logout_url();
+                elseif( $fieldName == 'lostpassword_url' )
+                    $replacements[ $key ] = wp_lostpassword_url();                                         
+                elseif( $fieldName == 'admin_url' )
+                    $replacements[ $key ] = admin_url();
+                elseif( $fieldName == 'activation_url' )
+                    $replacements[ $key ] = $userMeta->userActivationUrl( 'activate', $user->ID, false );
+                elseif( $fieldName == 'email_verification_url' )
+                    $replacements[ $key ] = $userMeta->emailVerificationUrl( $user );
+                elseif( $fieldName == 'login_form' )
+                    $replacements[ $key ] = $userMeta->lgoinForm();
+                elseif( $fieldName == 'lostpassword_form' )
+                    $replacements[ $key ] = $userMeta->lostPasswordForm();
+                elseif( !empty( $user->$fieldName ) )
+                    $replacements[ $key ] = is_array( $user->$fieldName ) ? implode( ',', $user->$fieldName ) : $user->$fieldName;
+                else
+                    $replacements[ $key ] = '';                                              
+            }
+            $data = str_replace($patterns, $replacements, $data);
+        }    
 
+        return $data;     
+    }
+    
+    function loadAllScripts(){
+        global $userMeta;
+
+        $userMeta->enqueueScripts( array( 
+            'plugin-framework', 
+            'user-meta',           
+            'jquery-ui-all',
+            'fileuploader',
+            'wysiwyg',
+            'jquery-ui-datepicker',
+            'jquery-ui-slider',
+            'timepicker',
+            'validationEngine',
+            'password_strength',
+        ) );                      
+        $userMeta->runLocalization();
+    }
+        
 }
 endif;

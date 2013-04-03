@@ -1,4 +1,43 @@
 
+.um_label_top{
+    display: block;
+    font-weight: bold; 
+}
+
+.um_label_left{
+    display: inline;
+    font-weight: bold;
+    float: left;
+    width: 140px;
+    margin-right: 10px;   
+}
+
+.um_label_right{
+    display: inline;
+    font-weight: bold;
+    float:right;
+    width: 140px;
+    margin-left: 10px;      
+}
+
+.um_label_inline{
+    display: inline;
+    font-weight: bold;  
+}
+
+.um_left_margin{
+    margin-left: 150px;
+}
+
+.um_half_width{
+    float: left;
+    width: 50%;
+}
+
+.um_inline{
+    display: inline;
+}
+
 .um_get_button {    
     width: 150px;
     height: 43px;
@@ -39,9 +78,9 @@ input[type='checkbox'].um_input,input[type='radio'].um_input {
 
 .um_field_selecor {
     display: inline-block;
-    width: 40%;
-    margin: 2%;
-    padding: 2%;
+    width: 45%;
+    margin: 1% !important;
+    /*padding: 2% !important;*/
     text-align: center;
 }
 
@@ -55,6 +94,10 @@ input[type='checkbox'].um_input,input[type='radio'].um_input {
 
 .um_right {
     float: right;
+}
+
+.um_clear {
+    clear:both;
 }
 
 .um_block_title {
@@ -124,4 +167,10 @@ input[type='checkbox'].um_input,input[type='radio'].um_input {
 #um_resetpassword_form h2 {
     font-size: 25px;
     color: blue;
+}
+
+.um_import_div {
+    padding-left: 40px;   
+    background: url(../images/um_line.png) repeat-y left;
+    min-height: 170px;
 }

@@ -17,7 +17,6 @@
     padding: 5px;
 }
 
-
 .pf_loading {
     background:url(../images/pf_loading.gif) no-repeat;
     margin:  10px; 
@@ -33,8 +32,15 @@
     color: red;
 }
 
-.pf_divider {background-color:#fff; height:1px; overflow:hidden; border-top:1px solid #E6E6E6; border-bottom:1px solid #fff; margin:24px 0; clear:both}
-
+.pf_divider {
+    margin: 10px 0; 
+    background-color: #fff; 
+    height: 1px; 
+    overflow: hidden; 
+    border-top: 1px solid #E6E6E6; 
+    border-bottom: 1px solid #fff; 
+    clear: both;
+}
 
 /* Various Message */
 .pf_info, .pf_success, .pf_warning, .pf_error, .pf_validation {
@@ -44,26 +50,31 @@
     background-repeat: no-repeat;
     background-position: 10px center;
 }
+
 .pf_info {
     color: #00529B;
     background-color: #BDE5F8;
     background-image: url('../images/info.png');
 }
+
 .pf_success {
     color: #4F8A10;
     background-color: #DFF2BF;
     background-image:url('../images/success.png');
 }
+
 .pf_warning {
     color: #9F6000;
     background-color: #FEEFB3;
     background-image: url('../images/warning.png');
 }
+
 .pf_error {
     color: #D8000C;
     background-color: #FFBABA;
     background-image: url('../images/error.png');
 }
+
 .pf_validation {
     color: #D63301;
     background-color: #FFCCBA;
@@ -87,7 +98,8 @@
     margin: 0 5px;
 	padding: 0 5px;
 	display: inline-block;
-	}
+}
+    
 .password_strength_1 { background-color: #fcb6b1; }
 .password_strength_2 { background-color: #fccab1; }
 .password_strength_3 { background-color: #fcfbb1; }
@@ -137,4 +149,13 @@
     width: 60%;
     padding: 2px;    
 }
-    
+
+.pf_width_70 {
+    width: 70%;
+    padding: 2px;    
+}
+
+.pf_blure{
+    opacity:.5;
+    filter:alpha(opacity=50);
+}

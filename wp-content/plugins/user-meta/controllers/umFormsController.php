@@ -4,7 +4,7 @@ if( !class_exists( 'umFormsController' ) ) :
 class umFormsController {
     
     function __construct(){      
-        add_action( 'admin_menu',               array( $this, 'menuItem' ) );    
+        //add_action( 'admin_menu',               array( $this, 'menuItem' ) );    
         
         add_action( 'wp_ajax_um_add_form',      array( $this, 'ajaxAddForm' ) ); 
         add_action( 'wp_ajax_um_update_forms',  array( $this, 'ajaxUpdateForms' ) );                
@@ -89,7 +89,10 @@ class umFormsController {
             die();
         }
         
-        $userMeta->updateData( 'forms', $data );       
+        $data = apply_filters( 'user_meta_pre_configuration_update', $data, 'forms_editor' );
+        
+        $userMeta->updateData( 'forms', $data );   
+        
         echo $userMeta->showMessage( __( 'Form Successfully saved.', $userMeta->name ) );
         die();
     }

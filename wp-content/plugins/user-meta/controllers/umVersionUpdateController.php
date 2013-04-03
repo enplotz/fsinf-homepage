@@ -6,7 +6,8 @@ class umVersionUpdateController {
     function __construct() {
         //global $userMeta;
         
-        add_action( 'user_meta_admin_notices',      array( $this, 'init' ) );
+        //add_action( 'user_meta_admin_notices',      array( $this, 'init' ) );
+        add_action( 'admin_menu',      array( $this, 'init' ), 15 );
         
         add_filter( 'site_transient_update_plugins',array( $this, 'pluginUpdateNotification' ) ); 
         
@@ -14,8 +15,53 @@ class umVersionUpdateController {
          * Set on plugin activation
          */
         //register_activation_hook( $userMeta->file,  array( $this, 'runEvent' ) );
-        //add_action( 'um_plugin_activation_event',   array( $this, 'init' ) );        
+        //add_action( 'um_plugin_activation_event',   array( $this, 'init' ) );      
     }    
+            
+    /**
+     * Check if data update is needed after version update
+     */
+    function init(){
+        global $userMeta;
+
+        $history = $userMeta->getData( 'history' );   
+        
+        $lastVersion = null;
+        if( !empty( $history ) ){       
+            if( isset( $history[ 'version' ][ 'last_version' ] ) )
+                $lastVersion = $history[ 'version' ][ 'last_version' ];
+        }
+
+        if( version_compare( $userMeta->version, $lastVersion, '<=' ) )
+            return;
+            
+        // Determine last version and run data update
+        if( $lastVersion )
+            self::runUpgrade( $lastVersion );
+        else{
+            if( get_option( 'user_meta_fields' ) )
+                self::runUpgrade( '1.1.0' );
+            elseif( get_option( 'user_meta_field' ) )
+                self::runUpgrade( '1.0.3' );
+        }
+        
+        // Saveing last version data
+        $history[ 'version' ][ 'last_version' ] = $userMeta->version;
+        $history[ 'version' ][ $userMeta->version ] = array( 
+            'timestamp' => time(),
+        );
+        
+        $userMeta->updateData( 'history', $history );
+        
+        nocache_headers();
+    }
+    
+    /**
+     * Migrate data from previous version by wp_schedule_single_event on plugin activation.
+     */
+    /*function runEvent(){
+        wp_schedule_single_event( current_time( 'timestamp' ), 'um_plugin_activation_event' );
+    }*/    
     
     /**
      * Replace download url for pro version
@@ -53,68 +99,32 @@ class umVersionUpdateController {
         }
                   
         return $data;                         
-    }       
-    
-    /**
-     * Migrate data from previous version by wp_schedule_single_event on plugin activation.
-     */
-    function runEvent(){
-        wp_schedule_single_event( current_time( 'timestamp' ), 'um_plugin_activation_event' );
-    }
-    
-    /**
-     * Check if data update is needed after version update
-     */
-    function init(){
-        global $userMeta;
-
-        $history = $userMeta->getData( 'history' );   
-        
-        $lastVersion = null;
-        if( !empty( $history ) ){       
-            if( isset( $history[ 'version' ][ 'last_version' ] ) )
-                $lastVersion = $history[ 'version' ][ 'last_version' ];
-        }
-
-        // Return if already updated
-        if( $lastVersion == $userMeta->version )
-            return;
-            
-        // Determine last version and run data update
-        if( $lastVersion )
-            $this->runUpgrade( $lastVersion );
-        else{
-            if( get_option( 'user_meta_fields' ) )
-                $this->runUpgrade( '1.1.0' );
-            elseif( get_option( 'user_meta_field' ) )
-                $this->runUpgrade( '1.0.3' );
-        }
-        
-        // Saveing last version data
-        $history[ 'version' ][ 'last_version' ] = $userMeta->version;
-        $history[ 'version' ][ $userMeta->version ] = array( 
-            'timestamp' => time(),
-        );
-        
-        $userMeta->updateData( 'history', $history );
-    }
+    }    
     
     /**
      * Run upgrade one by one
      */
-    function runUpgrade( $versionFrom ){        
+    function runUpgrade( $versionFrom ){  
+        global $userMeta;
         
         if( in_array( $versionFrom, array( '1.0.0', '1.0.1', '1.0.2', '1.0.3' ) ) ){
-            $this->upgradeFrom_1_0_3_To_1_1_0();
-            $this->upgradeAvatarFrom_1_0_3_To_1_1_0();
+            self::upgradeFrom_1_0_3_To_1_1_0();
+            self::upgradeAvatarFrom_1_0_3_To_1_1_0();
             $versionFrom = '1.1.0';
         }
         
-        if( in_array( $versionFrom, array( '1.0.5', '1.1.0', '1.1.1', '1.1.2rc1', '1.1.2rc2', '1.1.2rc2.1' ) ) ){
-            $this->upgradeFrom_1_1_0_To_1_1_2();
-        }      
+        if( in_array( $versionFrom, array( '1.0.5', '1.1.0', '1.1.1', '1.1.2rc1', '1.1.2rc2' ) ) )
+            self::upgradeFrom_1_1_0_To_1_1_2();
+                    
+        if( in_array( $versionFrom, array( '1.1.2rc3', '1.1.2rc4', '1.1.2', '1.1.3rc1', '1.1.3rc2' ) ) )
+            $userMeta->changeAuthProStructure();   
+        
+        $userMeta->notifyVersionUpdate();
     }
     
+    /**
+     * Distribute one page settings data to multipart array
+     */
     function upgradeFrom_1_1_0_To_1_1_2(){
         global $userMeta;     
               
@@ -194,7 +204,7 @@ class umVersionUpdateController {
         if( $prevDefaultFields ){
             foreach( $prevDefaultFields as $fieldName => $noData  ){   
                 if( $fieldName == 'avatar' ) $fieldName = 'user_avatar';
-                $fieldData = $this->getFields( 'key', $fieldName );
+                $fieldData = $userMeta->getFields( 'key', $fieldName );
                 if( !$fieldData ) continue;
                 $i++;
                 $newField[$i]['field_title']    = isset($fieldData['title']) ? $fieldData['title'] : null;
@@ -270,7 +280,8 @@ class umVersionUpdateController {
         update_option( 'user_meta_cache', $cache);
     
         return true;        
-    }    
+    }
+
  
 }
 

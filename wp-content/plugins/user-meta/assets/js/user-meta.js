@@ -1,30 +1,30 @@
 
-function umNewField( element ){ 
+function umNewField( element ){
     newID = parseInt( jQuery("#last_id").val() ) + 1;
     arg = 'id=' + newID + '&field_type=' + jQuery(element).attr('field_type');
     pfAjaxCall( element, 'um_add_field', arg, function(data){
-        jQuery("#um_fields_container").append( data );        
+        jQuery("#um_fields_container").append( data );
         jQuery("#last_id").val( newID );
     });
 }
 
-function umNewForm( element ){    
+function umNewForm( element ){
     newID = parseInt( jQuery("#form_count").val() ) + 1;
     pfAjaxCall( element, 'um_add_form', 'id='+newID, function(data){
-        jQuery("#um_fields_container").append( data );        
+        jQuery("#um_fields_container").append( data );
         jQuery("#form_count").val( newID );
         
         jQuery('.um_dropme').sortable({
             connectWith: '.um_dropme',
             cursor: 'pointer'
         }).droppable({
-            accept: '.button',
+            accept: '.postbox',
             activeClass: 'um_highlight'
-        });                 
+        });
     });
 }
 
-function umUpdateField( element ){    
+function umUpdateField( element ){
     if( !jQuery(element).validationEngine("validate") ) return;
     
     bindElement = jQuery(".pf_save_button");
@@ -35,11 +35,12 @@ function umUpdateField( element ){
     });
 }
 
-function umUpdateForms( element ){    
+
+function umUpdateForms( element ){
     if( !jQuery(element).validationEngine("validate") ) return;
     
     jQuery(".um_selected_fields").each(function(index){
-        var length = jQuery(this).children(".button").size();
+        var length = jQuery(this).children(".postbox").size();
         n = index + 1;
         jQuery("#field_count_" + n).val( length ); 
         
@@ -64,11 +65,20 @@ function umAuthorizePro( element ){
     });    
 }
 
-function umUpdateSettings( element ){      
+function umWithdrawLicense( element ){
+    bindElement = jQuery(element);
+    arg = "method_name=withdrawLicense";
+    bindElement.parent().children(".pf_ajax_result").remove();
+    pfAjaxCall( bindElement, 'pf_ajax_request', arg, function(data){
+        bindElement.after("<div class='pf_ajax_result'>"+data+"</div>");
+    });     
+}
+
+function umUpdateSettings( element ){
     bindElement = jQuery("#update_settings");
     
     jQuery(".um_selected_fields").each(function(index){
-        var length = jQuery(this).children(".button").size();
+        var length = jQuery(this).children(".postbox").size();
         n = index + 1;
         jQuery("#field_count_" + n).val( length ); 
         
@@ -81,7 +91,7 @@ function umUpdateSettings( element ){
     });
 }
 
-function umChangeField( element, fieldID){   
+function umChangeField( element, fieldID){
     arg = jQuery( "#field_" + fieldID + " *" ).serialize();
     pfAjaxCall( element, "um_change_field", arg, function(data){
         jQuery(element).parents(".meta-box-sortables").replaceWith(data);
@@ -103,29 +113,65 @@ function umChangeFormTitle( element ){
 function umInsertUser( element ){
     if( !jQuery(element).validationEngine("validate") ) return;
     
-    bindElement = jQuery("#insert_user");
-    bindElement.parent().children(".pf_ajax_result").remove();
+    bindElement = jQuery(element);
+    bindElement.children(".pf_ajax_result").remove();
     arg = jQuery( element ).serialize();
-    pfAjaxCall( bindElement, 'um_insert_user', arg, function(data){
+    pfAjaxCall( bindElement, 'pf_ajax_request', arg, function(data){
         if( jQuery(data).attr('action_type') == 'registration' )
             jQuery(element).replaceWith(data);
         else
-            bindElement.after("<div class='pf_ajax_result'>"+data+"</div>");        
+            bindElement.append("<div class='pf_ajax_result'>"+data+"</div>");        
     });    
 }
 
-function umPageNavi( pageID, isNext ){
+function umLogin( element ){
+    //if( !jQuery(element).validationEngine("validate") ) return;
+        
+    arg = jQuery( element ).serialize();
+    bindElement = jQuery(element);
+    bindElement.children(".pf_ajax_result").remove();
+    pfAjaxCall( bindElement, 'pf_ajax_request', arg, function(data){
+        if( jQuery(data).attr('status') == 'success' ){
+            jQuery(element).replaceWith(data);
+            redirection = jQuery(data).attr('redirect_to');
+            if( redirection )
+                window.location.href = redirection;
+        }
+        else
+            bindElement.append("<div class='pf_ajax_result'>"+data+"</div>");
+    });      
+}
+
+function umLogout( element ){
+    arg = 'action_type=logout';
+    
+    pfAjaxCall( element, 'um_login', arg, function(data){
+        //alert(data);
+        //jQuery("#" + jQuery() )
+        jQuery(element).after(data);
+        //jQuery(element).parents(".error").remove();    
+    });    
+}
+
+function umPageNavi( pageID, isNext, element ){
     var haveError = false;
     
+    if( typeof element == 'object' )
+        formID = "#" + jQuery(element).parents("form").attr("id");
+    else
+        formID = "#" + element;
+
     if( isNext ){
         checkingPage = parseInt(pageID) - 1;
-        jQuery("#um_page_segment_" + checkingPage + " .um_input").each(function(index){
-            id = jQuery(this).attr("id");
-            error = jQuery("#um_user_form").validationEngine( "validateField", "#" + id );
-            if( error )
-                haveError = true;
-        });
         
+        jQuery( formID + " #um_page_segment_" + checkingPage + " .um_input" ).each(function(){
+            fieldID = jQuery(this).attr("id");
+            error = jQuery(formID).validationEngine( "validateField", "#" + fieldID );           
+            if( error )
+                haveError = true;           
+        });
+
+        // Not in use
         // Checking every um_unique class for error. (validateField not working for ajax)
         jQuery("#um_page_segment_" + checkingPage + " .um_unique").each(function(index){
             id = jQuery(this).attr("id");
@@ -142,17 +188,21 @@ function umPageNavi( pageID, isNext ){
         		}
         	});  
         });               
-    }
+    }else
+        jQuery(formID).validationEngine("hide");
     
     if( haveError ) return false;
     
-    jQuery(".um_page_segment").hide();
-    jQuery("#um_page_segment_" + pageID ).fadeIn('slow');
+    jQuery(formID).children(".um_page_segment").hide();
+    jQuery(formID).children("#um_page_segment_" + pageID ).fadeIn('slow');    
 }
 
 function umFileUploader( uploadScript ){
     jQuery(".um_file_uploader_field").each(function(index){
-        var fieldID = jQuery(this).attr("id");
+
+        var divID = jQuery(this).attr("id");
+        var fieldID = jQuery(this).attr("um_field_id");
+        
         allowedExtensions = jQuery(this).attr("extension");
         maxSize = jQuery(this).attr("maxsize")
         if( !allowedExtensions )
@@ -162,7 +212,7 @@ function umFileUploader( uploadScript ){
         
         var uploader = new qq.FileUploader({
             // pass the dom node (ex. $(selector)[0] for jQuery users)
-            element: document.getElementById(fieldID),
+            element: document.getElementById(divID),
             // path to server-side upload script
             action: uploadScript,
             params: {"field_name":jQuery(this).attr("name"), field_id:fieldID, "pf_nonce":pf_nonce },
@@ -170,20 +220,26 @@ function umFileUploader( uploadScript ){
             sizeLimit: maxSize,
             onComplete: function(id, fileName, responseJSON){
                 if( !responseJSON.success ) return;
-                //console.log(responseJSON);
+                
+                // responseJSON comes from uploader.php return
                 handle = jQuery('#'+fieldID);
                 arg = 'field_name=' + responseJSON.field_name + '&filepath=' + responseJSON.filepath + '&field_id=' + fieldID;
 
                 // Check if it is used by User Import Upload
-                if( responseJSON.field_name == 'csv_upload_user_import' ){
-                    arg = arg + '&step=one';
+                if( responseJSON.field_name == 'txt_upload_ump_import' ){
+                    arg = arg + '&method_name=ImportUmp';
+                    pfAjaxCall( handle, 'pf_ajax_request', arg, function(data){
+                        jQuery('#'+fieldID+'_result').empty().append( data );      
+                    });                                     
+                }else if( responseJSON.field_name == 'csv_upload_user_import' ){
+                    arg = arg + '&step=one';                   
                     pfAjaxCall( handle, 'um_user_import', arg, function(data){
                         //jQuery('#'+fieldID+'_result').empty().append( data );   
                         jQuery(handle).parents(".meta-box-sortables").replaceWith(data);    
                     });                    
                 }else{
                     pfAjaxCall( handle, 'um_show_uploaded_file', arg, function(data){
-                        jQuery('#'+fieldID+'_result').empty().append( data );       
+                        jQuery('#'+divID+'_result').empty().append( data );       
                     });                    
                 }                
                 
@@ -223,35 +279,6 @@ function umUpgradeFromPrevious(element){
     }); 
 }
 
-function umLogin( element ){
-    //if( !jQuery(element).validationEngine("validate") ) return;
-        
-    arg = jQuery( element ).serialize();
-    bindElement = jQuery(element);
-    bindElement.parent().children(".pf_ajax_result").remove();
-    pfAjaxCall( bindElement, 'um_login', arg, function(data){
-        if( jQuery(data).attr('status') == 'success' ){
-            jQuery(element).replaceWith(data);
-            redirection = jQuery(data).attr('redirect_to');
-            if( redirection )
-                window.location.href = redirection;
-        }
-        else
-            bindElement.after("<div class='pf_ajax_result'>"+data+"</div>");
-    });      
-}
-
-function umLogout( element ){
-    arg = 'action_type=logout';
-    
-    pfAjaxCall( element, 'um_login', arg, function(data){
-        //alert(data);
-        //jQuery("#" + jQuery() )
-        jQuery(element).after(data);
-        //jQuery(element).parents(".error").remove();    
-    });    
-}
-
 // Get Pro Message in admin section
 function umGetProMessage( element ){
     alert( user_meta.get_pro_link );
@@ -264,6 +291,16 @@ function umToggleCustomField( element ){
     else
         jQuery(element).parent().children(".um_custom_field").fadeOut();
 }
+
+
+function umRedirection( element ){
+    var arg = jQuery( element ).parent("form").serialize();       
+    document.location.href = ajaxurl + "?action=pf_ajax_request&" + arg;  
+}
+
+/**
+ * Export and Import
+ */
 
 var umAjaxRequest;
 
@@ -297,7 +334,69 @@ function umUserImport( element, file_pointer, init ){
     });
 }
 
-function copyFormData( element ){
-    data = jQuery(element).parents();  
-    //console.log(data);
+function umUserExport( element, type ){
+    var arg = jQuery( element ).parent("form").serialize();
+    var field_count = jQuery( element ).parent("form").children(".um_selected_fields").children(".postbox").size();
+        
+    arg = arg + "&action_type=" + type + "&field_count=" + field_count;
+       
+    if( type == 'export' || type == 'save_export' ){
+        document.location.href = ajaxurl + "?action=pf_ajax_request&" + arg;
+    }else if( type == 'save' ){
+        pfAjaxCall( element, 'pf_ajax_request', arg, function(data){
+            alert('Form saved');
+        });          
+    }
+}
+
+function umNewUserExportForm( element ){
+    var formID = jQuery("#new_user_export_form_id").val();
+    incID = formID + 1;
+    jQuery("#new_user_export_form_id").val( parseInt(formID) + 1 );  
+    
+    arg = 'method_name=userExportForm&form_id=' + formID;
+    
+    pfAjaxCall( element, 'pf_ajax_request', arg, function(data){
+        jQuery(element).before(data);        
+        
+        jQuery('.um_dropme').sortable({
+            connectWith: '.um_dropme',
+            cursor: 'pointer'
+        }).droppable({
+            accept: '.postbox',
+            activeClass: 'um_highlight'
+        });  
+        jQuery(".um_date").datepicker({ dateFormat: 'yy-mm-dd', changeYear: true });
+    });    
+}
+
+function umAddFieldToExport( element ){
+    var metaKey = jQuery(element).parent().children(".um_add_export_meta_key").val();
+    if(metaKey){
+        var button  = '<div class="postbox">Title:<input type="text" style="width:50%" name="fields['+metaKey+']" value="'+metaKey+'" /> ('+metaKey+')</div>';
+        jQuery(element).parents("form").children(".um_selected_fields").append(button);
+    }else{
+        alert( 'Please provide Meta Key.' );
+    }
+}
+
+function umDragAllFieldToExport( element ){
+    jQuery(element).parents("form").children(".um_selected_fields").append(
+        jQuery(element).parents("form").children(".um_availabele_fields").html()
+    );
+    jQuery(element).parents("form").children(".um_availabele_fields").empty()
+}
+
+function umRemoveFieldToExport( element, formID ){
+    if( confirm( "This form will removed permanantly. Confirm to Remove?" ) ){ 
+        var arg = 'method_name=RemoveExportForm&form_id=' + formID;
+        pfAjaxCall( element, 'pf_ajax_request', arg, function(data){
+
+        });  
+        jQuery( element ).parents(".meta-box-sortables").hide('slow').empty();
+    }
+}
+
+function umTest(){
+    alert('working..');
 }
