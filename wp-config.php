@@ -28,7 +28,7 @@ if ( file_exists( dirname( __FILE__ ) . '/lconf/local-config.php')) {
 	define('DB_USER', $_SERVER['wpdbuser']);
 	define('DB_PASSWORD', $_SERVER['wpdbpassword']);
 	define('DB_HOST', $_SERVER['wpdbhost']);
-
+	define('WP_DOOR_URL', $_SERVER['wpdoorurl']);
 
 	/**#@+
 	 * Authentication Unique Keys and Salts.
@@ -49,7 +49,6 @@ if ( file_exists( dirname( __FILE__ ) . '/lconf/local-config.php')) {
 	define('NONCE_SALT',       $_SERVER['wpnoncesalt']);
 
 }
-
 
 
 

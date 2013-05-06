@@ -4501,3 +4501,9 @@ a.thumbnail:hover {
 .form-actions {
   height: 30px;
 }
+.d-unlock {
+  color: #80bb3f;
+}
+.d-lock {
+  color: #c71c22;
+}

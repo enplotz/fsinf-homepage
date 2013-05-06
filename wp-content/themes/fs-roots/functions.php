@@ -118,3 +118,9 @@ $role_object = get_role( 'editor' );
 
 // add $cap capability to this role object
 $role_object->add_cap( 'edit_theme_options' );
+
+function get_json_data($url)
+{
+  $json = file_get_contents($url); $data = json_decode($json, TRUE);
+  return $data;
+}
