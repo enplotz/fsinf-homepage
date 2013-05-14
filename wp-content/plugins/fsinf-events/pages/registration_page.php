@@ -1,5 +1,5 @@
 <?php
-add_shortcode('fsinf_current_event_booking', 'fsfin_events_booking_form');
+add_shortcode('fsinfcurrenteventbooking', 'fsfin_events_booking_form');
 
 function fsfin_events_booking_form()
 {
