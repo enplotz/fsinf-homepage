@@ -364,7 +364,8 @@ class Roots_Nav_Walker extends Walker_Nav_Menu {
     return preg_match('/(current-)/', $val);
   }
 
-  function start_el(&$output, $item, $depth, $args) {
+  function start_el(&$output, $object, $depth = 0, $args = array(), $current_object_id = 0) {
+    $item = $object;
     global $wp_query;
     $indent = ($depth) ? str_repeat("\t", $depth) : '';
 
@@ -402,11 +403,12 @@ class Roots_Navbar_Nav_Walker extends Walker_Nav_Menu {
     return preg_match('/(current-)|active|dropdown/', $val);
   }
 
-  function start_lvl(&$output, $depth) {
+  function start_lvl(&$output, $depth = 0, $args = array()) {
     $output .= "\n<ul class=\"dropdown-menu\">\n";
   }
 
-  function start_el(&$output, $item, $depth, $args) {
+  function start_el(&$output, $object, $depth = 0, $args = array(), $current_object_id = 0) {
+    $item = $object;
     global $wp_query;
     $indent = ($depth) ? str_repeat("\t", $depth) : '';
 

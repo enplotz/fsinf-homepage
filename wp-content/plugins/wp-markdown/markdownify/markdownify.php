@@ -202,14 +202,14 @@ class Markdownify {
    * @var array<string>
    */
   var $drop = array(
-    'script',
+    //'script',
     'head',
-    'style',
+   // 'style',
     'form',
     'area',
     'object',
     'param',
-    'iframe',
+    //'iframe',
   );
   /**
    * Markdown indents which could be wrapped
@@ -227,20 +227,23 @@ class Markdownify {
   /**
    * list of chars which have to be escaped in normal text
    * @note: use strings in regex format
+   * @note: WP-shortcode -MD fun 1! Escape underscores only appearing at the ends of words.
+   * @note: WP-shortcode - MD fun 2! [text][text] in HTML is not be escaped. (Could be a shortcode
+   * and won't be valid link: all links from HTML->MD have integer identifier). 
    *
    * @var array
    *
    * TODO: what's with block chars / sequences at the beginning of a block?
    */
   var $escapeInText = array(
-    '([-*_])([ ]{0,2}\1){2,}' => '\\\\$0|', # hr
+    '^([-*_])([ ]{0,2}\1){2,}$' => '\\\\$0', # hr
     '\*\*([^*\s]+)\*\*' => '\*\*$1\*\*', # strong
     '\*([^*\s]+)\*' => '\*$1\*', # em
     '__(?! |_)(.+)(?!<_| )__' => '\_\_$1\_\_', # em
-    '_(?! |_)(.+)(?!<_| )_' => '\_$1\_', # em
+    '\b_(?! |_)(.+)(?!<_| )_' => '\_$1\_', # em Force it to only check at the beginning of words - prevents breaking shortcodes
     '`(.+)`' => '\`$1\`', # code
     '\[(.+)\](\s*\()' => '\[$1\]$2', # links: [text] (url) => [text\] (url)
-    '\[(.+)\](\s*)\[(.*)\]' => '\[$1\]$2\[$3\]', # links: [text][id] => [text\][id\]
+    '\[(.+)\](\s*)\[(\d)\]' => '\[$1\]$2\[$3\]', # links: [text][integer] => [text\][integer]
   );
   /**
    * wether last processed node was a block tag or not
@@ -997,7 +1000,7 @@ class Markdownify {
    * @return void
    */
   function out($put, $nowrap = false) {
-    if (empty($put)) {
+  	if ( $put !== '0' && empty( $put ) ) {
       return;
     }
     if (!empty($this->buffer)) {

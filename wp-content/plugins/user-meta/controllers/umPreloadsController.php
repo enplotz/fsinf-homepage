@@ -20,7 +20,7 @@ class umPreloadsController {
                        
         add_action( 'wp_ajax_um_common_request',    array($userMeta, 'ajaxUmCommonRequest' ) );
                    
-        add_action( 'user_meta_admin_notices',      array( $this, 'adminNotices' ) );  
+        //add_action( 'user_meta_admin_notices',      array( $this, 'adminNotices' ) );  
         add_action( 'admin_notices',                array( $userMeta, 'activateLicenseNotice' ) ); 
             
         add_filter( 'pf_file_upload_allowed_extensions', array( $this, 'fileUploadExtensions' ) );

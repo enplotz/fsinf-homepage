@@ -1,10 +1,10 @@
 === Plugin Name ===
 Contributors: Vadimk
 Donate link: http://vadimk.com/donate/
-Tags: plugin, admin, profile, links, social, meta, facebook, twitter, google+, tumblr, linkedin, stumbleupon, author, user, users, fields, details.
-Requires at least: 2.0.2
-Tested up to: 3.3.1
-Stable tag: 0.3.2
+Tags: plugin, admin, profile, links, social, meta, facebook, twitter, google+, tumblr, linkedin, pinterest, youtube, author, user, users, fields, details.
+Requires at least: 3.3
+Tested up to: 3.6.1
+Stable tag: 0.3.3
 
 Add extra fields to the user profile page, saved in WordPress' native way (in wp_usermeta).
 
@@ -33,6 +33,9 @@ Install it like any other plugin, no special actions required.
 Please contact me here http://vadimk.com/contact/.
 
 == Changelog ==
+
+= 0.3.3 =
+* Fixed deprecated functions usage
 
 = 0.3.2 =
 * Extra field heading is not shown at user profile edit page if there's no fields to display (user has no access to any configured field).

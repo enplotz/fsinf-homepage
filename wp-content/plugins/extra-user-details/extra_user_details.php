@@ -4,8 +4,9 @@ Plugin Name: Extra User Details
 Plugin URI: http://vadimk.com/wordpress-plugins/extra-user-details/
 Description: Allows you to add additional fields to the user profile like Facebook, Twitter etc.
 Author: Vadym Khukhrianskyi
-Version: 0.3.2
+Version: 0.3.3
 Author URI: http://vadimk.com/
+License: GPLv2 or later
 */
 
 if ( ! get_option( 'eud_fields' ) ) add_option( 'eud_fields', '' );
@@ -16,11 +17,13 @@ add_action( 'profile_update', 'eud_update_ExtraFields' );
 
 //Administration
 add_action( 'admin_menu', 'eud_plugin_menu' );
-add_action('init', 'eud_scripts');
-add_action( 'admin_init', 'add_eud_contextual_help' );
+add_action( 'init', 'eud_scripts' );
+//add_action( 'admin_init', 'add_eud_contextual_help' );
 
 function eud_plugin_menu() {
-	add_submenu_page( 'users.php', 'Extra User Details Options', 'Extra User Details', 'edit_users', 'extra_user_details', 'eud_plugin_options' );
+	$eud_page = add_submenu_page( 'users.php', 'Extra User Details Options', 'Extra User Details', 'edit_users', 'extra_user_details', 'eud_plugin_options' );
+
+	add_action( 'load-' . $eud_page, 'add_eud_contextual_help' );
 }
 
 function eud_scripts(){
@@ -33,7 +36,7 @@ function eud_scripts(){
  * @return void
  * @author Vadimk
  **/
-function add_eud_contextual_help(){
+function add_eud_contextual_help() {
   $help = '
 	<div id="eud-fields-help">
 		<p><strong>' . __( "How to use this plugin:", 'extra_user_details' ) . '</strong></p>
@@ -53,7 +56,13 @@ function add_eud_contextual_help(){
 			<img src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" alt="" width="1" height="1" border="0" />
 		</form>
 	</div>';
-  add_contextual_help( 'users_page_extra_user_details', $help );
+
+	$screen = get_current_screen();
+	$screen->add_help_tab(array(
+		'title'   => 'Help',
+		'id'      => 'users_page_extra_user_details',
+		'content' => $help,
+	));
 }
 
 
@@ -335,7 +344,7 @@ function eud_update_ExtraFields() {
 
 	foreach ( $_POST as $key => $value ) {
 
-		if( eregi( 'eud', $key ) ) {
+		if( strpos( $key, 'eud' ) === 0 ) {
 
 			$key = str_replace( 'eud', '', $key );
 

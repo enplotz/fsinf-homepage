@@ -9,13 +9,13 @@ class umVersionUpdateController {
         //add_action( 'user_meta_admin_notices',      array( $this, 'init' ) );
         add_action( 'admin_menu',      array( $this, 'init' ), 15 );
         
-        add_filter( 'site_transient_update_plugins',array( $this, 'pluginUpdateNotification' ) ); 
+        //add_filter( 'site_transient_update_plugins',array( $this, 'pluginUpdateNotification' ) ); 
         
         /**
          * Set on plugin activation
          */
         //register_activation_hook( $userMeta->file,  array( $this, 'runEvent' ) );
-        //add_action( 'um_plugin_activation_event',   array( $this, 'init' ) );      
+        //add_action( 'um_plugin_activation_event',   array( $this, 'init' ) );  
     }    
             
     /**
@@ -85,7 +85,7 @@ class umVersionUpdateController {
          * Running Force Upgrade (free to pro)
          */
         if( isset( $data->checked[ $userMeta->pluginSlug ] ) ){
-            if( !$userMeta->isPro && $userMeta->isPro() ){
+            if( !$userMeta->isPro && $userMeta->isLicenceValidated() ){
                 $upgrade = new stdClass;
                 $upgrade->id            = '0';
                 $upgrade->slug          = $userMeta->pluginSlug;

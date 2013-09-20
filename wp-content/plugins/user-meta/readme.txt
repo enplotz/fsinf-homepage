@@ -1,10 +1,10 @@
 === User Meta ===
 Contributors: khaledsaikat
 Donate link: http://user-meta.com/donation
-Tags: user, profile, registration, login, frontend, users, usermeta, import, csv, upload, AJAX, admin, plugin, page, image, images, photo, picture, file, email, shortcode, captcha, avatar, redirect, register, password, custom, csv, import, user import, widget
+Tags: user, profile, registration, login, frontend, users, usermeta, import, export, csv, upload, AJAX, admin, file, email, captcha, avatar, redirect, password, custom fields, widget
 Requires at least: 3.3.0
-Tested up to: 3.5.1
-Stable tag: 1.1.3
+Tested up to: 3.6
+Stable tag: 1.1.3.1
 Copyright: Khaled Saikat, user-meta.com.
 License: GNU General Public License
 

@@ -7,16 +7,16 @@
  * Author: Justin Tadlock
  * Author URI: http://justintadlock.com
  *
- * The members plugin was created because the WordPress community is lacking a solid permissions 
- * plugin that is both open source and works completely within the confines of the APIs in WordPress.  
- * But, the plugin is so much more than just a plugin to control permissions.  It is meant to extend 
+ * The members plugin was created because the WordPress community is lacking a solid permissions
+ * plugin that is both open source and works completely within the confines of the APIs in WordPress.
+ * But, the plugin is so much more than just a plugin to control permissions.  It is meant to extend
  * WordPress by making user, role, and content management as simple as using WordPress itself.
  *
- * This program is free software; you can redistribute it and/or modify it under the terms of the GNU 
- * General Public License version 2, as published by the Free Software Foundation.  You may NOT assume 
+ * This program is free software; you can redistribute it and/or modify it under the terms of the GNU
+ * General Public License version 2, as published by the Free Software Foundation.  You may NOT assume
  * that you can use any other version of the GPL.
  *
- * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without 
+ * This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
  * even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
  * @package Members
@@ -31,16 +31,6 @@
  * @since 0.2.0
  */
 class Members_Load {
-
-	/**
-	 * PHP4 constructor method.  This will be removed once the plugin only supports WordPress 3.2, 
-	 * which is the version that drops PHP4 support.
-	 *
-	 * @since 0.2.0
-	 */
-	function Members_Load() {
-		$this->__construct();
-	}
 
 	/**
 	 * PHP5 constructor method.
@@ -186,10 +176,10 @@ class Members_Load {
 		}
 
 		/**
-		 * If the administrator role does not exist for some reason, we have a bit of a problem 
-		 * because this is a role management plugin and requires that someone actually be able to 
-		 * manage roles.  So, we're going to create a custom role here.  The site administrator can 
-		 * assign this custom role to any user they wish to work around this problem.  We're only 
+		 * If the administrator role does not exist for some reason, we have a bit of a problem
+		 * because this is a role management plugin and requires that someone actually be able to
+		 * manage roles.  So, we're going to create a custom role here.  The site administrator can
+		 * assign this custom role to any user they wish to work around this problem.  We're only
 		 * doing this for single-site installs of WordPress.  The 'super admin' has permission to do
 		 * pretty much anything on a multisite install.
 		 */

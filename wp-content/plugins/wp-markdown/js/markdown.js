@@ -9,17 +9,16 @@ jQuery(document).ready(function($) {
 		}
 
 		if($('#bbp_reply_content').length>0){
-			id =  "bbp_reply_content";
+			var id =  "bbp_reply_content";
 		}else if($('#bbp_topic_content').length>0){
-			id =  "bbp_topic_content";
+			var id =  "bbp_topic_content";
 		}else{
-			id =  "comment";
+			var id =  "comment";
 		}
 
-		if( $('#'+id ).length > 0 ){
+		if( $('#wmd-button-bar'+id ).length > 0 ){
 			var converter2 = new Markdown.getSanitizingConverter();
 			editor = new Markdown.Editor(converter2, id, { handler: help });
-			editor.run();
 		}
 		
 		if (typeof prettyPrint == 'function') {
@@ -30,5 +29,9 @@ jQuery(document).ready(function($) {
 			        prettyPrint();
    			 	});
 			}
+		}
+
+		if( editor ){
+			editor.run();
 		}
 });

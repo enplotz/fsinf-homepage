@@ -7,7 +7,7 @@ Description: Easy and extremely productive spam-fighting plugin with many sophis
 Author: Sergej M&uuml;ller
 Author URI: http://wpcoder.de
 Plugin URI: http://antispambee.com
-Version: 2.5.6
+Version: 2.5.9
 */
 
 
@@ -641,7 +641,7 @@ class Antispam_Bee {
 	public static function add_dashboard_count()
 	{
 		/* Aktiv? */
-		if ( !self::get_option('dashboard_count') ) {
+		if ( ! self::get_option('dashboard_count') ) {
 			return;
 		}
 
@@ -667,7 +667,7 @@ class Antispam_Bee {
 	public static function add_dashboard_chart()
 	{
 		/* Filter */
-		if ( !current_user_can('publish_posts') or !self::get_option('dashboard_chart') ) {
+		if ( ! current_user_can('publish_posts') OR ! self::get_option('dashboard_chart') ) {
 			return;
 		}
 
@@ -702,18 +702,18 @@ class Antispam_Bee {
 
 
 	/**
-	* Ausgabe der Dashboard-CSS
+	* Print dashboard styles
 	*
-	* @since   1.9
-	* @change  2.4.4
+	* @since   1.9.0
+	* @change  2.5.8
 	*/
 
 	public static function add_dashboard_style()
 	{
-		/* Plugin-Info */
+		/* Get plugin data */
 		$plugin = get_plugin_data(__FILE__);
 
-		/* CSS registrieren */
+		/* Register styles */
 		wp_register_style(
 			'ab_chart',
 			plugins_url('css/dashboard.min.css', __FILE__),
@@ -721,104 +721,107 @@ class Antispam_Bee {
 			$plugin['Version']
 		);
 
-		/* CSS ausgeben */
+		/* Embed styles */
   		wp_print_styles('ab_chart');
 	}
 
 
 	/**
-	* Ausgabe der Dashboard-JS
+	* Print dashboard scripts
 	*
-	* @since   1.9
-	* @change  2.4.4
+	* @since   1.9.0
+	* @change  2.5.8
 	*/
 
 	public static function add_dashboard_script()
 	{
-		/* Init */
-		$items = (array)self::get_option('daily_stats');
-
-		/* Leer? */
-		if ( empty($items) ) {
+		/* Get stats */
+		if ( ! self::get_option('daily_stats') ) {
 			return;
 		}
 
-		/* Sortieren */
-		krsort($items, SORT_NUMERIC);
-
-		/* Init */
-		$output = array(
-			'created' => array(),
-			'count' => array()
-		);
-
-		/* Init */
-		$i = 0;
-
-		/* Zeilen loopen */
-		foreach($items as $timestamp => $count) {
-			array_push(
-				$output['created'],
-				( $timestamp == strtotime('today', current_time('timestamp')) ? __('Today', 'antispam_bee') : date('d.m', $timestamp) )
-			);
-			array_push(
-				$output['count'],
-				(int)$count
-			);
-		}
-
-		/* Zusammenfassen */
-		$stats = array(
-			'created' => implode(',', $output['created']),
-			'count' => implode(',', $output['count'])
-		);
-
-		/* Plugin-Info */
+		/* Get plugin data */
 		$plugin = get_plugin_data(__FILE__);
 
-		/* JS einbinden */
+		/* Register scripts */
 		wp_register_script(
-			'ab_chart',
+			'sm_raphael_js',
+			plugins_url('js/raphael.min.js', __FILE__),
+			array(),
+			$plugin['Version'],
+			true
+		);
+		wp_register_script(
+			'sm_raphael_helper',
+			plugins_url('js/raphael.helper.min.js', __FILE__),
+			array(),
+			$plugin['Version'],
+			true
+		);
+		wp_register_script(
+			'ab_chart_js',
 			plugins_url('js/dashboard.min.js', __FILE__),
 			array('jquery'),
-			$plugin['Version']
-		);
-		wp_register_script(
-			'google_jsapi',
-			'https://www.google.com/jsapi',
-			false
+			$plugin['Version'],
+			true
 		);
 
-		/* Einbinden */
-		wp_enqueue_script('google_jsapi');
-		wp_enqueue_script('ab_chart');
-
-		/* Übergeben */
-		wp_localize_script(
-			'ab_chart',
-			'antispambee',
-			$stats
-		);
+		/* Embed scripts */
+		wp_enqueue_script('sm_raphael_js');
+		wp_enqueue_script('sm_raphael_helper');
+		wp_enqueue_script('ab_chart_js');
 	}
 
 
 	/**
-	* Ausgabe des Dashboard-Chart
+	* Print dashboard html
 	*
-	* @since   1.9
-	* @change  2.4
+	* @since   1.9.0
+	* @change  2.5.8
 	*/
 
 	public static function show_spam_chart()
 	{
-		/* Init */
+		/* Get stats */
 		$items = (array)self::get_option('daily_stats');
 
-		/* Ausgabe */
-		echo sprintf(
-			'<div id="ab_chart">%s</div>',
-			( empty($items) ? esc_html__('No data available.', 'antispam_bee') : '' )
-		);
+		/* Emty array? */
+		if ( empty($items) ) {
+			echo sprintf(
+				'<div id="ab_chart"><p>%s</p></div>',
+				esc_html__('No data available.', 'antispam_bee')
+			);
+
+			return;
+		}
+
+		/* Sort stats */
+		ksort($items, SORT_NUMERIC);
+
+		/* HTML start */
+		$html = "<table id=ab_chart_data>\n";
+
+
+		/* Timestamp table */
+		$html .= "<tfoot><tr>\n";
+		foreach($items as $date => $count) {
+			$html .= "<th>" .$date. "</th>\n";
+		}
+		$html .= "</tr></tfoot>\n";
+
+		/* Counter table */
+		$html .= "<tbody><tr>\n";
+		foreach($items as $date => $count) {
+			$html .= "<td>" .(int) $count. "</td>\n";
+		}
+		$html .= "</tr></tbody>\n";
+
+
+		/* HTML end */
+		$html .= "</table>\n";
+
+		/* Print html */
+		echo '<div id="ab_chart">' .$html. '</div>';
 	}
 
 
@@ -1405,16 +1408,24 @@ class Antispam_Bee {
 		);
 
 		/* Spammy author */
-		if ( $quoted_author = preg_quote($comment['author']) ) {
+		if ( $quoted_author = preg_quote($comment['author'], '/') ) {
 			$patterns[] = array(
-				'body'	=> sprintf(
+				'body' => sprintf(
 					'<a.+?>%s<\/a>$',
 					$quoted_author
 				)
 			);
 			$patterns[] = array(
-				'body'	=> sprintf(
+				'body' => sprintf(
 					'%s https?:.+?$',
+					$quoted_author
+				)
+			);
+			$patterns[] = array(
+				'email'	 => '@gmail.com$',
+				'author' => '^[a-z0-9-\.]+\.[a-z]{2,6}$',
+				'host'	 => sprintf(
+					'^%s$',
 					$quoted_author
 				)
 			);
@@ -1441,7 +1452,7 @@ class Antispam_Bee {
 					continue;
 				}
 
-				if ( preg_match('|' .$regexp. '|isu', $comment[$field]) ) {
+				if ( preg_match('/' .$regexp. '/isu', $comment[$field]) ) {
 					$hits[$field] = true;
 				}
 			}
@@ -1477,13 +1488,13 @@ class Antispam_Bee {
 		$params = array($ip);
 
 		/* URL abgleichen */
-		if ( !empty($url) ) {
+		if ( ! empty($url) ) {
 			$filter[] = '`comment_author_url` = %s';
 			$params[] = $url;
 		}
 
 		/* E-Mail abgleichen */
-		if ( !empty($email) ) {
+		if ( ! empty($email) ) {
 			$filter[] = '`comment_author_email` = %s';
 			$params[] = $email;
 		}
@@ -1584,15 +1595,35 @@ class Antispam_Bee {
 
 	private static function _is_dnsbl_spam($ip)
 	{
-		/* Funktionscheck */
-		if ( ! function_exists('checkdnsrr') ) {
+		/* Start request */
+		$response = wp_remote_get(
+			esc_url_raw(
+				sprintf(
+					'http://www.stopforumspam.com/api?ip=%s&f=json',
+					$ip
+				),
+				'http'
+			)
+		);
+
+		/* Response error? */
+		if ( is_wp_error($response) ) {
 			return false;
 		}
 
-		return (bool) checkdnsrr(
-			self::_reverse_ip($ip). '.opm.tornevall.org.',
-			'A'
-		);
+		/* Get JSON */
+		$json = wp_remote_retrieve_body($response);
+
+		/* Decode JSON */
+		$result = json_decode($json);
+
+		/* Empty data */
+		if ( empty($result->success) ) {
+			return false;
+		}
+
+		/* Return status */
+		return (bool) $result->ip->appears;
 	}
 
 
@@ -1864,7 +1895,7 @@ class Antispam_Bee {
 	* Ausführung des Lösch-/Markier-Vorgangs
 	*
 	* @since   0.1
-	* @change  2.5.2
+	* @change  2.5.7
 	*
 	* @param   array    $comment  Unbehandelte Kommentardaten
 	* @param   string   $reason   Verdachtsgrund
@@ -1886,7 +1917,8 @@ class Antispam_Bee {
 		$ignore_type = $options['ignore_type'];
 		$ignore_reason = in_array($reason, (array)$options['ignore_reasons']);
 
-		/* Spam hochzählen */
+		/* Spam merken */
+		self::_update_spam_log($comment);
 		self::_update_spam_count();
 		self::_update_daily_stats();
 
@@ -1954,6 +1986,41 @@ class Antispam_Bee {
 
 
 	/**
+	* Logfile mit erkanntem Spam
+	*
+	* @since   2.5.7
+	* @change  2.5.7
+	*
+	* @param   array   $comment  Array mit Kommentardaten
+	* @return  mixed   			 FALSE im Fehlerfall
+	*/
+
+	private static function _update_spam_log($comment)
+	{
+		/* Skip logfile? */
+		if ( ! defined('ANTISPAM_BEE_LOG_FILE') OR ! ANTISPAM_BEE_LOG_FILE OR ! is_writable(ANTISPAM_BEE_LOG_FILE) ) {
+			return false;
+		}
+
+		/* Compose entry */
+		$entry = sprintf(
+			'%s comment for post=%d from host=%s marked as spam%s',
+			current_time('mysql'),
+			$comment['comment_post_ID'],
+			self::get_key($_SERVER, 'REMOTE_ADDR'),
+			PHP_EOL
+		);
+
+		/* Write */
+		file_put_contents(
+			ANTISPAM_BEE_LOG_FILE,
+			$entry,
+			FILE_APPEND | LOCK_EX
+		);
+	}
+
+
+	/**
 	* Sendet den 403-Header und beendet die Verbindung
 	*
 	* @since   2.5.6
@@ -1971,7 +2038,9 @@ class Antispam_Bee {
 	* Versand einer Benachrichtigung via E-Mail
 	*
 	* @since   0.1
-	* @change  2.4.3
+	* @change  2.5.7
+	*
+	* @hook    string  antispam_bee_notification_subject  Custom subject for notification mails
 	*
 	* @param   intval  $id  ID des Kommentars
 	* @return  intval  $id  ID des Kommentars
@@ -1996,7 +2065,7 @@ class Antispam_Bee {
 		}
 
 		/* Parent-Post */
-		if ( !$post = get_post($comment['comment_post_ID']) ) {
+		if ( ! $post = get_post($comment['comment_post_ID']) ) {
 			return $id;
 		}
 
@@ -2075,7 +2144,10 @@ class Antispam_Bee {
 		/* Send */
 		wp_mail(
 			get_bloginfo('admin_email'),
-			$subject,
+			apply_filters(
+				'antispam_bee_notification_subject',
+				$subject
+			),
 			$body
 		);
 

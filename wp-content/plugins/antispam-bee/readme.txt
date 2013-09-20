@@ -46,6 +46,7 @@ Die meisten Auswahlmöglichkeiten innerhalb der Optionsseite sind konfigurierbar
 * Kommentare nur in einer Sprache zulassen
 * Erkannten Spam kennzeichnen, nicht löschen
 * Bei Spam via E-Mail informieren
+* Optionale Logdatei mit Spam-Einträgen z.B. für [Fail2Ban](http://cup.wpcoder.de/fail2ban-ip-firewall/)
 * Spamgrund im Kommentar nicht speichern
 * Vorhandenen Spam nach X Tagen löschen
 * Aufbewahrung der Spam-Kommentare für einen Typ
@@ -57,7 +58,7 @@ Die meisten Auswahlmöglichkeiten innerhalb der Optionsseite sind konfigurierbar
 
 
 = Datenschutz =
-In Blogs innerhalb der EU-Länder darf die Option *"Öffentliche Spamdatenbank berücksichtigen"* nicht aktiviert werden, da das Antispam-Plugin ungekürzte IP-Adressen der Nutzer dafür verwendet, diese in der öffentlichen Spammer-Datenbank nachzuschlagen und als Spam zu identifizieren. Technisch ist die Verschlüsselung der IP nicht möglich, da Spammer-Datenbanken mit vollständigen IP-Adressen arbeiten. [Weitere Details](http://playground.ebiene.de/antispam-bee-wordpress-plugin/#dnsbl_check)
+In Blogs innerhalb der EU-Länder darf die Option *"Öffentliche Spamdatenbank berücksichtigen"* nicht aktiviert werden, da das Antispam-Plugin ungekürzte IP-Adressen der Kommentatoren dafür verwendet, diese in der öffentlichen Spammer-Datenbank nachzuschlagen und als Spam zu identifizieren. Technisch ist die Verschlüsselung der IP nicht möglich, da Spammer-Datenbanken mit vollständigen, unverschlüsselten IP-Adressen arbeiten. [Weitere Details](http://playground.ebiene.de/antispam-bee-wordpress-plugin/#dnsbl_check)
 
 
 = Schlusswort =
@@ -103,6 +104,24 @@ Freundlich formulierte Fragen rund um das Plugin werden per E-Mail beantwortet.
 
 
 == Changelog ==
+
+= 2.5.9 =
+* DE: Anpassung des Dashboard-Skriptes für die Zusammenarbeit mit [Statify](http://statify.de)
+* EN: Dashboard widget changes to work with [Statify](http://statify.de)
+
+= 2.5.8 =
+* DE: Umstellung von TornevallDNSBL zu [Stop Forum Spam](http://www.stopforumspam.com)
+* DE: Neue JS-Bibliothek für das Dashboard-Widget
+* DE: [Mehr Informationen auf Google+](https://plus.google.com/110569673423509816572/posts/VCFr3fDAYDs)
+* EN: Switch from TornevallDNSBL to [Stop Forum Spam](http://www.stopforumspam.com)
+* EN: New JS library for the Antispam Bee dashboard chart
+
+= 2.5.7 =
+* DE: Optionale Spam-Logdatei z.B. für [Fail2Ban](http://cup.wpcoder.de/fail2ban-ip-firewall/)
+* DE: Filter `antispam_bee_notification_subject` für eigenen Betreff in Benachrichtigungen
+* DE: Detaillierte Informationen zum Update auf [Google+](https://plus.google.com/110569673423509816572/posts/iCfip2ggYt9)
+* EN: Optional logfile with spam entries e.g. for [Fail2Ban](https://gist.github.com/sergejmueller/5622883)
+* EN: Filter `antispam_bee_notification_subject` for a custom subject in notifications
 
 = 2.5.6 =
 * DE: Neue Erkennungsmuster für Spam hinzugefügt / [Google+](https://plus.google.com/110569673423509816572/posts/9BSURheN3as)

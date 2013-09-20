@@ -197,7 +197,7 @@ class pluginFramework {
         return isset( $classes ) ? $classes : false;
     }        
 
-    function loadEncDirectory( $dir ){
+    /*function loadEncDirectory( $dir ){
         if (!file_exists($dir)) return;
         foreach (scandir($dir) as $item) {
             if( preg_match( "/Encrypted.php$/i" , $item ) ) {
@@ -209,7 +209,7 @@ class pluginFramework {
             }      
         }
         return isset( $classes ) ? $classes : false;           
-    }         
+    }*/       
     
     /**
      * Render view file

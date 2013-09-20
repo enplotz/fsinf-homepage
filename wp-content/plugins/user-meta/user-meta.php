@@ -1,10 +1,10 @@
 <?php
 /*
-Plugin Name: User Meta Pro
+Plugin Name: User Meta
 Plugin URI: http://user-meta.com
 Description: User management plugin. Frontend user profile, user egistration with extra fields. Login widget, user import, user redirection, email verification, admin approval, frontend lost-reset passwod and many more.
 Author: Khaled Hossain Saikat
-Version: 1.1.3
+Version: 1.1.3.1
 Author URI: http://khaledsaikat.com
 */
 
@@ -16,9 +16,9 @@ require_once ( 'framework/init.php' );
 
 if (!class_exists( 'userMeta' )) :
 class userMeta extends pluginFramework {
-    public $title       = 'User Meta Pro';
+    public $title       = 'User Meta';
     public $name        = 'user-meta';
-    public $version     = '1.1.3';
+    public $version     = '1.1.3.1';
     public $prefix      = 'um_';  
     public $prefixLong  = 'user_meta_';
     public $website     = 'http://user-meta.com';
@@ -40,7 +40,7 @@ class userMeta extends pluginFramework {
         $userMetaCache          = new stdClass;
         
         $this->loadModels( $this->modelsPath . 'pro/' );
-        $this->loadModels( $this->modelsPath . 'enc/', true );
+        //$this->loadModels( $this->modelsPath . 'enc/', true );
         $this->loadModels( $this->modelsPath );
         $this->loadModels( $pluginFramework->modelsPath );                                     
     }

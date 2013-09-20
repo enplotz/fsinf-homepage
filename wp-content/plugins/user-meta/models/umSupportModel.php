@@ -321,7 +321,7 @@ class umSupportModel {
         global $userMeta;
         $plugin = $userMeta->pluginSlug;
         $url = wp_nonce_url( "update.php?action=upgrade-plugin&plugin=$plugin", "upgrade-plugin_$plugin" );                
-        return $url = admin_url( $url );                                        
+        return $url = admin_url( htmlspecialchars_decode( $url ) );                                        
     }
     
     function getSettings( $key ){
