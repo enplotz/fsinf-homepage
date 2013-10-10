@@ -5,14 +5,15 @@ function fsfin_events_booking_form()
 {
   $curr_event = fsinf_get_current_event();
 
+  ob_start(); // for correct shortcode output order
+
   if(is_null($curr_event)) {
 ?>  <div class="alert alert-info">
       <a class="close" data-dismiss="alert">×</a>
       <p>Aktuell ist kein Event eingetragen.</p>
     </div>
 <?php
-    return;
-  }
+  } else {
 
   $errors = array();
   if (array_key_exists('fsinf_events_register', $_POST)) {
@@ -114,8 +115,9 @@ $field_name = 'has_car';
 $selected = !empty($errors) && array_key_exists($field_name, $_POST);
 ?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
             <div class="controls">
-              <label class="checkbox inline">Ich habe ein Auto und kann damit zur Hütte fahren.
+              <label class="checkbox inline">
                 <input type="checkbox" name="<?=$field_name?>" value="1" <?= $selected ? ' checked="checked"' : '' ?>/>
+                Ich habe ein Auto und kann damit zur Hütte fahren.
               </label>
             </div>
           </div>
@@ -136,8 +138,9 @@ $field_name = 'has_tent';
 $selected = !empty($errors) && array_key_exists($field_name, $_POST);
 ?>        <div class="control-group <?= error_class($field_name, $errors) ?>">
             <div class="controls">
-              <label class="checkbox inline">Ich habe ein Zelt und kann dies mitnehmen.
+              <label class="checkbox inline">
                 <input type="checkbox" name="<?=$field_name?>" value="1" <?= $selected ? ' checked="checked"' : '' ?>/>
+                Ich habe ein Zelt und kann dies mitnehmen.
               </label>
             </div>
           </div>
@@ -171,4 +174,7 @@ $field_name = 'notes';
 
 <?php
   #echo '<pre>'.print_r($_POST, true).'</pre>';
+  }
+  $html_text = ob_get_clean();
+  return $html_text;
 }

@@ -5,7 +5,9 @@ add_shortcode('fsinfcurrenteventdetails', 'fsfin_events_details');
 function fsfin_events_details()
 {
   $current_event = fsinf_get_current_event();
+  $html_text = "";
   if(!empty($current_event)){
+    ob_start(); // use output buffering for correct shortcode order in frontend
 ?>
   <h3><?= $current_event->title ?></h3>
   <div class="row">
@@ -64,33 +66,8 @@ function fsfin_events_details()
 ?>
 </span>
 <p>Blau: bezahlt | Rot: nicht bezahlt | Grün: frei</p>
-<!--
-  <table class="table table-hover">
-          <thead>
-            <tr>
-            <th>Titel</th>
-            <th>Beginn</th>
-            <th>Ende</th>
-            <th>Ort</th>
-            <th>Beschreibung</th>
-            <th>Art</th>
-            <th>Max. Teilnehmer</th>
-            <th>Teilnahmegebühr</th>
-          </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><?= $current_event->title ?></td>
-              <td><?= $current_event->starts_at ?></td>
-              <td><?= $current_event->ends_at ?></td>
-              <td><?= $current_event->place ?></td>
-              <td><?= $current_event->description ?></td>
-              <td><?= $current_event->camping == 1 ? 'Zelten' : 'Hütte' ?></td>
-              <td><?= $current_event->max_participants?></td>
-              <td><?= formatted_fee_for($current_event)?></td>
-            </tr>
-          </tbody>
-        </table>-->
 <?php
+ $html_text = ob_get_clean();
 }
+return $html_text;
 }
