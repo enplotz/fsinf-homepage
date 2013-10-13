@@ -15,7 +15,7 @@ class umVersionUpdateController {
          * Set on plugin activation
          */
         //register_activation_hook( $userMeta->file,  array( $this, 'runEvent' ) );
-        //add_action( 'um_plugin_activation_event',   array( $this, 'init' ) );  
+        //add_action( 'um_plugin_activation_event',   array( $this, 'init' ) );      
     }    
             
     /**
@@ -67,12 +67,10 @@ class umVersionUpdateController {
      * Replace download url for pro version
      * Running force update while upgrading from free to pro
      */
-    function pluginUpdateNotification( $data ){
+    /*function pluginUpdateNotification( $data ){
         global $userMeta;
         
-        /**
-         * When new version is available
-         */                                                                      
+         // When new version is available
         if( isset( $data->response[ $userMeta->pluginSlug ] ) ){
             $plugin = $data->response[ $userMeta->pluginSlug ];                
             if( $userMeta->isPro() ){
@@ -81,9 +79,7 @@ class umVersionUpdateController {
             }                                 
         }
             
-        /**
-         * Running Force Upgrade (free to pro)
-         */
+         // Running Force Upgrade (free to pro)
         if( isset( $data->checked[ $userMeta->pluginSlug ] ) ){
             if( !$userMeta->isPro && $userMeta->isLicenceValidated() ){
                 $upgrade = new stdClass;
@@ -99,7 +95,7 @@ class umVersionUpdateController {
         }
                   
         return $data;                         
-    }    
+    }*/ 
     
     /**
      * Run upgrade one by one

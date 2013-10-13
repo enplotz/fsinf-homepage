@@ -12,7 +12,7 @@ if( @$avatar ) :
 elseif( @$filepath ) :
     $uploads    = wp_upload_dir();
     $path       = $uploads['basedir'] . $filepath;
-    $fullUrl    = $uploads['baseurl'] . $filepath;
+    $url        = $uploads['baseurl'] . $filepath;
     
     $fileData   = pathinfo( $path );
     $fileName   = $fileData['basename'];
@@ -20,7 +20,7 @@ elseif( @$filepath ) :
     if( !file_exists( $path ) ) return;               
 
     // In case of image
-    if( is_array( getimagesize( $fullUrl ) ) ){
+    if( $userMeta->isImage( $url ) ){
         if( !empty( $width ) && !empty( $height ) ){
             
             /**
@@ -38,26 +38,26 @@ elseif( @$filepath ) :
                     $path = $resizedImage;               
             }     
             
-            $fullUrl    = str_replace( $uploads['basedir'], $uploads['baseurl'], $path );
+            $url    = str_replace( $uploads['basedir'], $uploads['baseurl'], $path );
             $filepath   = str_replace( $uploads['basedir'], '', $path );            
             
             
             /*$resizedImage = image_resize( $path, $width, $height, $crop );
             if( ! is_wp_error($resizedImage) ){
-                $fullUrl    = str_replace( $uploads['basedir'], $uploads['baseurl'], $resizedImage );
+                $url    = str_replace( $uploads['basedir'], $uploads['baseurl'], $resizedImage );
                 $filepath   = str_replace( $uploads['basedir'], '', $resizedImage );
             }else{
                 //$html .= $userMeta->showError( $resizedImage->get_error_message() );
             }*/
         }        
-        $html.= "<img src='$fullUrl' alt='$fileName' title='$fileName' />";  
+        $html.= "<img src='$url' alt='$fileName' title='$fileName' />";  
     }else
-        $html.= "<a href='$fullUrl'>$fileName</a>";           
+        $html.= "<a href='$url'>$fileName</a>";           
 endif;
 
 // Remove Link
 if( (@$avatar OR @$filepath) AND !@$readonly )
-    $html .= "<p><a href='#' onclick='umRemoveFile(this)' name='$field_name'>Remove</a><p>";
+    $html .= "<p><a href='#' onclick='umRemoveFile(this)' name='$field_name'>". __('Remove', $userMeta->name) ."</a><p>";
 
 // Hidden field
 if( @$field_name AND !@$readonly )

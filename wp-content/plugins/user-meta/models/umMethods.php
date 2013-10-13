@@ -48,14 +48,23 @@ class umMethods {
             }
             
             if( !empty($_REQUEST['user_id']) ){
-                if( $user->has_cap( 'add_users' ) ){
+                if( $userID <> esc_attr($_REQUEST['user_id']) ){
+                    if( $user->has_cap( 'add_users' ) ){
+                        $userID =  esc_attr( $_REQUEST['user_id'] );
+                        $user = get_user_by('id', $userID);
+                        if( empty($user) )
+                            return $userMeta->showError( __( 'No user found!.', $userMeta->name ) );
+                    }else
+                        return $userMeta->showError( __( "You do not have permission to access user profile.", $userMeta->name ) );
+                }
+                
+                /*if( $user->has_cap( 'add_users' ) ){
                     $userID =  esc_attr( $_REQUEST['user_id'] );
                     $user = get_user_by('id', $userID);
                     if( empty($user) )
                         return $userMeta->showError( __( 'No user found!.', $userMeta->name ) );
-                }
-                else
-                    return $userMeta->showError( __( "You do not have permission to access user profile.", $userMeta->name ) );
+                }else
+                    return $userMeta->showError( __( "You do not have permission to access user profile.", $userMeta->name ) );*/
             }
         
         }elseif( $actionType == 'registration' ) {

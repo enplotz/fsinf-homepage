@@ -10,7 +10,7 @@ global $userMeta;
     <div id="dashboard-widgets-wrap">
         <div class="metabox-holder">
             <div id="um_admin_content">
-                <?php //$userMeta->renderPro( "activationForm", null, "settings" ); ?>
+                <?php if($userMeta->isPro) $userMeta->renderPro( "activationForm", null, "settings" ); ?>
                 <?php
                 $isPro = $userMeta->isPro();
                 $title = array(

@@ -38,7 +38,7 @@ class umFieldsController {
     function init(){   
         global $userMeta;        
         
-        $fields = $userMeta->getData( 'fields' );        
+        $fields = $userMeta->getData( 'fields' );
         $userMeta->render( 'fieldsEditorPage', array( 'fields'=>$fields ) );
     }
     

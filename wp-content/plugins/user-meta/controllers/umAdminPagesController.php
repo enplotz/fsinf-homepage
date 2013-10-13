@@ -20,10 +20,11 @@ class umAdminPagesController {
         $pages  = $userMeta->adminPages();
         $isPro  = $userMeta->isPro();
         foreach( $pages as $key => $page ){
-            $menuTitle = (!$isPro && !$page['is_free']) ? '<span style="opacity:.5;filter:alpha(opacity=50);">' . $page['menu_title'] . '</span>' : $page['menu_title'];
-             $hookName = add_submenu_page( $parentSlug, $page['page_title'], $menuTitle, 'manage_options', $page['menu_slug'], array( $this, $key . '_init' ));
-             add_action( 'load-' . $hookName, array( $this, 'onLoadUmAdminPages' ) );
-             $pages[$key]['hookname'] = $hookName;
+            $menuTitle  = (!$isPro && !$page['is_free']) ? '<span style="opacity:.5;filter:alpha(opacity=50);">' . $page['menu_title'] . '</span>' : $page['menu_title'];
+            $callBack   = !empty( $page['callback'] ) ? $page['callback'] : array( $this, $key . '_init' );
+            $hookName   = add_submenu_page( $parentSlug, $page['page_title'], $menuTitle, 'manage_options', $page['menu_slug'], $callBack );
+            add_action( 'load-' . $hookName, array( $this, 'onLoadUmAdminPages' ) );
+            $pages[$key]['hookname'] = $hookName;
         }
         
         $umAdminPages = $pages;

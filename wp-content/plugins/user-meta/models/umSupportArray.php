@@ -17,52 +17,49 @@ class umSupportArray {
         );
     }
     
-    /**
-     * Added: 1.1.3rc2 (not yet used)
-     */
     function adminPages(){
         global $userMeta;
 
-        return $pages = array(
+        $pages = array(
             'fields_editor' => array(
                 'menu_title'    => __( 'Fields Editor', $userMeta->name ),
                 'page_title'    => __( 'User Meta Fields Editor', $userMeta->name ),
                 'menu_slug'     => 'usermeta',
+                'position'      => 0,
                 'is_free'       => true,
             ),
             'forms_editor'  => array(
                 'menu_title'    => __( 'Forms Editor', $userMeta->name ),
                 'page_title'    => __( 'User Meta Forms Editor', $userMeta->name ),
                 'menu_slug'     => 'user-meta-form-editor',
+                'position'      => 1,
                 'is_free'       => true,
             ),
             'email_notification' => array(
                 'menu_title'    => __( 'Email Notification', $userMeta->name ),
                 'page_title'    => __( 'Email Notification', $userMeta->name ),
                 'menu_slug'     => 'user-meta-email',
+                'position'      => 2,
                 'is_free'       => false,
             ),
             'export_import' => array(
                 'menu_title'    => __( 'Export & Import', $userMeta->name ),
                 'page_title'    => __( 'Export & Import', $userMeta->name ),
                 'menu_slug'     => 'user-meta-import-export',
+                'position'      => 3,
                 'is_free'       => false,
             ),  
             'settings'      => array(
                 'menu_title'    => __( 'Settings', $userMeta->name ),
                 'page_title'    => __( 'User Meta Settings', $userMeta->name ),
                 'menu_slug'     => 'user-meta-settings',
+                'position'      => 4,
                 'is_free'       => true,
             ),            
         );
 
-        foreach( $pages as $key => $page ){
-            $menu_slug      = plugin_basename( $page['menu_slug'] );
-            $parent_slug    = plugin_basename( $page['parent_slug'] );
-            $hookname       = get_plugin_page_hookname( $menu_slug, $parent_slug);
-            
-            $pages[ $key ][ 'hookname' ] = $hookname;
-        }
+        $pages = apply_filters( 'user_meta_admin_pages', $pages );
+        uasort( $pages, array( $userMeta, 'sortByPosition' ) );
         
         return $pages;
     }
@@ -126,9 +123,9 @@ class umSupportArray {
                 'jquery-ui-timepicker-addon.js' => 'jqueryui/',
             ),
             'validationEngine' => array(
-                'validationEngine.js'   => 'jquery/',
-                'validationEngine-en.js'=> 'jquery/',
-                'validationEngine.css'  => 'jquery/',
+                'jquery.validationEngine-en.js' => 'jquery/',
+                'jquery.validationEngine.js'    => 'jquery/',
+                'validationEngine.jquery.css'   => 'jquery/',
             ),
             'password_strength' => array(
                 'jquery.password_strength.js'   => 'jquery/',
@@ -317,18 +314,19 @@ class umSupportArray {
             ), 
             'url' => array(
                 'title'         => __( 'Website', $userMeta->name ),
-                'field_group'   => 'standard', 
+                'field_group'   => 'standard',
                 'is_free'       => false,
             ),                          
             'country' => array(
                 'title'         => __( 'Country', $userMeta->name ),
-                'field_group'   => 'standard', 
+                'field_group'   => 'standard',
                 'is_free'       => false,
             ),      
-            /*'scale' => array(
-                'title'         => 'Scale',
-                'field_group'     => 'standard',  
-            ),*/           
+            'custom' => array(
+                'title'         => 'Custom Field',
+                'field_group'   => 'standard',
+                'is_free'       => false,
+            ),       
             
             
             //Formating Fields
@@ -495,8 +493,8 @@ class umSupportArray {
     }
     
     function runLocalization(){
-        global $userMeta, $userMetaCache; 
-               
+        global $userMeta, $userMetaCache;
+        
         if( empty( $userMetaCache->localizedStrings ) ){                  
             $userMetaCache->localizedStrings = array(
                 'user-meta' => array(
@@ -519,7 +517,7 @@ class umSupportArray {
                     'strong'        => __( 'Strong password', $userMeta->name ),
                     'very_strong'   => __( 'Very strong password', $userMeta->name ),
                 ),
-                'validationEngine-en' => array(
+                'jquery.validationEngine-en' => array(
                     'required_field'    => __( '* This field is required', $userMeta->name ),
                     'required_option'   => __( '* Please select an option', $userMeta->name ),
                     'required_checkbox' => __( '* This checkbox is required', $userMeta->name ),
@@ -543,10 +541,13 @@ class umSupportArray {
                     'invalid_datetime'  => __( '* Invalid datetime, must be in YYYY-MM-DD hh:mm:ss format', $userMeta->name ),
                     'invalid_ip'        => __( '* Invalid IP address', $userMeta->name ),
                     'invalid_url'       => __( '* Invalid URL', $userMeta->name ),
+                    'invalid_field'     => __( '* Invalid field', $userMeta->name ),
                     'numbers_only'      => __( '* Numbers only', $userMeta->name ),
                     'letters_only'      => __( '* Letters only', $userMeta->name ),
                     'no_special_char'   => __( '* No special characters allowed', $userMeta->name ),
                     'user_exists'       => __( '* This user is already taken', $userMeta->name ),
+                    
+                    'customRules'       => $userMeta->getCustomFieldRegex()
                 ),
 
             );

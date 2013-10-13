@@ -481,6 +481,26 @@ class umSupportModel {
         ) );                      
         $userMeta->runLocalization();
     }
+    
+    function getCustomFieldRegex(){
+        global $userMeta;
+        
+        $fields = $userMeta->getData( 'fields' );
+        
+        $rules = array();
+        if ( is_array( $fields ) ) {
+            foreach ( $fields as $id => $field ){
+                if ( 'custom' == @$field['field_type'] ) {
+                    $custom = array();
+                    $custom['regex'] = @$field['regex'];
+                    $custom['alertText'] = @$field['error_text'];
+                    $rules[ 'umCustomField_' . $id ] = $custom;
+                }
+            }
+        }
+        
+        return json_encode( $rules );
+    }
         
 }
 endif;

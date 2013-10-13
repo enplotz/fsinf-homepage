@@ -195,21 +195,7 @@ class pluginFramework {
             }      
         }
         return isset( $classes ) ? $classes : false;
-    }        
-
-    /*function loadEncDirectory( $dir ){
-        if (!file_exists($dir)) return;
-        foreach (scandir($dir) as $item) {
-            if( preg_match( "/Encrypted.php$/i" , $item ) ) {
-                //$codes = mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5(__CLASS__), base64_decode( file_get_contents( $dir . $item ) ), MCRYPT_MODE_CBC, md5(__CLASS__));
-                eval( base64_decode( file_get_contents( $dir . $item ) ) );
-                $className = str_replace( "Encrypted.php", "", $item );
-                if( class_exists( $className ) )
-                    $classes[] = new $className;
-            }      
-        }
-        return isset( $classes ) ? $classes : false;           
-    }*/       
+    }                
     
     /**
      * Render view file

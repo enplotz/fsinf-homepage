@@ -49,21 +49,26 @@ class umAjaxModel {
         foreach( $validFields as $fieldName => $fieldData ){
 
             /// user_login is read-only for profile update, so remove it to being $userData
-            if( $fieldName == 'user_login' && $actionType == 'profile' )
+            /*if( $fieldName == 'user_login' && $actionType == 'profile' )
                 continue;
 
-            if( $fieldName == 'user_pass' ){
+            if( $fieldName == 'user_pass' && $actionType == 'profile' ){
                 if( !$_REQUEST[$fieldName] )
                     continue;
-            }        
+            }*/
             
+            if( $actionType == 'profile' ){
+                if( $fieldName == 'user_login' || ( $fieldName == 'user_pass' && empty($_REQUEST['user_pass']) ) )
+                    continue;
+            }
+                        
             /// Assigning data to $userData       
             $userData[ $fieldName ] = @$_REQUEST[ $fieldName ];
             
             /// Handle non-ajax file upload
             if( in_array( $fieldData[ 'field_type' ], array( 'user_avatar', 'file' ) ) ){
                 if( isset( $_FILES[ $fieldName ] ) ){
-                    $extensions = @$fieldData[ 'allowed_extension' ] ? $fieldData[ 'allowed_extension' ] : "jpg, png, gif";
+                    $extensions = @$fieldData[ 'allowed_extension' ] ? $fieldData[ 'allowed_extension' ] : "jpg,png,gif";
                     $maxSize    = @$fieldData[ 'max_file_size' ] ? $fieldData[ 'max_file_size' ] * 1024 : 1024 * 1024;
                     $file = $userMeta->fileUpload( $fieldName, $extensions, $maxSize );
                     if( is_wp_error( $file ) ){
@@ -80,22 +85,55 @@ class umAjaxModel {
             //if( $fieldName == 'user_avatar' OR $fieldName == 'file' )
                 //$imageCache[] = $userData[$fieldName];
             
-            if( $fieldName == 'user_login' || $fieldName == 'user_email' ){
+            /*if( $fieldName == 'user_login' || $fieldName == 'user_email' ){
                 $fieldData[ 'required' ] = true;
                 $fieldData[ 'unique' ]   = true;
-            }                    
-            if( $fieldData[ 'required' ] ){
+            }*/
+            
+            /*if( $fieldName == 'user_pass' && $actionType == 'registration' )
+                $fieldData[ 'required' ] = true;*/
+
+            /*if( $fieldData[ 'required' ] ){
                 if( !$userData[ $fieldName ] ){
                     $errors->add( 'required', sprintf( __( '%s field is required', $userMeta->name ), $fieldData['field_title'] ) );
                     continue;
                 }                        
+            }*/
+          
+            
+            
+            /*
+             * Using umField Class
+             */
+            if( ! isset( $fieldData['field_value'] ) )
+                $fieldData['field_value'] = $userData[ $fieldName ];
+            
+            $field = new umField( $fieldData['field_id'], $fieldData, array(
+                'user_id'       => $userID,
+                'insert_type'   => $actionType,
+            ) );
+            
+            if( $fieldName == 'user_pass' && $actionType == 'registration' )
+                $field->addRule('required');
+            
+            if ( isset( $_REQUEST[ $fieldName . "_retype" ] ) )
+                $field->addRule('equals');
+             
+            if( ! $field->validate() ){
+                foreach( $field->getErrors() as $errKey => $errVal )
+                    $errors->add( $errKey, $errVal );
             }
+             
+            /*if( isset($_REQUEST[ $fieldName . "_retype" ]) && !empty($_REQUEST[$fieldName]) ){
+                if( $_REQUEST[ $fieldName . "_retype" ] != $_REQUEST[$fieldName] )
+                    $errors->add( 'retype_required', sprintf( __( '%s field is required to retype', $userMeta->name ), $fieldData['field_title'] ) );
+            }
+            
             if( $fieldData[ 'unique' ] ){
                 $available = $userMeta->isUserFieldAvailable( $fieldName, $userData[ $fieldName ], $userID );
-                if( ! $available ){
-                    $errors->add( 'existing_' . $fieldName, sprintf( __( '%1$s: "%2$s" already taken', $userMeta->name ), $fieldData[ 'field_title' ], $userData[ $fieldName ] ) );					
-                }								
-            }
+                if( ! $available )
+                    $errors->add( 'existing_' . $fieldName, sprintf( __( '%1$s: "%2$s" already taken', $userMeta->name ), $fieldData[ 'field_title' ], $userData[ $fieldName ] ) );								
+            }*/
         }       
 
 		// If add_user_to_blog set true in UserMeta settings panel

@@ -51,7 +51,7 @@ foreach( $fields as $id => $field ){
     $fieldValue = null;
     if( isset( $field['default_value'] ) ){
         $fieldValue = $userMeta->convertUserContent( new WP_User($userID), $field['default_value']  );
-    }            
+    }       
 
     if( isset( $fieldValues->$fieldName ) )
         $fieldValue = $fieldValues->$fieldName;

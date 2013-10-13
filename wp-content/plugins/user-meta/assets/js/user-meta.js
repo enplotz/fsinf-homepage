@@ -104,6 +104,16 @@ function umChangeFieldTitle( element ){
     jQuery(element).parents(".postbox").children("h3").children(".um_admin_field_title").text(title);
 }
 
+function umUpdateMetaKey( element ){
+    if( jQuery(element).parents(".postbox").find(".um_meta_key_editor").length ){
+        if( ! jQuery(element).parents(".postbox").find(".um_meta_key_editor").val() ){
+            title = jQuery(element).parents(".postbox").find(".um_field_title_editor").val();
+            meta_key = title.trim().toLowerCase().replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,'_');
+            jQuery(element).parents(".postbox").find(".um_meta_key_editor").val(meta_key);
+        }
+    }
+}
+
 function umChangeFormTitle( element ){
     title = jQuery(element).val();
     if( !title ){ title = 'Untitled Form'; }
@@ -111,6 +121,7 @@ function umChangeFormTitle( element ){
 }
 
 function umInsertUser( element ){
+    if (typeof(tinyMCE) !== 'undefined') tinyMCE.triggerSave();
     if( !jQuery(element).validationEngine("validate") ) return;
     
     bindElement = jQuery(element);
@@ -204,12 +215,13 @@ function umFileUploader( uploadScript ){
         var fieldID = jQuery(this).attr("um_field_id");
         
         allowedExtensions = jQuery(this).attr("extension");
+        allowedExtensions = allowedExtensions.replace(/\s+/g,"");
         maxSize = jQuery(this).attr("maxsize")
         if( !allowedExtensions )
             allowedExtensions = "jpg,jpeg,png,gif";
         if( !maxSize )
             maxSize = 1 * 1024 * 1024;            
-        
+
         var uploader = new qq.FileUploader({
             // pass the dom node (ex. $(selector)[0] for jQuery users)
             element: document.getElementById(divID),
@@ -336,6 +348,7 @@ function umUserImport( element, file_pointer, init ){
 
 function umUserExport( element, type ){
     var arg = jQuery( element ).parent("form").serialize();
+    arg = arg.replace(/\(/g, "%28").replace(/\)/g, "%29");//Replace "()"
     var field_count = jQuery( element ).parent("form").children(".um_selected_fields").children(".postbox").size();
         
     arg = arg + "&action_type=" + type + "&field_count=" + field_count;

@@ -13,7 +13,7 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
          * Use enclose for enclosing by other html element: (eg. array('enclose'=>'p') or  array("enclose"=>"p class='abc'")  )
          * @param array $options : options for select, checkbox
          */
-        function createInput($name='', $type='text', $attr=array(), $options=array()){   
+        function createInput($name='', $type='text', $attr=array(), $options=array()){
             $name   = trim($name);
             $name   = $name ? "name=\"$name\"" : '';      
             
@@ -24,7 +24,7 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
                     $attr['value'] = array_map( 'esc_attr', $attr['value'] );
                 }
             }                             
-            $value  = isset( $attr['value'] ) ? $attr['value'] : null;         
+            $value  = isset( $attr['value'] ) ? $attr['value'] : null;       
             
             //filter attr for add
             $excludeAttr = array( 'before', 'after', 'enclose', 'label', 'by_key', 'label_class', 'combind', 'option_before', 'option_after' );      
@@ -34,7 +34,7 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
             if(is_array(@$attr)){
                 foreach( $attr as $key => $val){
                     if( !in_array( $key, $excludeAttr ) ){
-                        $include .= $val ? "$key=\"$val\" " : "";
+                        $include .= self::notEmpty($val) ? "$key=\"$val\" " : "";
                     }                        
                 }
             }
@@ -249,7 +249,7 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
                     elseif($keepEmptyArray)
                         $result[$key] = $child;                  
                 }else{
-                    if($val)
+                    if( self::notEmpty( $val ) )
                         $result[$key] = $val;             
                 }
                 
@@ -258,6 +258,21 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
             }
             return $result;
         } 
+        
+        function notEmpty( $data ) {
+            if ( is_int( $data ) )
+                return true;
+            elseif ( is_string( $data ) ) {
+                $data = trim( $data );
+                if( ( "0" == $data ) || ! empty( $data ) )
+                    return true;
+            } else {
+                if ( ! empty( $data ) )
+                    return true;
+            }
+                
+            return false;
+        }
         
         /**
          * Remove non array data from array on first chield
@@ -313,6 +328,8 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
             
             if( !$data ) return $result;                               
             if( ! is_string($data) ) return (array) $data;
+            
+            $data = str_replace(array("\,","\:"),array("&#44;","&#58;"), $data);
                            
             $fields = explode( $fieldSeparator, $data );
             foreach( $fields as $val ){
@@ -325,7 +342,14 @@ if (!class_exists( 'PluginFrameworkRawFunction' )):
             return $result;
         }
         
-        
+        function sortByPosition($a, $b){
+            if( !isset($a['position']) || !isset($b['position']) )
+                return 0;
+            if( $a['position'] == $b['position'] )
+                return 0;
+            return $a['position'] > $b['position'] ? 1 : -1;
+        }
+           
         function dump( $data, $dump=false ){
             echo "<pre>";
             if( is_array($data) OR is_object($data) ){

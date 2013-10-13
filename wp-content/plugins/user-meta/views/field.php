@@ -79,9 +79,10 @@ $fieldTitle = $userMeta->createInput( "fields[$id][field_title]", "text", array(
     "value"         => isset($field_title) ? $field_title : null, 
     "label"         => __( 'Field Title', $userMeta->name ), 
     "id"            => "field_title_$id",
-    "class"         => "um_input",
+    "class"         => "um_input um_field_title_editor",
     "label_class"   => "pf_label",
     "onkeyup"       => "umChangeFieldTitle(this)",
+    "onblur"        => "umUpdateMetaKey(this)",
     "enclose"       => "div class='um_segment'",
  ) );
 
@@ -121,8 +122,9 @@ $fieldDescription = $userMeta->createInput( "fields[$id][description]", "textare
 $fieldMetaKey = $userMeta->createInput( "fields[$id][meta_key]", "text", array( 
     "value"         => isset($meta_key) ? $meta_key : null,
     "label"         => __( 'Meta Key', $userMeta->name ), 
-    "class"         => "um_input",
+    "class"         => "um_input um_meta_key_editor",
     "label_class"   => "pf_label",
+    "onblur"        => "umUpdateMetaKey(this)",
     "after"         => "<div style='margin-right:20px;'><span class='um_required'>Required Field.</span> Field data will save by metakey. Without defining metakey, field data will not be saved. e.g country_name (unique and no space)</div>",
     "enclose"       => "div class='um_segment'",
  ) );  
@@ -433,6 +435,24 @@ $fieldImageSize = $userMeta->createInput( "fields[$id][image_size]", "text", arr
     "after"         => "<div>" . __( '(Default 96)', $userMeta->name ) . "</div>",
     "enclose"       => "div class='um_segment'",
  ) );  
+
+$fieldRegex = $userMeta->createInput( "fields[$id][regex]", "text", array( 
+    "value"         => isset($regex) ? $regex : null, 
+    "label"         => __( 'Regex', $userMeta->name ),
+    "class"         => "um_input",
+    "label_class"   => "pf_label",
+    "after"         => "<div>" . __( 'e.g.: ^[A-za-z]$', $userMeta->name ) . "</div>",
+    "enclose"       => "div class='um_segment'",
+ ) );
+
+$fieldErrorText = $userMeta->createInput( "fields[$id][error_text]", "text", array( 
+    "value"         => isset($error_text) ? $error_text : null, 
+    "label"         => __( 'Error Text', $userMeta->name ),
+    "class"         => "um_input",
+    "label_class"   => "pf_label",
+    "after"         => "<div>" . __( 'Default: Invalid field', $userMeta->name ) . "</div>",
+    "enclose"       => "div class='um_segment'",
+ ) );
  
 /*$fieldCaptchaPublicKey = $userMeta->createInput( "fields[$id][captcha_public_key]", "text", array( 
     "value"         => isset($captcha_public_key) ? $captcha_public_key : null, 
@@ -562,6 +582,8 @@ elseif( ! $field_type_data['is_free'] ) :
         'fieldMaxNumber'            => $fieldMaxNumber,
         'fieldCountrySelectionType' => $fieldCountrySelectionType,
         'fieldShowDivider'          => $fieldShowDivider,
+        'fieldRegex'                => $fieldRegex,
+        'fieldErrorText'            => $fieldErrorText,
         'fieldCaptchaTheme'         => $fieldCaptchaTheme,
     ) );
      

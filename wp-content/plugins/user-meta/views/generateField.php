@@ -134,8 +134,9 @@ elseif( $field['field_type'] == 'user_email' OR $field['field_type'] == 'email' 
         
     //$validation .= "required,custom[email],ajax[ajaxValidateUniqueField],";
     if( isset( $field['retype_email'] ) ):
-	$field2['field_name']	= $field['field_name'];
-        $field2['class']        = $class . "validate[equals[$inputID]]";
+        $field2['field_name']	= $field['field_name'] . "_retype";
+        $isRequired             = $actionType == 'registration' ? 'required,' : '';
+        $field2['class']        = $class . "validate[{$isRequired}equals[$inputID]]";
         $field2['fieldID']      = $inputID . "_retype";   
         $field2['fieldTitle']   = sprintf( __( 'Retype %s', $userMeta->name ), $fieldTitle ); 
     endif;
@@ -154,11 +155,12 @@ elseif( $field['field_type'] == 'user_pass' OR $field['field_type'] == 'password
     }
         
     if( isset( $field['retype_password'] ) ):
-	$field2['field_name']	= $field['field_name'];
-        $field2['class']        = str_replace( "pass_strength", "", $class ) . "validate[equals[$inputID]]";
-        $field2['fieldID']      = $inputID . "_retype";   
-        $field2['fieldTitle']   = sprintf( __( 'Retype %s', $userMeta->name ), $fieldTitle );     
-    endif;        
+        $field2['field_name']	= $field['field_name'] . "_retype";
+        $isRequired             = $actionType == 'registration' ? 'required,' : '';
+        $field2['class']        = str_replace( "pass_strength", "", $class ) . "validate[{$isRequired}equals[$inputID]]";
+        $field2['fieldID']      = $inputID . "_retype";
+        $field2['fieldTitle']   = sprintf( __( 'Retype %s', $userMeta->name ), $fieldTitle );
+    endif;
            
  
 elseif( $field['field_type'] == 'user_nicename' ):
@@ -311,7 +313,12 @@ elseif( $field['field_type'] == 'file' OR $field['field_type'] == 'user_avatar' 
             $extension = $field['allowed_extension'];  
         if( isset($field['max_file_size']) )
             $maxsize = $field['max_file_size'] * 1024;
-        $html .= "$fieldTitle";
+        $html .= $userMeta->createInput( null, 'label', array(
+            'value' => $fieldTitle,
+            'id'    => $labelID,
+            'class' => $label_class,
+            'for'   => $inputID,
+        ) );
         if( ! $fieldReadOnly ):
             $uploadButtonLeftClass = @$field['title_position'] == 'left' ? 'um_left_margin' : '';
             $html .= "<div id=\"$inputID\" um_field_id=\"um_field_{$field['field_id']}\" name=\"{$field['field_name']}\" class=\"um_file_uploader_field $uploadButtonLeftClass\" extension=\"$extension\" maxsize=\"$maxsize\"></div>"; 
@@ -319,13 +326,35 @@ elseif( $field['field_type'] == 'file' OR $field['field_type'] == 'user_avatar' 
     }
     
 elseif( $field['field_type'] == 'rich_text' ):  
-    $fieldType = 'textarea';
-    $class    .= "um_rich_text ";   
+    
     if( @$field['title_position'] == 'left' ){
         $fieldBefore    .= "<div class=\"um_left_margin\">";
         $fieldAfter     .= "</div>";          
+    }    
+    
+    if( !empty($field['use_previous_editor']) ){
+        $fieldType = 'textarea';
+        $class    .= "um_rich_text ";
+    }else{
+        $showInputField = false;
+        $html .= $userMeta->createInput( null, 'label', array(
+            'value' => $fieldTitle,
+            'id'    => $labelID,
+            'class' => $label_class,
+            'for'   => $inputID,
+        ) );
+        ob_start();
+        $editorID = preg_replace("/[^a-z0-9 ]/", '', strtolower($inputID) );
+        wp_editor( @$field['field_value'], $editorID, array(
+            'textarea_name' => $field['field_name'],
+            'editor_height' => !empty( $field['field_height'] ) ? str_replace( 'px', '', $field['field_height'] )  : null,
+            'editor_class'  => !empty( $field['field_class'] ) ? $field['field_class'] : null,
+            'editor_css'    => !empty( $field['field_style'] ) ? $field['field_style'] : null,
+        ) );
+        $editorOutput = $fieldBefore . ob_get_clean() . $fieldAfter;
+        $html .= ! empty( $field['field_size'] ) ? "<div style=\"width:{$field['field_size']}\">$editorOutput</div>" : $editorOutput;
     }
-  
+
 endif;
 
 
@@ -343,7 +372,7 @@ if( empty($noMore) ){
     if($showInputField){    
         $html .= $userMeta->createInput( $field['field_name'], $fieldType, array(
                     "value"         => isset($field['field_value']) ? $field['field_value'] : "",
-                    "label"         => $fieldTitle,
+                    "label"         => __( $fieldTitle, $userMeta->name),
                     "readonly"      => !empty($fieldReadOnly)        ? $fieldReadOnly : "",
                     "disabled"      => !empty($isDisabled) ? true : false,
                     "id"            => $inputID,
@@ -367,11 +396,11 @@ if( empty($noMore) ){
         extract($field2);    
         $html .= $userMeta->createInput( $field2['field_name'], $fieldType, array(
                     "value"         => isset($field['field_value']) ? $field['field_value'] : "",
-                    "label"         => $fieldTitle,
+                    "label"         => __( $fieldTitle, $userMeta->name),
                     "readonly"      => !empty($fieldReadOnly)        ? $fieldReadOnly : "",
-                    "id"            => $inputID,
+                    "id"            => $field2['fieldID'],
                     "class"         => $class,
-                    "style"         => isset($inputStyle)           ? $inputStyle :"",
+                    "style"         => isset($inputStyle)           ? $inputStyle : "",
                     "maxlength"     => $maxlength,
                     "label_id"      => $labelID,
                     "label_class"   => $label_class ? $label_class : 'pf_label',
@@ -384,7 +413,7 @@ if( empty($noMore) ){
         $descriptionStyle = ! empty( $field['description_style'] ) ? "style=\"{$field['description_style']}\"" : "";
         if( @$field['title_position'] == 'left' )
             $descriptionClass .= ' um_left_margin';
-        $html .= "<p $descriptionID class=\"$descriptionClass\" $descriptionStyle>" . $field['description'] . "</p>";
+        $html .= "<p $descriptionID class=\"$descriptionClass\" $descriptionStyle>" . __($field['description'], $userMeta->name) . "</p>";
     }
 
     $fieldResultContent = isset($fieldResultContent) ? $fieldResultContent : "";

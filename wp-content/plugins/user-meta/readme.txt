@@ -1,10 +1,10 @@
 === User Meta ===
 Contributors: khaledsaikat
 Donate link: http://user-meta.com/donation
-Tags: user, profile, registration, login, frontend, users, usermeta, import, export, csv, upload, AJAX, admin, file, email, captcha, avatar, redirect, password, custom fields, widget
+Tags: user, profile, registration, login, frontend, users, usermeta, import, csv, upload, AJAX, admin, plugin, page, image, images, photo, picture, file, email, shortcode, captcha, avatar, redirect, register, password, custom, csv, import, user import, widget
 Requires at least: 3.3.0
-Tested up to: 3.6
-Stable tag: 1.1.3.1
+Tested up to: 3.6.1
+Stable tag: 1.1.4
 Copyright: Khaled Saikat, user-meta.com.
 License: GNU General Public License
 
@@ -72,6 +72,7 @@ Let your user get email from your prefered name and email instead of wordpress@u
 * Number
 * Website
 * Country
+* Custom Field
 * Page Heading
 * Section Heading
 * HTML
@@ -114,12 +115,20 @@ WordPress doesn't allow to register new user by default settings. To allow user 
 
 == Changelog ==
 
+= 1.1.4 =
+* Introduce new field type "Custom Field" to add custom regex and error message.
+* Use TinyMCE as rich text editor.
+* meta_key auto generate from field title.
+* Enable translation for dynamic text.
+* Disable free to pro one click update as WordPress plugin guidline.
+* add allow_custom in datetime field to allow more customization by js.
+* Added alternate method when allow_url_fopen=0 for showing uploaded image.
+* Field validation in both server and client side.
+
 = 1.1.3 =
 * Assign form to login widget.
 * Allow role based profile as widget.
 * Add all other feature of RC version.
-
-= 1.1.3rc3 =
 * Replace type=both into type=profile-registration
 * Replace type=none into type=public
 * type=public allow user_id as $_GET for showing public user profile.
@@ -137,8 +146,6 @@ WordPress doesn't allow to register new user by default settings. To allow user 
 * Check user access by “add_users” capability.
 * Clickable users listing for Active | Inactive | Pending | Pending Approval
 * Change email verification and reset password process.
-
-= 1.1.3rc2 =
 * WordPress-3.5 compatibility.
 * UMP Export-Import fields, forms, settings.
 * Role based profile showing.
@@ -156,8 +163,6 @@ WordPress doesn't allow to register new user by default settings. To allow user 
 * MU: New blog registration.
 * MU: Add user to blog.
 * MU: added option for prevent login for non-member for current blog.
-
-= 1.1.3rc1 =
 * Registration/Profile widget.
 * Registration/Profile Template Tag.
 * Extended users export.

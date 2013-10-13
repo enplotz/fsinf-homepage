@@ -111,8 +111,10 @@ class PluginFrameworkWPSupport {
         $unique = true;            
         $wpUserTable = $pluginFramework->wpUserTableFieldsArray();  
    
+        
         // Set $comparingID if not set
-        if( !$comparingID ){
+        //if( !$comparingID ){
+        if(  is_null( $comparingID ) ){
             $comparingID = $user_ID;
             $comparingID = isset($_REQUEST['user_id']) ? $_REQUEST['user_id'] : $comparingID;
         }
@@ -163,14 +165,16 @@ class PluginFrameworkWPSupport {
         $userdata = array();
         $metadata = array();            
         $wpField = $pluginFramework->defaultUserFieldsArray();
-        foreach( $data as $key => $val ){
-            $key = is_string($key) ? trim($key) : $key;
-            $val = is_string($val) ? trim($val) : $val;
-            if( !$key ) continue;
-            if( isset($wpField[$key]) )
-                $userdata[$key] = $val;
-            else
-                $metadata[$key] = $val;
+        if(is_array($data)){
+            foreach( $data as $key => $val ){
+                $key = is_string($key) ? trim($key) : $key;
+                $val = is_string($val) ? trim($val) : $val;
+                if( !$key ) continue;
+                if( isset($wpField[$key]) )
+                    $userdata[$key] = $val;
+                else
+                    $metadata[$key] = $val;
+            }
         }
         
         // sanitize email and user
@@ -525,7 +529,16 @@ class PluginFrameworkWPSupport {
         
         return $errors;
     }
-                
+    
+    function isImage( $url ){
+        if( ini_get('allow_url_fopen') )
+            return getimagesize( $url ) ? true : false;
+        
+        $ext = preg_match('/\.([^.]+)$/', $url, $matches) ? strtolower($matches[1]) : false;   
+        $image_exts = array( 'jpg', 'jpeg', 'jpe', 'gif', 'png' );    
+        return in_array( $ext, $image_exts ) ? true :false;
+    }
+                 
 }
 endif;
 ?>
