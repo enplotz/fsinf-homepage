@@ -26,7 +26,7 @@ function plugins_loaded() {
       global $pagenow;
       define('PARTICIPANTS_EXPORT_FILENAME', 'participants');
       if ($pagenow=='admin.php' &&
-          current_user_can('manage_event') &&
+          current_user_can('manage_events') &&
           isset($_GET['download'])  &&
           $_GET['download']== PARTICIPANTS_EXPORT_FILENAME . '.tsv') {
         export_participants();
@@ -35,7 +35,8 @@ function plugins_loaded() {
     }
 
 function export_participants(){
-    header("Content-type: application/x-msdownload");
+    # header("Content-type: application/x-msdownload");
+    header("Content-type: application/octet-stream");
     header("Content-Disposition: attachment; filename=".PARTICIPANTS_EXPORT_FILENAME.".tsv");
     header("Pragma: no-cache");
     header("Expires: 0");
