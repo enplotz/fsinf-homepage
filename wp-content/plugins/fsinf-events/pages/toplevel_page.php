@@ -81,6 +81,7 @@ function fsinf_events_toplevel_page() {
 <?php
             if ($number_registrations > 0) {
 ?>
+            <a class="btn" href="admin.php?download=participants.tsv">Download TSV</a>
             <table class="table table-bordered table-hover">
               <thead>
                 <tr>
